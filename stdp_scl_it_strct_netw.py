@@ -10,7 +10,7 @@ from brian2.units import ms,mV
 from pypet.brian2.parameter import Brian2Parameter, Brian2MonitorResult
 
 from brian2 import NeuronGroup, StateMonitor, SpikeMonitor, run, \
-                   PoissonGroup, Synapses, set_device, device, Clock, \
+                   PoissonGroup, Synapses, device, Clock, \
                    defaultclock
 
 def add_params(tr):
@@ -81,12 +81,12 @@ def add_params(tr):
 
     tr.f_add_parameter('netw.sim.T',  prm.T)
     tr.f_add_parameter('netw.sim.dt', prm.netw_dt)
+
+    tr.f_add_parameter('netw.config.strct_active', prm.strct_active)
    
 
     
 def run_net(tr):
-
-    set_device('cpp_standalone', directory=None, build_on_run=False)
 
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
 
@@ -113,7 +113,7 @@ def run_net(tr):
     SynII = Synapses(target=GInh, source=GInh, on_pre='gi_post += a_ii',
                      namespace=namespace)
 
-    SynEE.connect()
+    SynEE.connect(p=tr.p_ee)
     SynIE.connect(p=tr.p_ie)
     SynEI.connect(p=tr.p_ei)
     SynII.connect(p=tr.p_ii)
@@ -130,7 +130,8 @@ def run_net(tr):
     GExc.run_regularly(tr.intrinsic_mod, dt = tr.it_dt, when='end')
 
     # structural plasticity
-    SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
+    if tr.netw.config.strct_active:
+        SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
     
     
     GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
@@ -139,8 +140,11 @@ def run_net(tr):
     GExc_spks = SpikeMonitor(GExc)
     GInh_stat = StateMonitor(GInh, ['V', 'ge', 'gi'], record=[0,1,2])
     GInh_spks = SpikeMonitor(GInh)
-    run(tr.T)
-    device.build(directory=None)
+
+    GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2)
+    run(tr.sim.T)
+    GExc_vts.record_single_timestep()
+    
     # SynEE_a = StateMonitor(SynEE, ['a'], record=True, dt=tr.netw.sim.dt)
     # run(tr.netw.sim.dt)
 
@@ -151,5 +155,5 @@ def run_net(tr):
     tr.f_add_result('GInh_stat', GInh_stat)
     tr.f_add_result('GInh_spks', GInh_spks)
     tr.f_add_result('SynEE_a', SynEE_a)
-
+    tr.f_add_result('GExc_vts', GExc_vts)
 

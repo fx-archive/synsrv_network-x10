@@ -29,8 +29,8 @@ p_ii = 0.5
 
 taupre = 15*ms
 taupost = 30*ms
-Aplus = 15
-Aminus = -7.5
+Aplus = 15*0.001
+Aminus = -7.5*0.001
 amax = 40*0.001
 
 ATotalMax = 40.*0.001
@@ -45,6 +45,7 @@ it_dt = 10*ms
 h_ip = 3*Hz
 
 # structural plasticity
+strct_active = True
 prn_thrshld = 0.001 * ATotalMax
 insert_P = 0.001
 strct_dt = 10*ms
