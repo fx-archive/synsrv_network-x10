@@ -11,7 +11,7 @@ from pypet.brian2.parameter import Brian2Parameter, Brian2MonitorResult
 
 from brian2 import NeuronGroup, StateMonitor, SpikeMonitor, run, \
                    PoissonGroup, Synapses, device, Clock, \
-                   defaultclock
+                   defaultclock, prefs
 
 def add_params(tr):
 
@@ -88,6 +88,8 @@ def add_params(tr):
 
     
 def run_net(tr):
+
+    prefs.codegen.target = 'numpy'
 
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
 
