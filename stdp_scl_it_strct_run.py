@@ -22,7 +22,7 @@ print("Using {:d} cores".format(ncores))
 repo = git.Repo('./')
 commit = repo.commit(None)
 
-filename = os.path.join('data', name+str(commit)[:6]+'.hdf5')
+filename = os.path.join('data', name+'_'+str(commit)[:6]+'.hdf5')
 
 # if not the first run, tr2 will be merged later
 label = 'tr1'
