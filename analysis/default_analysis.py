@@ -24,7 +24,7 @@ tr = Trajectory(#name='stdp_scl_it_strct',
                 name='tr1',
                 add_time=False, 
                 #filename='../data/stdp_scl_it_strct.hdf5',
-                filename='../data/ns8.hdf5',
+                filename='../data/pear_repro8ac5ec.hdf5',
                 dynamic_imports=[Brian2MonitorResult, Brian2Parameter])
 
 
@@ -118,7 +118,7 @@ def default_analysis_figure(tr, crun='run_00000000'):
     membrane_threshold_traces(ax10, tr, crun=crun)
             
     pl.tight_layout()
-    pl.savefig("default_analysis_output/ns8_{:s}.png".format(crun), dpi=300, bbox_inches='tight')
+    pl.savefig("default_output/pear_repro8ac5ec_{:s}.png".format(crun), dpi=300, bbox_inches='tight')
 
 
 if __name__ == "__main__":
