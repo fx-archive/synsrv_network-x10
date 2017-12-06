@@ -36,6 +36,7 @@ amax = 40*0.001
 ATotalMax = 40.*0.001
 dt_synEE_scaling = 10*ms
 
+#preT  = 100*second
 T  = 10*second
 netw_dt = 0.1*ms
 
