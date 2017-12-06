@@ -1,5 +1,5 @@
 
-import os, uuid
+import os, git
 
 from pypet import Environment, Trajectory
 from pypet.brian2.network import NetworkManager
@@ -9,6 +9,8 @@ from pypet.brian2.parameter import Brian2Parameter, \
 from explored_params import explore_dict, name
 from stdp_scl_it_strct_netw import add_params, run_net
 
+
+# control the number of cores to be used for computation
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--ncores", "-c", help="No. cores", nargs=1)
@@ -16,9 +18,13 @@ args = parser.parse_args()
 ncores = int(args.ncores[0])
 print("Using {:d} cores".format(ncores))
 
+# get info on git repository
+repo = git.Repo('./')
+commit = repo.commit(None)
 
-filename = os.path.join('data', name+'.hdf5')
+filename = os.path.join('data', name+str(commit)[:6]+'.hdf5')
 
+# if not the first run, tr2 will be merged later
 label = 'tr1'
 first_run = True
 if os.path.exists(filename):
@@ -34,13 +40,16 @@ env = Environment(trajectory=label,
                   ncores=ncores,
                   use_pool=False, # likely not working w/ brian2
                   wrap_mode='QUEUE', # ??
-                  overwrite_file=False # ??
-                  )
+                  overwrite_file=False, # ??
+                  git_repository='./',
+                  git_fail = True)
 
 
 tr = env.trajectory
 
 add_params(tr)
+tr.f_add_parameter('mconfig.git.sha1', str(commit))
+tr.f_add_parameter('mconfig.git.message', commit.message)
 
 tr.f_explore(explore_dict)
 
