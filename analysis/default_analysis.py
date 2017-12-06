@@ -24,7 +24,7 @@ tr = Trajectory(#name='stdp_scl_it_strct',
                 name='tr1',
                 add_time=False, 
                 #filename='../data/stdp_scl_it_strct.hdf5',
-                filename='../data/ns2.hdf5',
+                filename='../data/ns8.hdf5',
                 dynamic_imports=[Brian2MonitorResult, Brian2Parameter])
 
 
@@ -55,23 +55,19 @@ def voltage_traces(ax, tr, crun='run_00000000'):
     ax.set_ylim(tr.Vr_e/mV-5, tr.Vt_e/mV+5)
     ax.set_title('Membrane Voltage Traces')
 
-def synaptic_weight_distribution(ax, tr, crun='run_00000000', bins=50):
+def synapse_weight_distribution(ax, tr, crun='run_00000000', bins=50):
     df = tr.crun.SynEE_a
     bins = np.linspace(0, tr.amax, num=bins)
-    ax.hist(np.nan_to_num(df.a.flatten()), bins=bins)
+    for i,t in enumerate(df.t):
+        ax.hist(np.nan_to_num(df.a[:,i].flatten()), bins=bins)
     ax.set_title('Synaptic Weight Distribution')
 
-def single_synapse_weight_distribution(ax, tr, crun='run_00000000', bins=50):
-    df = tr.crun.SynEE_a
-    bins = np.linspace(0, tr.amax, num=bins)
-    ax.hist(np.nan_to_num(df.a.flatten()), bins=bins)
-
-def membrane_threshold_traces(ax, tr, crun='run_00000000'):
-    df = tr.crun.GExc_stat
-    for i in df.record:
-        ax.plot(df.Vt[i]/mV)
-    ax.set_title('{:.3f} ms mV, {:.0f} ms'.format(tr.eta_ip/(ms*mV),tr.it_dt/ms))
-    #ax.set_ylim(tr.Vr_e/mV-5, tr.Vt_e/mV+5)
+def synapse_weight_traces(ax, tr, crun='run_00000000', tmax=-1):
+    df = tr.crun.SynEE_stat
+    for i in range(len(df.a)):
+        ax.plot(df.t[:tmax]*1000,df.a[i,:tmax])
+    ax.set_title('Synapse Weight Traces')
+    ax.set_xlabel('time [ms]')
 
 def membrane_threshold_distribution(ax, tr, crun='run_00000000'):
     df = tr.crun.GExc_vts
@@ -79,6 +75,13 @@ def membrane_threshold_distribution(ax, tr, crun='run_00000000'):
         ax.hist(df.Vt[:,i]/mV)
     ax.set_title('Membrane Threshold Distribution')
     ax.set_ylabel('threshold [mV]')
+
+def membrane_threshold_traces(ax, tr, crun='run_00000000'):
+    df = tr.crun.GExc_stat
+    for i in df.record:
+        ax.plot(df.Vt[i]/mV)
+    ax.set_title('{:.3f} ms mV, {:.0f} ms'.format(tr.eta_ip/(ms*mV),tr.it_dt/ms))
+    #ax.set_ylim(tr.Vr_e/mV-5, tr.Vt_e/mV+5)
 
 
 def default_analysis_figure(tr, crun='run_00000000'):
@@ -109,18 +112,22 @@ def default_analysis_figure(tr, crun='run_00000000'):
     raster_plot(ax1, tr, crun=crun)
     firing_rate_distribution(ax2, tr, crun=crun, bins=25)
     voltage_traces(ax3, tr, crun=crun)
-    synaptic_weight_distribution(ax5, tr, crun=crun)
+    synapse_weight_distribution(ax5, tr, crun=crun)
+    synapse_weight_traces(ax6, tr, crun=crun, tmax=-1)
     membrane_threshold_distribution(ax9, tr, crun=crun)
     membrane_threshold_traces(ax10, tr, crun=crun)
             
     pl.tight_layout()
-    pl.savefig("default_analysis_output/50sec_dfa_{:s}.png".format(crun), dpi=300, bbox_inches='tight')
+    pl.savefig("default_analysis_output/ns8_{:s}.png".format(crun), dpi=300, bbox_inches='tight')
 
 
 if __name__ == "__main__":
-    # tr.v_idx = 2
+    # tr.v_idx = 6
     # crun = tr.v_crun
     # default_analysis_figure(tr,crun)
     
     for crun in tr.f_iter_runs():
-        default_analysis_figure(tr, crun)
+        if tr.v_idx < 3:
+            print('not making figure for ', crun)
+        else:
+            default_analysis_figure(tr, crun)
