@@ -46,7 +46,7 @@ it_dt = 10*ms
 h_ip = 3*Hz
 
 # structural plasticity
-strct_active = True
+strct_active = 0
 prn_thrshld = 0.001 * ATotalMax
 insert_P = 0.001
 strct_dt = 10*ms
