@@ -79,6 +79,7 @@ def add_params(tr):
     # tr.f_add_parameter('netw.mod.neuron_method', prm.neuron_method)
     # tr.f_add_parameter('netw.mod.synEE_method',  prm.synEE_method)
 
+    #tr.f_add_parameter('netw.sim.preT',  prm.T)
     tr.f_add_parameter('netw.sim.T',  prm.T)
     tr.f_add_parameter('netw.sim.dt', prm.netw_dt)
 
@@ -132,21 +133,21 @@ def run_net(tr):
     # structural plasticity
     if tr.netw.config.strct_active:
         SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
-    
+
+    #run(tr.sim.preT)
     
     GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
-    SynEE_stat = StateMonitor(SynEE, ['Apre', 'Apost'], record=[0,1,2])
-    SynEE_a = StateMonitor(SynEE, ['a'], record=range(tr.N_e*tr.N_e), dt=tr.strct_dt)
+    SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=[0,1,2])
     GExc_spks = SpikeMonitor(GExc)
-    GInh_stat = StateMonitor(GInh, ['V', 'ge', 'gi'], record=[0,1,2])
+    GInh_stat = StateMonitor(GInh, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
     GInh_spks = SpikeMonitor(GInh)
 
     GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2)
+    SynEE_a = StateMonitor(SynEE, ['a'], record=True, dt=tr.sim.T/2)
     run(tr.sim.T)
+
     GExc_vts.record_single_timestep()
-    
-    # SynEE_a = StateMonitor(SynEE, ['a'], record=True, dt=tr.netw.sim.dt)
-    # run(tr.netw.sim.dt)
+    SynEE_a.record_single_timestep()
 
     tr.v_standard_result = Brian2MonitorResult
     tr.f_add_result('GExc_stat', GExc_stat)
