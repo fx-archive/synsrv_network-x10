@@ -89,7 +89,7 @@ def add_params(tr):
     
 def run_net(tr):
 
-    prefs.codegen.target = 'numpy'
+    prefs.codegen.target = 'cython'
 
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
 
