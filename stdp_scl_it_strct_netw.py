@@ -152,11 +152,11 @@ def run_net(tr):
     # SynEE_a.record_single_timestep()
 
     tr.v_standard_result = Brian2MonitorResult
-    tr.f_add_result('GExc_stat', GExc_stat)
+    # tr.f_add_result('GExc_stat', GExc_stat)
     # tr.f_add_result('SynEE_stat', SynEE_stat)
-    # tr.f_add_result('GExc_spks', GExc_spks)
+    tr.f_add_result('GExc_spks', GExc_spks)
     # tr.f_add_result('GInh_stat', GInh_stat)
-    # tr.f_add_result('GInh_spks', GInh_spks)
+    tr.f_add_result('GInh_spks', GInh_spks)
     # tr.f_add_result('SynEE_a', SynEE_a)
     # tr.f_add_result('GExc_vts', GExc_vts)
 
