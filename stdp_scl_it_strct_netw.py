@@ -154,8 +154,12 @@ def run_net(tr):
     tr.v_standard_result = Brian2MonitorResult
     # tr.f_add_result('GExc_stat', GExc_stat)
     # tr.f_add_result('SynEE_stat', SynEE_stat)
+    print("Saving exc spikes...")
+    print(GExc_spks.get_states())
     tr.f_add_result('GExc_spks', GExc_spks)
     # tr.f_add_result('GInh_stat', GInh_stat)
+    print("Saving inh spikes...")
+    print(GInh_spks.get_states())
     tr.f_add_result('GInh_spks', GInh_spks)
     # tr.f_add_result('SynEE_a', SynEE_a)
     # tr.f_add_result('GExc_vts', GExc_vts)
