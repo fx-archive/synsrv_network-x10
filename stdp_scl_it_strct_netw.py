@@ -148,8 +148,8 @@ def run_net(tr):
     SynEE_a = StateMonitor(SynEE, ['a'], record=True, dt=tr.sim.T/2.)
     run(tr.sim.T)
 
-    # GExc_vts.record_single_timestep()
-    # SynEE_a.record_single_timestep()
+    GExc_vts.record_single_timestep()
+    SynEE_a.record_single_timestep()
 
     tr.v_standard_result = Brian2MonitorResult
     tr.f_add_result('GExc_stat', GExc_stat)
