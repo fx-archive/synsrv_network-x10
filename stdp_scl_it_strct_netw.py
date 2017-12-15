@@ -52,6 +52,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.amax',      prm.amax)
 
     # scaling
+    tr.f_add_parameter('netw.config.scl_active', prm.scl_active)
     tr.f_add_parameter('netw.ATotalMax',        prm.ATotalMax)
     tr.f_add_parameter('netw.dt_synEE_scaling', prm.dt_synEE_scaling)
 
@@ -125,9 +126,12 @@ def run_net(tr):
     SynEE.a = tr.a_ee
     SynEE.insert_P = tr.insert_P
 
-    SynEE.summed_updaters['Asum_post']._clock = Clock(dt=tr.dt_synEE_scaling)
-    SynEE.run_regularly(tr.synEE_scaling, dt = tr.dt_synEE_scaling,
-                        when='end')
+    # synaptic scaling
+    if tr.netw.config.scl_active:
+        SynEE.summed_updaters['Asum_post']._clock = Clock(
+            dt=tr.dt_synEE_scaling)
+        SynEE.run_regularly(tr.synEE_scaling, dt = tr.dt_synEE_scaling,
+                            when='end')
 
     # intrinsic plasticity
     if tr.netw.config.it_active:

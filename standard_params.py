@@ -34,11 +34,10 @@ Aminus = -7.5*0.001
 amax = 40*0.001
 
 ATotalMax = 40.*0.001
-dt_synEE_scaling = 10*ms
 
-#preT  = 100*second
-T  = 10*second
-netw_dt = 0.1*ms
+# scaling
+scl_active = 0
+dt_synEE_scaling = 10*ms
 
 # intrinsic plasticity
 it_active = 0
@@ -52,6 +51,12 @@ prn_thrshld = 0.001 * ATotalMax
 insert_P = 0.001
 strct_dt = 10*ms
 a_insert = 0.01 * ATotalMax
+
+
+#preT  = 100*second
+T  = 10*second
+netw_dt = 0.1*ms
+
 
 # neuron_method = 'euler'
 # synEE_method = 'euler'
