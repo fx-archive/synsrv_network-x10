@@ -146,6 +146,9 @@ def run_net(tr):
     
     GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
     SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=[0,1,2])
+
+    SynEE_at = StateMonitor(SynEE, ['a'], record=True)
+
     GExc_spks = SpikeMonitor(GExc)
     GInh_stat = StateMonitor(GInh, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
     GInh_spks = SpikeMonitor(GInh)
@@ -167,4 +170,6 @@ def run_net(tr):
     tr.f_add_result('GInh_spks', GInh_spks)
     tr.f_add_result('SynEE_a', SynEE_a)
     tr.f_add_result('GExc_vts', GExc_vts)
+    
+    tr.f_add_result('SynEE_at', SynEE_at)
 
