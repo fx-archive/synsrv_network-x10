@@ -56,9 +56,10 @@ def add_params(tr):
     tr.f_add_parameter('netw.dt_synEE_scaling', prm.dt_synEE_scaling)
 
     # intrinsic plasticity
+    tr.f_add_parameter('netw.config.it_active', prm.it_active)
     tr.f_add_parameter('netw.eta_ip', prm.eta_ip)
     tr.f_add_parameter('netw.it_dt',  prm.it_dt)
-    tr.f_add_parameter('netw.h_ip', prm.h_ip)
+    tr.f_add_parameter('netw.h_ip',   prm.h_ip)
 
     # structural plasticity
     tr.f_add_parameter('netw.prn_thrshld', prm.prn_thrshld)
@@ -129,8 +130,9 @@ def run_net(tr):
                         when='end')
 
     # intrinsic plasticity
-    GExc.h_ip = tr.h_ip
-    GExc.run_regularly(tr.intrinsic_mod, dt = tr.it_dt, when='end')
+    if tr.netw.config.it_active:
+        GExc.h_ip = tr.h_ip
+        GExc.run_regularly(tr.intrinsic_mod, dt = tr.it_dt, when='end')
 
     # structural plasticity
     if tr.netw.config.strct_active:

@@ -41,6 +41,7 @@ T  = 10*second
 netw_dt = 0.1*ms
 
 # intrinsic plasticity
+it_active = 0
 eta_ip = 0.2*mV*ms
 it_dt = 10*ms
 h_ip = 3*Hz
