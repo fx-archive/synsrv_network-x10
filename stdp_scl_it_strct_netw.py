@@ -118,11 +118,37 @@ def run_net(tr):
     SynII = Synapses(target=GInh, source=GInh, on_pre='gi_post += a_ii',
                      namespace=namespace)
 
-    SynEE.connect(p=tr.p_ee)
-    SynIE.connect(p=tr.p_ie)
-    SynEI.connect(p=tr.p_ei)
-    SynII.connect(p=tr.p_ii)
+    def generate_connections(N_tar, N_src, p):
+        nums = np.random.binomial(N_tar-1, p, N_src)
+        print(nums)
+        i = np.repeat(np.arange(N_src), nums)
+        print(i)
+        j = []
+        for k,n in enumerate(nums):
+            j+=list(np.random.choice(list(range(k-1))+list(range(k+1,N_tar)),
+                                     size=n, replace=False))
+            print(j)
+        return i, np.array(j)
 
+    sEE_src, sEE_tar = generate_connections(N_e, N_e, p_ee) 
+    sIE_src, sIE_tar = generate_connections(N_i, N_e, p_ie)
+    sEI_src, sEI_tar = generate_connections(N_e, N_i, p_ei)
+    sII_src, sII_tar = generate_connections(N_i, N_i, p_ii) 
+   
+    SynEE.connect(i=sEE_src, j=sEE_tar)
+    SynIE.connect(i=sIE_src, j=sIE_tar)
+    SynEI.connect(i=sEI_src, j=sEI_tar)
+    SynII.connect(i=sII_src, j=sII_tar)
+
+    tr.f_add_result('sEE_src', sEE_src)
+    tr.f_add_result('sEE_tar', sEE_tar)
+    tr.f_add_result('sIE_src', sIE_src)
+    tr.f_add_result('sIE_tar', sIE_tar)
+    tr.f_add_result('sEI_src', sEI_src)
+    tr.f_add_result('sEI_tar', sEI_tar)
+    tr.f_add_result('sII_src', sII_src)
+    tr.f_add_result('sII_tar', sII_tar)
+    
     SynEE.a = tr.a_ee
     SynEE.insert_P = tr.insert_P
 
@@ -147,8 +173,6 @@ def run_net(tr):
     GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
     SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=[0,1,2])
 
-    SynEE_at = StateMonitor(SynEE, ['a'], record=True)
-
     GExc_spks = SpikeMonitor(GExc)
     GInh_stat = StateMonitor(GInh, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
     GInh_spks = SpikeMonitor(GInh)
@@ -170,6 +194,4 @@ def run_net(tr):
     tr.f_add_result('GInh_spks', GInh_spks)
     tr.f_add_result('SynEE_a', SynEE_a)
     tr.f_add_result('GExc_vts', GExc_vts)
-    
-    tr.f_add_result('SynEE_at', SynEE_at)
 
