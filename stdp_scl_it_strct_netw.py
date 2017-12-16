@@ -130,10 +130,10 @@ def run_net(tr):
             print(j)
         return i, np.array(j)
 
-    sEE_src, sEE_tar = generate_connections(N_e, N_e, p_ee) 
-    sIE_src, sIE_tar = generate_connections(N_i, N_e, p_ie)
-    sEI_src, sEI_tar = generate_connections(N_e, N_i, p_ei)
-    sII_src, sII_tar = generate_connections(N_i, N_i, p_ii) 
+    sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee) 
+    sIE_src, sIE_tar = generate_connections(tr.N_i, tr.N_e, tr.p_ie)
+    sEI_src, sEI_tar = generate_connections(tr.N_e, tr.N_i, tr.p_ei)
+    sII_src, sII_tar = generate_connections(tr.N_i, tr.N_i, tr.p_ii) 
    
     SynEE.connect(i=sEE_src, j=sEE_tar)
     SynIE.connect(i=sIE_src, j=sIE_tar)
