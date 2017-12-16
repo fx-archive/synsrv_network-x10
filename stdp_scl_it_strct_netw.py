@@ -120,14 +120,11 @@ def run_net(tr):
 
     def generate_connections(N_tar, N_src, p):
         nums = np.random.binomial(N_tar-1, p, N_src)
-        print(nums)
         i = np.repeat(np.arange(N_src), nums)
-        print(i)
         j = []
         for k,n in enumerate(nums):
             j+=list(np.random.choice(list(range(k-1))+list(range(k+1,N_tar)),
                                      size=n, replace=False))
-            print(j)
         return i, np.array(j)
 
     sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee) 
