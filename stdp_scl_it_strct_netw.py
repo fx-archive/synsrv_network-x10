@@ -118,19 +118,25 @@ def run_net(tr):
     SynII = Synapses(target=GInh, source=GInh, on_pre='gi_post += a_ii',
                      namespace=namespace)
 
-    def generate_connections(N_tar, N_src, p):
+    def generate_connections(N_tar, N_src, p, same=False):
         nums = np.random.binomial(N_tar-1, p, N_src)
         i = np.repeat(np.arange(N_src), nums)
         j = []
-        for k,n in enumerate(nums):
-            j+=list(np.random.choice(list(range(k-1))+list(range(k+1,N_tar)),
-                                     size=n, replace=False))
+        if same:
+            for k,n in enumerate(nums):
+                j+=list(np.random.choice([*range(k-1)]+[*range(k+1,N_tar)],
+                                         size=n, replace=False))
+        else:
+            for k,n in enumerate(nums):
+                j+=list(np.random.choice([*range(N_tar)],
+                                         size=n, replace=False))
+
         return i, np.array(j)
 
-    sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee) 
+    sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee, same=True) 
     sIE_src, sIE_tar = generate_connections(tr.N_i, tr.N_e, tr.p_ie)
     sEI_src, sEI_tar = generate_connections(tr.N_e, tr.N_i, tr.p_ei)
-    sII_src, sII_tar = generate_connections(tr.N_i, tr.N_i, tr.p_ii) 
+    sII_src, sII_tar = generate_connections(tr.N_i, tr.N_i, tr.p_ii, same=True)
    
     SynEE.connect(i=sEE_src, j=sEE_tar)
     SynIE.connect(i=sIE_src, j=sIE_tar)
