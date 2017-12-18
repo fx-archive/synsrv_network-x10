@@ -23,7 +23,7 @@ nrnEE_reset = '''
 
 synEE_mod = '''
             a : 1
-            active : 1
+            syn_active : integer
 
             dApre  /dt = -Apre/taupre  : 1
             dApost /dt = -Apost/taupost : 1
@@ -65,9 +65,9 @@ strct_mod = '''
             r = rand()
             should_stay_active = (a > prn_thrshld)
             should_become_active = (r < insert_P)
-            was_active_before = active
-            active = int(active==1) * int(should_stay_active) \
-                     + int(active==0) * int(should_become_active)
-            a = a*int(was_active_before==1)*int(active==1) \
-                + a_insert*int(was_active_before==0)*int(active==1)
+            was_active_before = syn_active
+            syn_active = int(syn_active==1) * int(should_stay_active) \
+                     + int(syn_active==0) * int(should_become_active)
+            a = a*int(was_active_before==1)*int(syn_active==1) \
+                + a_insert*int(was_active_before==0)*int(syn_active==1)
              '''
