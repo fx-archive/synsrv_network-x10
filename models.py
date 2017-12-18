@@ -39,14 +39,14 @@ synEE_mod = '''
 #             '''
 
 synEE_pre = '''
-            ge_post += a
-            Apre += Aplus
-            a = clip(a+Apost, 0, amax)
+            ge_post += syn_active*a
+            Apre += syn_active*Aplus
+            a = clip(a+syn_active*Apost, 0, amax)
             '''
 
 synEE_post = '''
-             Apost+= Aminus
-             a = clip(a+Apre, 0, amax)
+             Apost+= syn_active*Aminus
+             a = clip(a+syn_active*Apre, 0, amax)
              '''
 
 
