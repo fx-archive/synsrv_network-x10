@@ -185,7 +185,7 @@ def run_net(tr):
 
         @network_operation(dt=tr.strct_dt, when='end')
         def f():
-            active_synapses.append(np.sum(SynEE.syn_active))
+            active_synapses.append(sum(SynEE.syn_active))
 
             
 
@@ -208,8 +208,10 @@ def run_net(tr):
     GExc_vts.record_single_timestep()
     SynEE_a.record_single_timestep()
 
-    tr.v_standard_result = Brian2MonitorResult
+    print(active_synapses)
     tr.f_add_result('SynAct_stat', active_synapses)
+    tr.v_standard_result = Brian2MonitorResult
+
     tr.f_add_result('GExc_stat', GExc_stat)
     tr.f_add_result('SynEE_stat', SynEE_stat)
     print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
