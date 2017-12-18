@@ -183,9 +183,11 @@ def run_net(tr):
     if tr.netw.config.strct_active:
         SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
 
-        @network_operation(dt=tr.strct_dt, when='end')
+        # @network_operation(dt=tr.strct_dt, when='end')
+        @network_operation(dt=50*ms, when='end')
         def f():
-            active_synapses.append(sum(SynEE.syn_active))
+            print(np.shape(SynEE.syn_active), len(SynEE.syn_active))
+            #active_synapses.append(sum(SynEE.syn_active))
 
             
 
