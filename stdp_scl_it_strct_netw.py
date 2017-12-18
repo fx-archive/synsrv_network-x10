@@ -180,6 +180,7 @@ def run_net(tr):
 
     # structural plasticity
     if tr.netw.config.strct_active:
+        print("activated strct_mod")
         SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
 
     #run(tr.sim.preT)
