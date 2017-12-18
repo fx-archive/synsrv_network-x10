@@ -11,7 +11,7 @@ from pypet.brian2.parameter import Brian2Parameter, Brian2MonitorResult
 
 from brian2 import NeuronGroup, StateMonitor, SpikeMonitor, run, \
                    PoissonGroup, Synapses, set_device, device, Clock, \
-                   defaultclock, prefs
+                   defaultclock, prefs, network_operation
 
 def add_params(tr):
 
