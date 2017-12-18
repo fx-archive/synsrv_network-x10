@@ -179,13 +179,16 @@ def run_net(tr):
         GExc.run_regularly(tr.intrinsic_mod, dt = tr.it_dt, when='end')
 
     # structural plasticity
+    active_synapses = []
     if tr.netw.config.strct_active:
         print("activated strct_mod")
         SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
 
-        @network_operation(dt=50*ms, when='end')
+        @network_operation(dt=tr.strct_dt, when='end')
         def f():
-            print(np.sum(SynEE.syn_active))
+            active_synapses.append(np.sum(SynEE.syn_active))
+
+            
 
     #run(tr.sim.preT)
     
@@ -206,6 +209,9 @@ def run_net(tr):
     GExc_vts.record_single_timestep()
     SynEE_a.record_single_timestep()
 
+    tr.f_add_result('active_synapses', {'no': active_synapses})
+    print(active_synapses)
+    
     tr.v_standard_result = Brian2MonitorResult
     tr.f_add_result('GExc_stat', GExc_stat)
     tr.f_add_result('SynEE_stat', SynEE_stat)
