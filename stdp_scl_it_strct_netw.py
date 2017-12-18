@@ -213,7 +213,8 @@ def run_net(tr):
     SynEE_a.record_single_timestep()
 
     active_synapses = np.array(active_synapses)
-    tr.f_add_result('SynAct_stat', {'no:', active_synapses})
+    # print(active_synapses)
+    tr.f_add_result('SynAct_stat', active_synapses)
     tr.v_standard_result = Brian2MonitorResult
 
     tr.f_add_result('GExc_stat', GExc_stat)
