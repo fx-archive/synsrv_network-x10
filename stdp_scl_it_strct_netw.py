@@ -183,6 +183,10 @@ def run_net(tr):
         print("activated strct_mod")
         SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
 
+        @network_operation(dt=10*ms, when='end')
+        def f():
+            print("Hello World")
+
     #run(tr.sim.preT)
     
     GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
