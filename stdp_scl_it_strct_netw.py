@@ -193,7 +193,7 @@ def run_net(tr):
     GInh_spks = SpikeMonitor(GInh)
 
     GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
-    SynEE_a = StateMonitor(SynEE, ['a'], record=range(tr.N_e*tr.N_e), dt=tr.sim.T/2.)
+    SynEE_a = StateMonitor(SynEE, ['a'], record=True, dt=tr.sim.T/2.)
 
     run(tr.sim.T)
     #device.build(directory='./build')
