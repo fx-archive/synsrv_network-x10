@@ -154,7 +154,7 @@ def run_net(tr):
     if not tr.strct_active:
         tr.f_add_result('sEE_src', sEE_src)
         tr.f_add_result('sEE_tar', sEE_tar)
-
+        
     tr.f_add_result('sIE_src', sIE_src)
     tr.f_add_result('sIE_tar', sIE_tar)
     tr.f_add_result('sEI_src', sEI_src)
@@ -163,6 +163,7 @@ def run_net(tr):
     tr.f_add_result('sII_tar', sII_tar)
     
     SynEE.a = tr.a_ee
+    SynEE.active = 0
     SynEE.insert_P = tr.insert_P
 
     # synaptic scaling
