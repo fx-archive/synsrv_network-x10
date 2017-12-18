@@ -23,7 +23,7 @@ nrnEE_reset = '''
 
 synEE_mod = '''
             a : 1
-            active : integer
+            active : 1
 
             dApre  /dt = -Apre/taupre  : 1
             dApost /dt = -Apost/taupost : 1
