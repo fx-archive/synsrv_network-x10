@@ -163,7 +163,7 @@ def run_net(tr):
     tr.f_add_result('sII_tar', sII_tar)
     
     SynEE.a = tr.a_ee
-    SynEE.active = 0
+    SynEE.active = np.zeros(tr.N_e*tr.N_e-1)
     SynEE.insert_P = tr.insert_P
 
     # synaptic scaling
