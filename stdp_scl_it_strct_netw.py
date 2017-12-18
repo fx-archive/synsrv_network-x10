@@ -91,8 +91,9 @@ def add_params(tr):
     
 def run_net(tr):
 
-    #prefs.codegen.target = 'cython'
-    set_device('cpp_standalone', directory='./build', build_on_run=False)
+    prefs.codegen.target = 'numpy'
+    # prefs.codegen.target = 'cython'
+    # set_device('cpp_standalone', directory='./build', build_on_run=False)
 
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
 
@@ -194,7 +195,7 @@ def run_net(tr):
     SynEE_a = StateMonitor(SynEE, ['a'], record=range(tr.N_e*tr.N_e), dt=tr.sim.T/2.)
 
     run(tr.sim.T)
-    device.build(directory='./build')
+    #device.build(directory='./build')
 
     GExc_vts.record_single_timestep()
     SynEE_a.record_single_timestep()
