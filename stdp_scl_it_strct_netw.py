@@ -187,6 +187,7 @@ def run_net(tr):
         @network_operation(dt=50*ms, when='end')
         def f():
             print(np.shape(SynEE.syn_active), len(SynEE.syn_active))
+            print(np.sum(SynEE.syn_active))
             #active_synapses.append(sum(SynEE.syn_active))
 
             
