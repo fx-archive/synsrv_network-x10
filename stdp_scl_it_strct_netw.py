@@ -188,7 +188,7 @@ def run_net(tr):
         def f():
             print(np.shape(SynEE.syn_active), len(SynEE.syn_active))
             print(np.sum(SynEE.syn_active))
-            active_synapses.append(np.sum(SynEE.syn_active))
+            active_synapses.append(np.sum(SynEE.syn_active)[0])
             #active_synapses.append(sum(SynEE.syn_active))
 
             
