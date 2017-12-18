@@ -161,7 +161,7 @@ def run_net(tr):
     tr.f_add_result('sEI_tar', sEI_tar)
     tr.f_add_result('sII_src', sII_src)
     tr.f_add_result('sII_tar', sII_tar)
-    
+
     SynEE.a = tr.a_ee
     SynEE.syn_active = 0
     SynEE.insert_P = tr.insert_P
