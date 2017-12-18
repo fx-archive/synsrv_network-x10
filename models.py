@@ -60,14 +60,14 @@ intrinsic_mod = '''
                 '''
 
 # rand() == uniform(0,1)
-strct_mod = ''
-# strct_mod = '''
-#             r = rand()
-#             should_stay_active = (a > prn_thrshld)
-#             should_become_active = (r < insert_P)
-#             was_active_before = active
-#             active = int(active==1) * int(should_stay_active) \
-#                      + int(active==0) * int(should_become_active)
-#             a = a*int(was_active_before==1)*int(active==1) \
-#                 + a_insert*int(was_active_before==0)*int(active==1)
-#              '''
+#strct_mod = ''
+strct_mod = '''
+            r = rand()
+            should_stay_active = (a > prn_thrshld)
+            should_become_active = (r < insert_P)
+            was_active_before = active
+            active = int(active==1) * int(should_stay_active) \
+                     + int(active==0) * int(should_become_active)
+            a = a*int(was_active_before==1)*int(active==1) \
+                + a_insert*int(was_active_before==0)*int(active==1)
+             '''

@@ -10,7 +10,7 @@ from brian2.units import ms,mV
 from pypet.brian2.parameter import Brian2Parameter, Brian2MonitorResult
 
 from brian2 import NeuronGroup, StateMonitor, SpikeMonitor, run, \
-                   PoissonGroup, Synapses, device, Clock, \
+                   PoissonGroup, Synapses, set_device, device, Clock, \
                    defaultclock, prefs
 
 def add_params(tr):
@@ -91,7 +91,8 @@ def add_params(tr):
     
 def run_net(tr):
 
-    prefs.codegen.target = 'cython'
+    #prefs.codegen.target = 'cython'
+    set_device('cpp_standalone', directory='./build', build_on_run=False)
 
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
 
@@ -133,18 +134,26 @@ def run_net(tr):
 
         return i, np.array(j)
 
-    sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee, same=True) 
+    if not tr.strct_active:
+        sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee, same=True) 
+
     sIE_src, sIE_tar = generate_connections(tr.N_i, tr.N_e, tr.p_ie)
     sEI_src, sEI_tar = generate_connections(tr.N_e, tr.N_i, tr.p_ei)
     sII_src, sII_tar = generate_connections(tr.N_i, tr.N_i, tr.p_ii, same=True)
-   
-    SynEE.connect(i=sEE_src, j=sEE_tar)
+
+    if tr.strct_active:
+        SynEE.connect(True)        
+    else:
+        SynEE.connect(i=sEE_src, j=sEE_tar)
+        
     SynIE.connect(i=sIE_src, j=sIE_tar)
     SynEI.connect(i=sEI_src, j=sEI_tar)
     SynII.connect(i=sII_src, j=sII_tar)
 
-    tr.f_add_result('sEE_src', sEE_src)
-    tr.f_add_result('sEE_tar', sEE_tar)
+    if not tr.strct_active:
+        tr.f_add_result('sEE_src', sEE_src)
+        tr.f_add_result('sEE_tar', sEE_tar)
+
     tr.f_add_result('sIE_src', sIE_src)
     tr.f_add_result('sIE_tar', sIE_tar)
     tr.f_add_result('sEI_src', sEI_src)
@@ -182,8 +191,10 @@ def run_net(tr):
     GInh_spks = SpikeMonitor(GInh)
 
     GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
-    SynEE_a = StateMonitor(SynEE, ['a'], record=True, dt=tr.sim.T/2.)
+    SynEE_a = StateMonitor(SynEE, ['a'], record=range(tr.N_e*tr.N_e), dt=tr.sim.T/2.)
+
     run(tr.sim.T)
+    device.build(directory='./build')
 
     GExc_vts.record_single_timestep()
     SynEE_a.record_single_timestep()
