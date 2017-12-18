@@ -185,7 +185,7 @@ def run_net(tr):
 
         @network_operation(dt=tr.strct_dt, when='end')
         def f():
-            number_nactive_synapses.append(np.sum(SynEE.syn_active))
+            number_active_synapses.append(np.sum(SynEE.syn_active))
 
     #run(tr.sim.preT)
     
