@@ -23,12 +23,12 @@ nrnEE_reset = '''
 
 synEE_mod = '''
             a : 1
+            active : integer
+
             dApre  /dt = -Apre/taupre  : 1
             dApost /dt = -Apost/taupost : 1
 
-            Asum_post = a : 1 (summed)
-
-            active : integer
+            Asum_post = a : 1 (summed)         
             insert_P : 1 (shared) 
             '''
 
