@@ -177,6 +177,7 @@ def run_net(tr):
     SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=[0,1,2])
 
     GExc_spks = SpikeMonitor(GExc)
+    
     GInh_stat = StateMonitor(GInh, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
     GInh_spks = SpikeMonitor(GInh)
 
