@@ -183,9 +183,9 @@ def run_net(tr):
         print("activated strct_mod")
         SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
 
-        @network_operation(dt=10*ms, when='end')
+        @network_operation(dt=50*ms, when='end')
         def f():
-            print("Hello World")
+            print(np.sum(SynEE.syn_active))
 
     #run(tr.sim.preT)
     
