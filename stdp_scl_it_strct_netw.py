@@ -183,11 +183,11 @@ def run_net(tr):
     if tr.netw.config.strct_active:
         SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
 
-        # @network_operation(dt=tr.strct_dt, when='end')
-        @network_operation(dt=50*ms, when='end')
+        @network_operation(dt=tr.strct_dt, when='end')
+        # @network_operation(dt=50*ms, when='end')
         def f():
-            print(np.shape(SynEE.syn_active), len(SynEE.syn_active))
-            print(np.sum(SynEE.syn_active))
+            # print(np.shape(SynEE.syn_active), len(SynEE.syn_active))
+            # print(np.sum(SynEE.syn_active))
             active_synapses.append(np.sum(SynEE.syn_active))
             #active_synapses.append(sum(SynEE.syn_active))
 
@@ -213,7 +213,7 @@ def run_net(tr):
     SynEE_a.record_single_timestep()
 
     active_synapses = np.array(active_synapses)
-    print(active_synapses)
+    # print(active_synapses)
     tr.f_add_result('SynAct_stat', active_synapses)
     tr.v_standard_result = Brian2MonitorResult
 
