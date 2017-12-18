@@ -66,12 +66,8 @@ strct_mod = '''
             should_stay_active = (a > prn_thrshld)
             should_become_active = (r < insert_P)
             was_active_before = syn_active
-            syn_active = should_become_active
-            '''
-
-
-            # syn_active = int(syn_active==1) * int(should_stay_active) \
-            #          + int(syn_active==0) * int(should_become_active)
-            # a = a*int(was_active_before==1)*int(syn_active==1) \
-            #     + a_insert*int(was_active_before==0)*int(syn_active==1)
-            #  '''
+            syn_active = int(syn_active==1) * int(should_stay_active) \
+                     + int(syn_active==0) * int(should_become_active)
+            a = a*int(was_active_before==1)*int(syn_active==1) \
+                + a_insert*int(was_active_before==0)*int(syn_active==1)
+             '''
