@@ -210,7 +210,7 @@ def run_net(tr):
 
     # # it looks like only pure numpy arrays can be stored as results
     # number_active_synapses = np.array(number_active_synapses)
-    # tr.f_add_result('SynAct_stat', number_active_synapses)
+    tr.f_add_result('SynAct_stat', number_active_synapses)
     
     # tr.v_standard_result = Brian2MonitorResult
 
