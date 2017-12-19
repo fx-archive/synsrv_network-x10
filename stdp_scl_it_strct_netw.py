@@ -225,4 +225,4 @@ def run_net(tr):
     # tr.f_add_result('GExc_vts', GExc_vts)
 
     tr.f_add_result('comp_time', [b-a])
-    print("Computation time: ", b-a)
+    print("Computation time: ", b-a, "\nSim time", tr.T, "\nNetworksize: Ne=", tr.N_e, "\t Ni=", tr.N_i )
