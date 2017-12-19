@@ -1,5 +1,6 @@
 
 # import logging?
+import time
 
 import standard_params as prm
 import models as mod
@@ -189,36 +190,39 @@ def run_net(tr):
 
     #run(tr.sim.preT)
     
-    GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
-    SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=[0,1,2])
+    # GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
+    # SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=[0,1,2])
 
-    GExc_spks = SpikeMonitor(GExc)
+    # GExc_spks = SpikeMonitor(GExc)
     
-    GInh_stat = StateMonitor(GInh, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
-    GInh_spks = SpikeMonitor(GInh)
+    # GInh_stat = StateMonitor(GInh, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
+    # GInh_spks = SpikeMonitor(GInh)
 
-    GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
-    SynEE_a = StateMonitor(SynEE, ['a','syn_active'], record=True, dt=tr.sim.T/2.)
-
+    # GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
+    # SynEE_a = StateMonitor(SynEE, ['a','syn_active'], record=True, dt=tr.sim.T/2.)
+    a = time.time()
     run(tr.sim.T)
+    b = time.time()
     #device.build(directory='./build')
 
     GExc_vts.record_single_timestep()
     SynEE_a.record_single_timestep()
 
-    # it looks like only pure numpy arrays can be stored as results
-    number_active_synapses = np.array(number_active_synapses)
-    tr.f_add_result('SynAct_stat', number_active_synapses)
+    # # it looks like only pure numpy arrays can be stored as results
+    # number_active_synapses = np.array(number_active_synapses)
+    # tr.f_add_result('SynAct_stat', number_active_synapses)
     
-    tr.v_standard_result = Brian2MonitorResult
+    # tr.v_standard_result = Brian2MonitorResult
 
-    tr.f_add_result('GExc_stat', GExc_stat)
-    tr.f_add_result('SynEE_stat', SynEE_stat)
-    print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
-    tr.f_add_result('GExc_spks', GExc_spks)
-    tr.f_add_result('GInh_stat', GInh_stat)
-    print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
-    tr.f_add_result('GInh_spks', GInh_spks)
-    tr.f_add_result('SynEE_a', SynEE_a)
-    tr.f_add_result('GExc_vts', GExc_vts)
+    # tr.f_add_result('GExc_stat', GExc_stat)
+    # tr.f_add_result('SynEE_stat', SynEE_stat)
+    # print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
+    # tr.f_add_result('GExc_spks', GExc_spks)
+    # tr.f_add_result('GInh_stat', GInh_stat)
+    # print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
+    # tr.f_add_result('GInh_spks', GInh_spks)
+    # tr.f_add_result('SynEE_a', SynEE_a)
+    # tr.f_add_result('GExc_vts', GExc_vts)
 
+    tr.f_add_result('comp_time', [b-a])
+    print("Computation time: ", b-a)
