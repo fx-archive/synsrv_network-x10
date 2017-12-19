@@ -205,8 +205,8 @@ def run_net(tr):
     b = time.time()
     #device.build(directory='./build')
 
-    GExc_vts.record_single_timestep()
-    SynEE_a.record_single_timestep()
+    # GExc_vts.record_single_timestep()
+    # SynEE_a.record_single_timestep()
 
     # # it looks like only pure numpy arrays can be stored as results
     # number_active_synapses = np.array(number_active_synapses)
