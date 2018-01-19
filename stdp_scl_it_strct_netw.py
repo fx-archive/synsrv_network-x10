@@ -188,7 +188,7 @@ def run_net(tr):
 
     # -------------- recording ------------------        
 
-    run(tr.sim.preT)
+    #run(tr.sim.preT)
     
     GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
     SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=[0,1,2])
