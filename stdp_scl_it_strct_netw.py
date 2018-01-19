@@ -4,6 +4,7 @@ import time
 
 import standard_params as prm
 import models as mod
+from utils import generate_connections
 
 import numpy as np
 
@@ -100,16 +101,23 @@ def run_net(tr):
 
     defaultclock.dt = tr.netw.sim.dt
 
-    GExc = NeuronGroup(N=tr.N_e, model=tr.condlif_sig, threshold=tr.nrnEE_thrshld,
+    GExc = NeuronGroup(N=tr.N_e, model=tr.condlif_sig,
+                       threshold=tr.nrnEE_thrshld,
                        reset=tr.nrnEE_reset, #method=tr.neuron_method,
                        namespace=namespace)
-    GInh = NeuronGroup(N=tr.N_i, model=tr.condlif_sig, threshold ='V > Vt',
+    GInh = NeuronGroup(N=tr.N_i, model=tr.condlif_sig,
+                       threshold ='V > Vt',
                        reset='V=Vr_i', #method=tr.neuron_method,
                        namespace=namespace)
-    GExc.Vt, GInh.Vt = tr.Vt_e, tr.Vt_i
-    GExc.V , GInh.V  = np.random.uniform(tr.Vr_e/mV, tr.Vt_e/mV, size=tr.N_e)*mV, \
-                       np.random.uniform(tr.Vr_i/mV, tr.Vt_i/mV, size=tr.N_i)*mV
 
+    # set initial thresholds fixed, init. potentials uniformly distrib.
+    GExc.Vt, GInh.Vt = tr.Vt_e, tr.Vt_i
+    GExc.V , GInh.V  = np.random.uniform(tr.Vr_e/mV, tr.Vt_e/mV,
+                                         size=tr.N_e)*mV, \
+                       np.random.uniform(tr.Vr_i/mV, tr.Vt_i/mV,
+                                         size=tr.N_i)*mV
+
+    # E<-E advanced synapse model, rest simple
     SynEE = Synapses(target=GExc, source=GExc, model=tr.synEE_mod,
                      on_pre=tr.synEE_pre, on_post=tr.synEE_post,
                      #method=tr.synEE_method,
@@ -121,40 +129,30 @@ def run_net(tr):
     SynII = Synapses(target=GInh, source=GInh, on_pre='gi_post += a_ii',
                      namespace=namespace)
 
-    def generate_connections(N_tar, N_src, p, same=False):
-        nums = np.random.binomial(N_tar-1, p, N_src)
-        i = np.repeat(np.arange(N_src), nums)
-        j = []
-        if same:
-            for k,n in enumerate(nums):
-                j+=list(np.random.choice([*range(k-1)]+[*range(k+1,N_tar)],
-                                         size=n, replace=False))
-        else:
-            for k,n in enumerate(nums):
-                j+=list(np.random.choice([*range(N_tar)],
-                                         size=n, replace=False))
+    
 
-        return i, np.array(j)
+    if tr.strct_active:
+        SynEE.connect(True)
+        SynEE.syn_active = 0
+    else:
+        sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee,
+                                                same=True)
+        SynEE.connect(i=sEE_src, j=sEE_tar)
 
-    if not tr.strct_active:
-        sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee, same=True) 
+        tr.f_add_result('sEE_src', sEE_src)
+        tr.f_add_result('sEE_tar', sEE_tar)
+
+        SynEE.syn_active = 1
+
 
     sIE_src, sIE_tar = generate_connections(tr.N_i, tr.N_e, tr.p_ie)
     sEI_src, sEI_tar = generate_connections(tr.N_e, tr.N_i, tr.p_ei)
-    sII_src, sII_tar = generate_connections(tr.N_i, tr.N_i, tr.p_ii, same=True)
+    sII_src, sII_tar = generate_connections(tr.N_i, tr.N_i, tr.p_ii,
+                                            same=True)
 
-    if tr.strct_active:
-        SynEE.connect(True)        
-    else:
-        SynEE.connect(i=sEE_src, j=sEE_tar)
-        
     SynIE.connect(i=sIE_src, j=sIE_tar)
     SynEI.connect(i=sEI_src, j=sEI_tar)
     SynII.connect(i=sII_src, j=sII_tar)
-
-    if not tr.strct_active:
-        tr.f_add_result('sEE_src', sEE_src)
-        tr.f_add_result('sEE_tar', sEE_tar)
         
     tr.f_add_result('sIE_src', sIE_src)
     tr.f_add_result('sIE_tar', sIE_tar)
@@ -164,7 +162,6 @@ def run_net(tr):
     tr.f_add_result('sII_tar', sII_tar)
 
     SynEE.a = tr.a_ee
-    SynEE.syn_active = 0
     SynEE.insert_P = tr.insert_P
 
     # synaptic scaling
@@ -188,41 +185,46 @@ def run_net(tr):
         def f():
             number_active_synapses.append(np.sum(SynEE.syn_active))
 
-    #run(tr.sim.preT)
-    
-    # GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
-    # SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=[0,1,2])
 
-    # GExc_spks = SpikeMonitor(GExc)
-    
-    # GInh_stat = StateMonitor(GInh, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
-    # GInh_spks = SpikeMonitor(GInh)
+    # -------------- recording ------------------        
 
-    # GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
-    # SynEE_a = StateMonitor(SynEE, ['a','syn_active'], record=True, dt=tr.sim.T/2.)
+    run(tr.sim.preT)
+    
+    GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
+    SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=[0,1,2])
+
+    GExc_spks = SpikeMonitor(GExc)
+    
+    GInh_stat = StateMonitor(GInh, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
+    GInh_spks = SpikeMonitor(GInh)
+
+    #GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
+    SynEE_a = StateMonitor(SynEE, ['a','syn_active'], record=True,
+                           dt=tr.sim.T/4.)
+    
     a = time.time()
     run(tr.sim.T)
     b = time.time()
     #device.build(directory='./build')
 
     # GExc_vts.record_single_timestep()
-    # SynEE_a.record_single_timestep()
+    SynEE_a.record_single_timestep()
 
-    # # it looks like only pure numpy arrays can be stored as results
+    # it looks like only pure numpy arrays can be stored as results
     # number_active_synapses = np.array(number_active_synapses)
-    tr.f_add_result('SynAct_stat', number_active_synapses)
+    # tr.f_add_result('SynAct_stat', number_active_synapses)
     
-    # tr.v_standard_result = Brian2MonitorResult
+    tr.v_standard_result = Brian2MonitorResult
 
-    # tr.f_add_result('GExc_stat', GExc_stat)
-    # tr.f_add_result('SynEE_stat', SynEE_stat)
-    # print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
-    # tr.f_add_result('GExc_spks', GExc_spks)
-    # tr.f_add_result('GInh_stat', GInh_stat)
-    # print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
-    # tr.f_add_result('GInh_spks', GInh_spks)
-    # tr.f_add_result('SynEE_a', SynEE_a)
-    # tr.f_add_result('GExc_vts', GExc_vts)
+    tr.f_add_result('GExc_stat', GExc_stat)
+    tr.f_add_result('SynEE_stat', SynEE_stat)
+    print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
+    tr.f_add_result('GExc_spks', GExc_spks)
+    tr.f_add_result('GInh_stat', GInh_stat)
+    print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
+    tr.f_add_result('GInh_spks', GInh_spks)
+    tr.f_add_result('SynEE_a', SynEE_a)
+    #tr.f_add_result('GExc_vts', GExc_vts)
 
     tr.f_add_result('comp_time', [b-a])
     print("Computation time: ", b-a, "\nSim time", tr.T, "\nNetworksize: Ne=", tr.N_e, "\t Ni=", tr.N_i )

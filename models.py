@@ -21,22 +21,20 @@ nrnEE_reset = '''
               spk_count = spk_count + 1
               '''
 
+# !--- add event-driven for efficiency ---!
+# dApre  /dt = -Apre/taupre  : 1 (event-driven)
+# dApost /dt = -Apost/taupost : 1 (event-driven)
 synEE_mod = '''
             a : 1
             syn_active : integer
 
-            dApre  /dt = -Apre/taupre  : 1
+            dApre  /dt = -Apre/taupre  : 1 
             dApost /dt = -Apost/taupost : 1
 
             Asum_post = a : 1 (summed)         
             insert_P : 1 (shared) 
             '''
 
-# synEE_mod = '''
-#             a : 1
-#             dApre  /dt = -Apre/taupre  : 1 (event-driven)
-#             dApost /dt = -Apost/taupost : 1 (event-driven)
-#             '''
 
 synEE_pre = '''
             ge_post += syn_active*a
@@ -48,7 +46,6 @@ synEE_post = '''
              Apost+= syn_active*Aminus
              a = clip(a+syn_active*Apre, 0, amax)
              '''
-
 
 synEE_scaling = '''
                 a = a*(ATotalMax/Asum_post)
