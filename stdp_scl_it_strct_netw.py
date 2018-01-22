@@ -225,7 +225,7 @@ def run_net(tr):
     tr.f_add_result('GInh_spks', GInh_spks)
     tr.f_add_result('SynEE_a', SynEE_a)
 
-    print(GExc_vts.all_values())
+    print(GExc_vts.get_states())
     tr.f_add_result('GExc_vts', GExc_vts)
     print(tr.GExc_vts.f_to_dict())
     
