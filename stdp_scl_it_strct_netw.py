@@ -224,7 +224,10 @@ def run_net(tr):
     print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
     tr.f_add_result('GInh_spks', GInh_spks)
     tr.f_add_result('SynEE_a', SynEE_a)
-    tr.f_add_result('GExc_vts', GExc_vts)
 
+    print(GExc_vts)
+    tr.f_add_result('GExc_vts', GExc_vts)
+    print(tr.GExc_vts.f_to_dict())
+    
     tr.f_add_result('comp_time', [b-a])
     print("Computation time: ", b-a, "\nSim time", tr.T, "\nNetworksize: Ne=", tr.N_e, "\t Ni=", tr.N_i )
