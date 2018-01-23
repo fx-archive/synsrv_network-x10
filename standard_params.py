@@ -17,6 +17,7 @@ Vr_i = -60*mV
 Vt_e = -54*mV
 Vt_i = -58*mV
 
+ascale = 1.0
 a_ee = 1.5
 a_ie = 1.5
 a_ei = -1.5
