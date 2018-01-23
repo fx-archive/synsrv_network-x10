@@ -37,10 +37,10 @@ def add_params(tr):
     tr.f_add_parameter('netw.Vt_i',  prm.Vt_i)
 
     tr.f_add_parameter('netw.ascale', prm.ascale)
-    tr.f_add_parameter('netw.a_ee',  prm.a_ee*prm.ascale)
-    tr.f_add_parameter('netw.a_ie',  prm.a_ie*prm.ascale)
-    tr.f_add_parameter('netw.a_ei',  prm.a_ei*prm.ascale)
-    tr.f_add_parameter('netw.a_ii',  prm.a_ii*prm.ascale)
+    tr.f_add_parameter('netw.a_ee',  prm.a_ee)
+    tr.f_add_parameter('netw.a_ie',  prm.a_ie)
+    tr.f_add_parameter('netw.a_ei',  prm.a_ei)
+    tr.f_add_parameter('netw.a_ii',  prm.a_ii)
 
     tr.f_add_parameter('netw.p_ee',  prm.p_ee)
     tr.f_add_parameter('netw.p_ie',  prm.p_ie)
@@ -50,13 +50,13 @@ def add_params(tr):
     # STDP
     tr.f_add_parameter('netw.taupre',    prm.taupre)
     tr.f_add_parameter('netw.taupost',   prm.taupost)
-    tr.f_add_parameter('netw.Aplus',     prm.Aplus*prm.ascale)
-    tr.f_add_parameter('netw.Aminus',    prm.Aminus*prm.ascale)
-    tr.f_add_parameter('netw.amax',      prm.amax*prm.ascale)
+    tr.f_add_parameter('netw.Aplus',     prm.Aplus)
+    tr.f_add_parameter('netw.Aminus',    prm.Aminus)
+    tr.f_add_parameter('netw.amax',      prm.amax)
 
     # scaling
     tr.f_add_parameter('netw.config.scl_active', prm.scl_active)
-    tr.f_add_parameter('netw.ATotalMax',        prm.ATotalMax*prm.ascale)
+    tr.f_add_parameter('netw.ATotalMax',        prm.ATotalMax)
     tr.f_add_parameter('netw.dt_synEE_scaling', prm.dt_synEE_scaling)
 
     # intrinsic plasticity
@@ -97,6 +97,11 @@ def run_net(tr):
     prefs.codegen.target = 'numpy'
     # prefs.codegen.target = 'cython'
     # set_device('cpp_standalone', directory='./build', build_on_run=False)
+
+    # parameter scaling
+    print('before ', tr.amax)
+    tr.amax = tr.amax * tr.ascale
+    print('after ', tr.amax)
 
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
 

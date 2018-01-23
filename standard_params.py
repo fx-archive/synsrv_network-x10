@@ -18,10 +18,10 @@ Vt_e = -54*mV
 Vt_i = -58*mV
 
 ascale = 1.0
-a_ee = 1.5 *ascale
-a_ie = 1.5 *ascale
-a_ei = -1.5 *ascale
-a_ii = -1.5 *ascale
+a_ee = 1.5 
+a_ie = 1.5 
+a_ei = -1.5 
+a_ii = -1.5 
 
 p_ee = 0.1 
 p_ie = 0.1
@@ -30,9 +30,9 @@ p_ii = 0.5
 
 taupre = 15*ms
 taupost = 30*ms
-Aplus = 15*0.001*ascale
-Aminus = -7.5*0.001*ascale
-amax = 40*0.001 *ascale
+Aplus = 15*0.001
+Aminus = -7.5*0.001
+amax = 40*0.001 
 
 ATotalMax = 40.*0.001
 
