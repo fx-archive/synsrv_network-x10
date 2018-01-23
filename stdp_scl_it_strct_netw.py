@@ -98,12 +98,6 @@ def run_net(tr):
     # prefs.codegen.target = 'cython'
     # set_device('cpp_standalone', directory='./build', build_on_run=False)
 
-    # parameter scaling
-    print('before ', tr.amax)
-    tr.amax.f_unlock()
-    tr.amax = tr.amax * tr.ascale
-    print('after ', tr.amax)
-
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
 
     defaultclock.dt = tr.netw.sim.dt
