@@ -100,6 +100,7 @@ def run_net(tr):
 
     # parameter scaling
     print('before ', tr.amax)
+    tr.amax.f_unlock()
     tr.amax = tr.amax * tr.ascale
     print('after ', tr.amax)
 
