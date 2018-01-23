@@ -203,9 +203,9 @@ def run_net(tr):
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'], record=True,
                            dt=tr.sim.T/4.)
     
-    a = time.time()
+    #a = time.time()
     run(tr.sim.T)
-    b = time.time()
+    #b = time.time()
     #device.build(directory='./build')
 
     GExc_vts.record_single_timestep()
@@ -230,5 +230,5 @@ def run_net(tr):
     tr.f_add_result('GExc_vts', GExc_vts)
     print(tr.GExc_vts.f_to_dict())
     
-    tr.f_add_result('comp_time', [b-a])
-    print("Computation time: ", b-a, "\nSim time", tr.T, "\nNetworksize: Ne=", tr.N_e, "\t Ni=", tr.N_i )
+    # tr.f_add_result('comp_time', [b-a])
+    # print("Computation time: ", b-a, "\nSim time", tr.T, "\nNetworksize: Ne=", tr.N_e, "\t Ni=", tr.N_i )
