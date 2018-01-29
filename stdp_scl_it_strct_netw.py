@@ -183,6 +183,8 @@ def run_net(tr):
 
     # structural plasticity
     number_active_synapses = []
+    life_times = []
+    dead_times = []
     if tr.netw.config.strct_active:
         SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
 
@@ -190,6 +192,21 @@ def run_net(tr):
         def f():
             number_active_synapses.append(np.sum(SynEE.syn_active))
 
+        active_before = SynEE.syn_active
+        t_counter = np.zeros_like(active_before)
+        
+        @network_operation(dt=tr.strct_dt, when='end')
+        def lifetime_counter():
+            active_now = SynEE.syn_active
+            t_counter[active_now == active_before] += 1
+            life_times.extend(list(t_counter[np.logical_and(
+                                     active_now != active_before,
+                                     active_before == 1)]))
+            dead_times.extend(list(t_counter[np.logical_and(
+                                     active_now != active_before,
+                                     active_before == 0)]))
+            t_counter[active_now != active_before] = 0
+            active_before = active_now
 
     # -------------- recording ------------------        
 
@@ -204,7 +221,7 @@ def run_net(tr):
     GInh_spks = SpikeMonitor(GInh)
 
     GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
-    SynEE_a = StateMonitor(SynEE, ['a','syn_active'], record=True, dt=tr.sim.T/1000.)
+    SynEE_a = StateMonitor(SynEE, ['a','syn_active'], record=True, dt=tr.sim.T/10.)
     
     #a = time.time()
     run(tr.sim.T)
@@ -217,6 +234,11 @@ def run_net(tr):
     # it looks like only pure numpy arrays can be stored as results
     number_active_synapses = np.array(number_active_synapses)
     tr.f_add_result('SynAct_stat', number_active_synapses)
+
+    # it looks like only pure numpy arrays can be stored as results
+    tr.f_add_result('dead_times', np.array(dead_times))
+    tr.f_add_result('life_times', np.array(life_times))
+ 
     
     tr.v_standard_result = Brian2MonitorResult
 
