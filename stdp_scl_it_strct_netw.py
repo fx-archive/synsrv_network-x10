@@ -198,9 +198,10 @@ def run_net(tr):
         t_counter = np.zeros_like(active_before)
 
         @network_operation(dt=tr.strct_dt, when='end')
-        def lifetime_counter(active_before, t_counter):
+        def lifetime_counter():
             global active_before
             global t_counter
+            print("HERE!!: ", active_before, t_counter)
             active_now = SynEE.syn_active
             t_counter[active_now == active_before] += 1
             life_times.extend(list(t_counter[np.logical_and(
