@@ -94,9 +94,9 @@ def add_params(tr):
     
 def run_net(tr):
 
-    prefs.codegen.target = 'numpy'
+    # prefs.codegen.target = 'numpy'
     # prefs.codegen.target = 'cython'
-    # set_device('cpp_standalone', directory='./build', build_on_run=False)
+    set_device('cpp_standalone', directory='./build', build_on_run=False)
 
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
 
@@ -163,7 +163,7 @@ def run_net(tr):
     tr.f_add_result('sII_tar', sII_tar)
 
     if tr.strct_active:
-        SynEE.a = -1 # allows to track synapses that were never inserted
+        SynEE.a = 0
     else:
         SynEE.a = tr.a_ee
         
@@ -183,35 +183,34 @@ def run_net(tr):
 
     # structural plasticity
     number_active_synapses = []
-    life_times = []
-    dead_times = []
-
+    # life_times = []
+    # dead_times = []
 
     if tr.netw.config.strct_active:
         SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
 
-        @network_operation(dt=tr.strct_dt, when='end')
-        def f():
-            number_active_synapses.append(np.sum(SynEE.syn_active))
+        # @network_operation(dt=tr.strct_dt, when='end')
+        # def f():
+        #     number_active_synapses.append(np.sum(SynEE.syn_active))
 
-        active_before = SynEE.syn_active
-        t_counter = np.zeros_like(active_before)
+        # active_before = SynEE.syn_active
+        # t_counter = np.zeros_like(active_before)
 
-        @network_operation(dt=tr.strct_dt, when='end')
-        def lifetime_counter():
-            global active_before
-            global t_counter
-            print("HERE!!: ", active_before, t_counter)
-            active_now = SynEE.syn_active
-            t_counter[active_now == active_before] += 1
-            life_times.extend(list(t_counter[np.logical_and(
-                                     active_now != active_before,
-                                     active_before == 1)]))
-            dead_times.extend(list(t_counter[np.logical_and(
-                                     active_now != active_before,
-                                     active_before == 0)]))
-            t_counter[active_now != active_before] = 0
-            active_before = active_now
+        # @network_operation(dt=tr.strct_dt, when='end')
+        # def lifetime_counter():
+        #     global active_before
+        #     global t_counter
+        #     print("HERE!!: ", active_before, t_counter)
+        #     active_now = SynEE.syn_active
+        #     t_counter[active_now == active_before] += 1
+        #     life_times.extend(list(t_counter[np.logical_and(
+        #                              active_now != active_before,
+        #                              active_before == 1)]))
+        #     dead_times.extend(list(t_counter[np.logical_and(
+        #                              active_now != active_before,
+        #                              active_before == 0)]))
+        #     t_counter[active_now != active_before] = 0
+        #     active_before = active_now
 
     # -------------- recording ------------------        
 
@@ -231,7 +230,7 @@ def run_net(tr):
     #a = time.time()
     run(tr.sim.T)
     #b = time.time()
-    #device.build(directory='./build')
+    device.build(directory='./build')
 
     GExc_vts.record_single_timestep()
     SynEE_a.record_single_timestep()
@@ -241,8 +240,8 @@ def run_net(tr):
     tr.f_add_result('SynAct_stat', number_active_synapses)
 
     # it looks like only pure numpy arrays can be stored as results
-    tr.f_add_result('dead_times', np.array(dead_times))
-    tr.f_add_result('life_times', np.array(life_times))
+    # tr.f_add_result('dead_times', np.array(dead_times))
+    # tr.f_add_result('life_times', np.array(life_times))
  
     
     tr.v_standard_result = Brian2MonitorResult
