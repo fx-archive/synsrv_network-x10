@@ -186,8 +186,6 @@ def run_net(tr):
     life_times = []
     dead_times = []
 
-    active_before = SynEE.syn_active
-    t_counter = np.zeros_like(active_before)
 
     if tr.netw.config.strct_active:
         SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
@@ -195,10 +193,14 @@ def run_net(tr):
         @network_operation(dt=tr.strct_dt, when='end')
         def f():
             number_active_synapses.append(np.sum(SynEE.syn_active))
-        
+
+        active_before = SynEE.syn_active
+        t_counter = np.zeros_like(active_before)
+
         @network_operation(dt=tr.strct_dt, when='end')
-        def lifetime_counter():
+        def lifetime_counter(active_before, t_counter):
             global active_before
+            global t_counter
             active_now = SynEE.syn_active
             t_counter[active_now == active_before] += 1
             life_times.extend(list(t_counter[np.logical_and(
