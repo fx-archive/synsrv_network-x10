@@ -225,7 +225,8 @@ def run_net(tr):
     GInh_spks = SpikeMonitor(GInh)
 
     GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
-    SynEE_a = StateMonitor(SynEE, ['a','syn_active'], record=True, dt=tr.sim.T/10.)
+    SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
+                           record=range(tr.N_e*tr.N_e-1), dt=tr.sim.T/10.)
     
     #a = time.time()
     run(tr.sim.T)
