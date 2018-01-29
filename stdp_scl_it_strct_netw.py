@@ -164,7 +164,6 @@ def run_net(tr):
 
     if tr.strct_active:
         SynEE.a = -1 # allows to track synapses that were never inserted
-        active_before = SynEE.syn_active
     else:
         SynEE.a = tr.a_ee
         
@@ -193,11 +192,12 @@ def run_net(tr):
         def f():
             number_active_synapses.append(np.sum(SynEE.syn_active))
 
-
+        active_before = SynEE.syn_active
         t_counter = np.zeros_like(active_before)
         
         @network_operation(dt=tr.strct_dt, when='end')
         def lifetime_counter():
+            global active_before
             active_now = SynEE.syn_active
             t_counter[active_now == active_before] += 1
             life_times.extend(list(t_counter[np.logical_and(
