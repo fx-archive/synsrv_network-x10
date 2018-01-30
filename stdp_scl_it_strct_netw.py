@@ -8,12 +8,13 @@ from utils import generate_connections
 
 import numpy as np
 
-from brian2.units import ms,mV
+from brian2.units import ms,mV,second
 from pypet.brian2.parameter import Brian2Parameter, Brian2MonitorResult
 
 from brian2 import NeuronGroup, StateMonitor, SpikeMonitor, run, \
                    PoissonGroup, Synapses, set_device, device, Clock, \
-                   defaultclock, prefs, network_operation
+                   defaultclock, prefs, network_operation, implementation, \
+                   check_units
 
 def add_params(tr):
 
