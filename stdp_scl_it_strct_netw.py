@@ -118,7 +118,7 @@ double record_turnover(double t, int was_active_before, int should_become_active
         std::ofstream outfile;
         std::ostringstream oss;
 
-        oss << "../tmp_turnover_" << str(run_id);
+        oss << "../tmp_turnover_" << run_id;
         outfile.open(oss.str(), std::ios_base::app);
 
         outfile << 1 << "," << t << "," << i << "," << j << run_id << "\n";
@@ -128,7 +128,7 @@ double record_turnover(double t, int was_active_before, int should_become_active
         std::ofstream outfile;
         std::ostringstream oss;
 
-        oss << "../tmp_turnover_" << str(run_id);
+        oss << "../tmp_turnover_" << run_id;
         outfile.open(oss.str(), std::ios_base::app);
 
         outfile << 0 << "," << t << "," << i << "," << j << run_id << "\n";
