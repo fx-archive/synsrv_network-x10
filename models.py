@@ -60,12 +60,12 @@ intrinsic_mod = '''
 #strct_mod = ''
 strct_mod = '''
             r = rand()
-            should_stay_active = (a > prn_thrshld)
-            should_become_active = (r < insert_P)
+            should_stay_active = int(a > prn_thrshld)
+            should_become_active = int(r < insert_P)
             was_active_before = syn_active
             syn_active = int(syn_active==1) * int(should_stay_active) \
                      + int(syn_active==0) * int(should_become_active)
             a = a*int(was_active_before==1)*int(syn_active==1) \
                 + a_insert*int(was_active_before==0)*int(syn_active==1)
-            dummy= record_turnover(t, i, j, syn_active, a)
+            dummy= record_turnover(t, was_active_before, should_become_active, should_stay_active, syn_active, i, j)
             '''
