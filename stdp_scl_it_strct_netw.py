@@ -141,7 +141,7 @@ def run_net(tr):
 
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
     print(namespace)
-    namespace['v_id'] = tr.v_id
+    namespace['idx'] = tr.v_idx
 
     defaultclock.dt = tr.netw.sim.dt
 
