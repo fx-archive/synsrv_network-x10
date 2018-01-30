@@ -243,7 +243,7 @@ def run_net(tr):
                            record=range(tr.N_e*tr.N_e-1), dt=tr.sim.T/10.)
     
     #a = time.time()
-    run(tr.sim.T)
+    run(tr.sim.T, report='text')
     #b = time.time()
     device.build(directory='./build')
 
