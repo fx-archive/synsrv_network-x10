@@ -110,26 +110,23 @@ def add_params(tr):
 
 @implementation('cpp', code=r'''
 #include <fstream>
-#include <sstream>
 
 double record_turnover(double t, int was_active_before, int should_become_active, int should_stay_active, int syn_active, int i, int j, int run_id) {
 
     if (int(was_active_before==0)*should_become_active==1){
         std::ofstream outfile;
-        std::stringstream oss;
+        std::string fname = "../tmp_turnover_" + std::to_string (run_id);
 
-        oss << "../tmp_turnover_" << run_id;
-        outfile.open(oss.str(), std::ios_base::app);
+        outfile.open(fname, std::ios_base::app);
 
         outfile << 1 << "," << t << "," << i << "," << j << run_id << "\n";
     }
 
     else if (was_active_before*int(should_stay_active==0)){
         std::ofstream outfile;
-        std::stringstream oss;
+        std::string fname = "../tmp_turnover_" + std::to_string (run_id);
 
-        oss << "../tmp_turnover_" << run_id;
-        outfile.open(oss.str(), std::ios_base::app);
+        outfile.open(fname, std::ios_base::app);
 
         outfile << 0 << "," << t << "," << i << "," << j << run_id << "\n";
     }
