@@ -67,4 +67,5 @@ strct_mod = '''
                      + int(syn_active==0) * int(should_become_active)
             a = a*int(was_active_before==1)*int(syn_active==1) \
                 + a_insert*int(was_active_before==0)*int(syn_active==1)
-             '''
+            record_turnover(t, i, j, syn_active, a)
+            '''

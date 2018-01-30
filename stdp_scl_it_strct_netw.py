@@ -89,7 +89,39 @@ def add_params(tr):
     tr.f_add_parameter('netw.sim.dt', prm.netw_dt)
 
     tr.f_add_parameter('netw.config.strct_active', prm.strct_active)
-   
+
+
+# @implementation('cpp', code=r'''
+# #include <fstream>
+
+# double monitor_now(double t, int i, int j, double w) {
+#     std::ofstream outfile;
+
+#     outfile.open("../spk_vals", std::ios_base::app);
+#     outfile << t << "," << i << "," << j << "," << w << "\n";
+
+#     return 0.0; // we need to return a dummy value
+# } '''
+#                 )
+# @check_units(t=second, i=1, j=1, w=1, result=1)
+# def record_at_spike_time(t, i, j, w):
+#     return 0.0
+
+@implementation('cpp', code=r'''
+#include <fstream>
+
+double monitor_now(double t, int i, int j, int syn_active, double a) {
+    std::ofstream outfile;
+
+    outfile.open("../dat_turnover", std::ios_base::app);
+    outfile << t << "," << i << "," << j << "," << syn_active << "," << a << "\n";
+
+    return 0.0; // we need to return a dummy value
+} '''
+                )
+@check_units(t=second, i=1, j=1, syn_active=1, a=1, result=1)
+def record_turnover(t, i, j, syn_active, a):
+    return 0.0
 
     
 def run_net(tr):
@@ -183,34 +215,9 @@ def run_net(tr):
 
     # structural plasticity
     number_active_synapses = []
-    # life_times = []
-    # dead_times = []
 
     if tr.netw.config.strct_active:
         SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
-
-        # @network_operation(dt=tr.strct_dt, when='end')
-        # def f():
-        #     number_active_synapses.append(np.sum(SynEE.syn_active))
-
-        # active_before = SynEE.syn_active
-        # t_counter = np.zeros_like(active_before)
-
-        # @network_operation(dt=tr.strct_dt, when='end')
-        # def lifetime_counter():
-        #     global active_before
-        #     global t_counter
-        #     print("HERE!!: ", active_before, t_counter)
-        #     active_now = SynEE.syn_active
-        #     t_counter[active_now == active_before] += 1
-        #     life_times.extend(list(t_counter[np.logical_and(
-        #                              active_now != active_before,
-        #                              active_before == 1)]))
-        #     dead_times.extend(list(t_counter[np.logical_and(
-        #                              active_now != active_before,
-        #                              active_before == 0)]))
-        #     t_counter[active_now != active_before] = 0
-        #     active_before = active_now
 
     # -------------- recording ------------------        
 
@@ -256,9 +263,9 @@ def run_net(tr):
     tr.f_add_result('GInh_spks', GInh_spks)
     tr.f_add_result('SynEE_a', SynEE_a)
 
-    print(GExc_vts.get_states())
+    #print(GExc_vts.get_states())
     tr.f_add_result('GExc_vts', GExc_vts)
-    print(tr.GExc_vts.f_to_dict())
+    #print(tr.GExc_vts.f_to_dict())
     
     # tr.f_add_result('comp_time', [b-a])
     # print("Computation time: ", b-a, "\nSim time", tr.T, "\nNetworksize: Ne=", tr.N_e, "\t Ni=", tr.N_i )
