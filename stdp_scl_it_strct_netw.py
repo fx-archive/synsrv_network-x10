@@ -137,6 +137,8 @@ def run_net(tr):
     # prefs.codegen.target = 'cython'
     set_device('cpp_standalone', directory='./build', build_on_run=False)
 
+    print("Process with id ", tr.v_idx)
+
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
 
     defaultclock.dt = tr.netw.sim.dt
@@ -242,9 +244,8 @@ def run_net(tr):
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*tr.N_e-1), dt=tr.sim.T/10.)
     
-    #a = time.time()
+
     run(tr.sim.T, report='text')
-    #b = time.time()
     device.build(directory='./build')
 
     GExc_vts.record_single_timestep()
