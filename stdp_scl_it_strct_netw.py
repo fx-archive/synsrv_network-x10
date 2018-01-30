@@ -116,22 +116,22 @@ double record_turnover(double t, int was_active_before, int should_become_active
 
     if (int(was_active_before==0)*should_become_active==1){
         std::ofstream outfile;
-        int i = 4;
-        std::string text "Player ";      
+        //int i = 4;
+        //std::string text "Player ";      
         //text += std::to_string(i);
 
-        outfile.open(text, std::ios_base::app);
+        outfile.open("../tmp_this", std::ios_base::app);
 
         outfile << 1 << "," << t << "," << i << "," << j << run_id << "\n";
     }
 
     else if (was_active_before*int(should_stay_active==0)){
         std::ofstream outfile;
-        int i = 4;
-        std::string text "Player ";      
+        //int i = 4;
+        //std::string text "Player ";      
         //text += std::to_string(i);
 
-        outfile.open(text, std::ios_base::app);
+        outfile.open("../tmp_this", std::ios_base::app);
 
         outfile << 0 << "," << t << "," << i << "," << j << run_id << "\n";
     }
