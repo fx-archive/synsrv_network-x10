@@ -118,7 +118,7 @@ double record_turnover(double t, int was_active_before, int should_become_active
         std::ofstream outfile;
         int i = 4;
         std::string text "Player ";      
-        text += std::to_string(i);
+        //text += std::to_string(i);
 
         outfile.open(text, std::ios_base::app);
 
@@ -129,7 +129,7 @@ double record_turnover(double t, int was_active_before, int should_become_active
         std::ofstream outfile;
         int i = 4;
         std::string text "Player ";      
-        text += std::to_string(i);
+        //text += std::to_string(i);
 
         outfile.open(text, std::ios_base::app);
 
