@@ -110,30 +110,29 @@ def add_params(tr):
 
 @implementation('cpp', code=r'''
 #include <fstream>
-//#include <sstream>
 
 double record_turnover(double t, int was_active_before, int should_become_active, int should_stay_active, int syn_active, int i, int j, int run_id) {
 
     if (int(was_active_before==0)*should_become_active==1){
-        std::ofstream outfile;
+        //std::ofstream outfile;
         int i = 4;
         std::string text "Player ";      
         text += std::to_string(i);
 
-        outfile.open("../tmp_this", std::ios_base::app);
+        //outfile.open("../tmp_this", std::ios_base::app);
 
-        outfile << 1 << "," << t << "," << i << "," << j << run_id << "\n";
+        //outfile << 1 << "," << t << "," << i << "," << j << run_id << "\n";
     }
 
     else if (was_active_before*int(should_stay_active==0)){
-        std::ofstream outfile;
+        //std::ofstream outfile;
         int i = 4;
         std::string text "Player ";      
         text += std::to_string(i);
 
-        outfile.open("../tmp_this", std::ios_base::app);
+        //outfile.open("../tmp_this", std::ios_base::app);
 
-        outfile << 0 << "," << t << "," << i << "," << j << run_id << "\n";
+        //outfile << 0 << "," << t << "," << i << "," << j << run_id << "\n";
     }
 
     return 0.0; // we need to return a dummy value
@@ -152,7 +151,7 @@ def run_net(tr):
     # prefs.codegen.target = 'cython'
     set_device('cpp_standalone', directory='./build', build_on_run=False)
 
-    print("Process with id ", tr.v_idx)
+    print("Process with id ", str(tr.v_idx))
 
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
     print(namespace)
