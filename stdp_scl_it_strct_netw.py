@@ -111,10 +111,10 @@ def add_params(tr):
 @implementation('cpp', code=r'''
 #include <fstream>
 
-double monitor_now(double t, int i, int j, int syn_active, double a) {
+double record_turnover(double t, int i, int j, int syn_active, double a) {
     std::ofstream outfile;
 
-    outfile.open("../dat_turnover", std::ios_base::app);
+    outfile.open("../tmp_turnover", std::ios_base::app);
     outfile << t << "," << i << "," << j << "," << syn_active << "," << a << "\n";
 
     return 0.0; // we need to return a dummy value
