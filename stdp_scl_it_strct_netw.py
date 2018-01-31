@@ -109,47 +109,30 @@ def add_params(tr):
 #     return 0.0
 
 @implementation('cpp', code=r'''
-    //#include <fstream>
-    //#include <iostream>
-    //#include <sstream>
+    #include <fstream>
     
     double record_turnover(double t, int was_active_before, int should_become_active, int should_stay_active, int syn_active, int i, int j, int run_id) {
 
+      if (int(was_active_before==0)*should_become_active==1){
+          std::ofstream outfile;
+          
+          outfile.open("tmp_data/turnover", std::ios_base::app);
 
-    //std::ostringstream o;
-    //o << name << age;
-    //std::cout << o.str();
-    
-    //std::string name = "John";
-    //int age = 21;
-    //std::string result;
-    //result = name + std::to_string(age);
+          outfile << 1 << "," << t << "," << i << "," << j << "\n";
+      }
 
-      //  if (int(was_active_before==0)*should_become_active==1){
-      //      std::ofstream outfile;
-      //      int i = 4;
-      //      std::string text "Player ";      
-      //      text += std::to_string(i);
+     else if (was_active_before*int(should_stay_active==0)){
+           std::ofstream outfile;
+     
+           outfile.open("tmp_data/turnover", std::ios_base::app);
 
-            //outfile.open("../tmp_this", std::ios_base::app);
-
-            //outfile << 1 << "," << t << "," << i << "," << j << run_id << "\n";
-     //   }
-
-     //   else if (was_active_before*int(should_stay_active==0)){
-     //       std::ofstream outfile;
-     //      int i = 4;
-     //       std::string text "Player ";      
-     //       text += std::to_string(i);
-
-            //outfile.open("../tmp_this", std::ios_base::app);
-
-            //outfile << 0 << "," << t << "," << i << "," << j << run_id << "\n";
-     //   }
+           outfile << 0 << "," << t << "," << i << "," << j << "\n";
+     }
 
     return 0.0; // we need to return a dummy value
-} '''
-                )
+} ''')
+
+
 @check_units(t=second, was_active_before=1, should_become_active=1,
              should_stay_active=1, syn_active=1, i=1, j=1, run_id=1, result=1)
 def record_turnover(t, was_active_before, should_become_active,
