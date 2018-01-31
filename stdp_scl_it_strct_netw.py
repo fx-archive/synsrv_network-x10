@@ -124,7 +124,7 @@ def run_net(tr):
 
     # prefs.codegen.target = 'numpy'
     # prefs.codegen.target = 'cython'
-    set_device('cpp_standalone', directory='./builds/'+str(tr.v_idx),
+    set_device('cpp_standalone', directory='./builds/%.4d'%(tr.v_idx),
                build_on_run=False)
 
     print("Process with id ", str(tr.v_idx))
@@ -237,7 +237,7 @@ def run_net(tr):
     
 
     run(tr.sim.T, report='text')
-    device.build(directory='./builds/'+str(tr.v_idx))
+    device.build(directory='./builds/%.4d'%(tr.v_idx))
 
     GExc_vts.record_single_timestep()
     SynEE_a.record_single_timestep()
