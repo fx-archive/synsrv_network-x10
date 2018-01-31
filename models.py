@@ -39,12 +39,12 @@ synEE_mod = '''
 synEE_pre = '''
             ge_post += syn_active*a
             Apre += syn_active*Aplus
-            a = clip(a+syn_active*Apost, 0, amax)
+            a = syn_active*clip(a+Apost, 0, amax)
             '''
 
 synEE_post = '''
              Apost+= syn_active*Aminus
-             a = clip(a+syn_active*Apre, 0, amax)
+             a = syn_active*clip(a+Apre, 0, amax)
              '''
 
 synEE_scaling = '''
@@ -67,5 +67,5 @@ strct_mod = '''
                      + int(syn_active==0) * int(should_become_active)
             a = a*int(was_active_before==1)*int(syn_active==1) \
                 + a_insert*int(was_active_before==0)*int(syn_active==1)
-            dummy= record_turnover(t, was_active_before, should_become_active, should_stay_active, syn_active, i, j, idx)
+            dummy = record_turnover(t, was_active_before, should_become_active, should_stay_active, syn_active, i, j)
             '''

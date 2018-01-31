@@ -16,6 +16,8 @@ from brian2 import NeuronGroup, StateMonitor, SpikeMonitor, run, \
                    defaultclock, prefs, network_operation, implementation, \
                    check_units
 
+from post_processing import process_turnover_data
+
 def add_params(tr):
 
     tr.v_standard_parameter=Brian2Parameter
@@ -111,7 +113,7 @@ def add_params(tr):
 @implementation('cpp', code=r'''
     #include <fstream>
     
-    double record_turnover(double t, int was_active_before, int should_become_active, int should_stay_active, int syn_active, int i, int j, int run_id) {
+    double record_turnover(double t, int was_active_before, int should_become_active, int should_stay_active, int syn_active, int i, int j) {
 
       if (int(was_active_before==0)*should_become_active==1){
           std::ofstream outfile;          
@@ -127,9 +129,9 @@ def add_params(tr):
       return 0.0; // we need to return a dummy value
     } ''')
 
-
 @check_units(t=second, was_active_before=1, should_become_active=1,
-             should_stay_active=1, syn_active=1, i=1, j=1, run_id=1, result=1)
+             should_stay_active=1, syn_active=1, i=1, j=1, run_id=1,
+             result=1)
 def record_turnover(t, was_active_before, should_become_active,
                     should_stay_active, syn_active, i, j, run_id):
     return 0.0
@@ -277,9 +279,14 @@ def run_net(tr):
     tr.f_add_result('GInh_spks', GInh_spks)
     tr.f_add_result('SynEE_a', SynEE_a)
 
-    #print(GExc_vts.get_states())
     tr.f_add_result('GExc_vts', GExc_vts)
-    #print(tr.GExc_vts.f_to_dict())
+
+    # post processing
+    fpath = './builds/%.4d/'%(tr.v_idx)
+    turnover_data = np.genfromtxt(fpath+'turnover',delimiter=',')
+    lt, dt = process_turnover_data(turnover_data, tr.N_e)
+    life_t, death_t = lt*second, dt*second
     
-    # tr.f_add_result('comp_time', [b-a])
-    # print("Computation time: ", b-a, "\nSim time", tr.T, "\nNetworksize: Ne=", tr.N_e, "\t Ni=", tr.N_i )
+    print(life_t[:5])
+    tr.f_add_result('life_t', life_t)
+    tr.f_add_result('death_t', death_t)
