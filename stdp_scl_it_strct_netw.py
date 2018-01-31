@@ -124,12 +124,12 @@ def run_net(tr):
 
     # prefs.codegen.target = 'numpy'
     # prefs.codegen.target = 'cython'
-    set_device('cpp_standalone', directory='./build', build_on_run=False)
+    set_device('cpp_standalone', directory='./builds/'+str(tr.v_idx),
+               build_on_run=False)
 
     print("Process with id ", str(tr.v_idx))
 
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
-    print(namespace)
     namespace['idx'] = tr.v_idx
 
     defaultclock.dt = tr.netw.sim.dt
@@ -237,7 +237,7 @@ def run_net(tr):
     
 
     run(tr.sim.T, report='text')
-    device.build(directory='./build')
+    device.build(directory='./builds/'+str(tr.v_idx))
 
     GExc_vts.record_single_timestep()
     SynEE_a.record_single_timestep()
