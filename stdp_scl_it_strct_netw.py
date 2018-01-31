@@ -114,23 +114,18 @@ def add_params(tr):
     double record_turnover(double t, int was_active_before, int should_become_active, int should_stay_active, int syn_active, int i, int j, int run_id) {
 
       if (int(was_active_before==0)*should_become_active==1){
-          std::ofstream outfile;
-          
+          std::ofstream outfile;          
           outfile.open("tmp_data/turnover", std::ios_base::app);
-
           outfile << 1 << "," << t << "," << i << "," << j << "\n";
       }
-
-     else if (was_active_before*int(should_stay_active==0)){
-           std::ofstream outfile;
-     
+      else if (was_active_before*int(should_stay_active==0)){
+           std::ofstream outfile;     
            outfile.open("tmp_data/turnover", std::ios_base::app);
-
            outfile << 0 << "," << t << "," << i << "," << j << "\n";
-     }
+      }
 
-    return 0.0; // we need to return a dummy value
-} ''')
+      return 0.0; // we need to return a dummy value
+    } ''')
 
 
 @check_units(t=second, was_active_before=1, should_become_active=1,
