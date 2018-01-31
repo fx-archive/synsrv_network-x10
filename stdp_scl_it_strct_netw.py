@@ -110,11 +110,16 @@ def add_params(tr):
 
 @implementation('cpp', code=r'''
     //#include <fstream>
-    #include <string>
-
+    #include <iostream>
+    #include <sstream>
+    
     double record_turnover(double t, int was_active_before, int should_become_active, int should_stay_active, int syn_active, int i, int j, int run_id) {
 
-    std::string result = name + std::to_string (age);
+
+    std::ostringstream o;
+    o << name << age;
+    std::cout << o.str();
+    
     //std::string name = "John";
     //int age = 21;
     //std::string result;
