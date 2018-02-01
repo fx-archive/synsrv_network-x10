@@ -112,7 +112,7 @@ def add_params(tr):
 
 @implementation('cpp', code=r'''
    
-    double syn_scale(double a, double kkATotalMax, double Asum_post) {
+    double syn_scale(double a, double Asum_post) {
       
       double a_out;
 
@@ -120,14 +120,14 @@ def add_params(tr):
           a_out = 0.;
       }
       else{
-          a_out = a*(kkATotalMax/Asum_post);
+          a_out = a*(ATotalMax/Asum_post);
       }
 
       return a_out;
     } ''')
 
-@check_units(a=1, kkATotalMax=1, Asum_post=1, result=1)
-def syn_scale(a, kkATotalMax, Asum_post):
+@check_units(a=1, Asum_post=1, result=1)
+def syn_scale(a, Asum_post):
     return -1.
 
 
