@@ -310,17 +310,18 @@ def run_net(tr):
     # ----------------- post processing ------------------------
     fpath = './builds/%.4d/'%(tr.v_idx)
     turnover_data = np.genfromtxt(fpath+'turnover',delimiter=',')
+    tr.f_add_result('turnover', turnover_data)
     
     # lifetimes
-    lt, dt = extract_lifetimes(turnover_data, tr.N_e)
-    life_t, death_t = lt*second, dt*second
-    tr.f_add_result('life_t', life_t)
-    tr.f_add_result('death_t', death_t)
+    # lt, dt = extract_lifetimes(turnover_data, tr.N_e)
+    # life_t, death_t = lt*second, dt*second
+    # tr.f_add_result('life_t', life_t)
+    # tr.f_add_result('death_t', death_t)
 
     # number of active synapses
-    asc_t_nd, asc_n = extract_active_synapse_count(turnover_data)
-    asc_t = asc_t_nd*second
-    tr.f_add_result('asc_t', asc_t)
-    tr.f_add_result('asc_n', asc_n)
+    # asc_t_nd, asc_n = extract_active_synapse_count(turnover_data)
+    # asc_t = asc_t_nd*second
+    # tr.f_add_result('asc_t', asc_t)
+    # tr.f_add_result('asc_n', asc_n)
 
     
