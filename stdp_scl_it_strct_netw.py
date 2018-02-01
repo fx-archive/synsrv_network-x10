@@ -128,7 +128,7 @@ def add_params(tr):
 
 @check_units(a=1, AToTalSum=1, Asum_post=1, result=1)
 def syn_scale(a, ATotalSum, Asum_post):
-    return -1
+    return -1.
 
 
 @implementation('cpp', code=r'''
