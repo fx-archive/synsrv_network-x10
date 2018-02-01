@@ -240,7 +240,7 @@ def run_net(tr):
     #run(tr.sim.preT)
     
     GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
-    SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=[0,1,2])
+    SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=range(20))
 
     GExc_spks = SpikeMonitor(GExc)
     
