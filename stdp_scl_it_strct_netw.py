@@ -111,6 +111,27 @@ def add_params(tr):
 #     return 0.0
 
 @implementation('cpp', code=r'''
+   
+    double syn_scale(double a, double ATotalMax, double Asum_post) {
+      
+      double a_out;
+
+      if (Asum_post==0.){
+          a_out = 0.;
+      }
+      else{
+          a_out = a*(ATotalMax/Asum_post);
+      }
+
+      return a_out;
+    } ''')
+
+@check_units(a=1, AToTalSum=1, Asum_post=1, result=1)
+def syn_scale(a, ATotalSum, Asum_post):
+    return -1
+
+
+@implementation('cpp', code=r'''
     #include <fstream>
     
     double record_turnover(double t, int was_active_before, int should_become_active, int should_stay_active, int syn_active, int i, int j) {
