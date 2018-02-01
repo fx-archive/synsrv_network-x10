@@ -126,7 +126,7 @@ def add_params(tr):
       return a_out;
     } ''')
 
-@check_units(a=1, AToTalSum=1, Asum_post=1, result=1)
+@check_units(a=1, ATotalSum=1, Asum_post=1, result=1)
 def syn_scale(a, ATotalSum, Asum_post):
     return -1.
 
