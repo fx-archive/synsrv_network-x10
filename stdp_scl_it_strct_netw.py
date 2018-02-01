@@ -110,9 +110,16 @@ def add_params(tr):
 # def record_at_spike_time(t, i, j, w):
 #     return 0.0
 
+# need to use vATotalMax here instead of ATotalMax, as otherwise
+# the float of ATotalMax gets inserted into the function
+# parameters:
+#
+#   double syn_scale(double a, double 0.121, ...)
+#
+# which returns an error
 @implementation('cpp', code=r'''
    
-    double syn_scale(double a, double Asum_post) {
+    double syn_scale(double a, double vATotalMax, double Asum_post) {
       
       double a_out;
 
@@ -120,14 +127,13 @@ def add_params(tr):
           a_out = 0.;
       }
       else{
-          a_out = a*(ATotalMax/Asum_post);
+          a_out = a*(vATotalMax/Asum_post);
       }
 
       return a_out;
     } ''')
-
-@check_units(a=1, Asum_post=1, result=1)
-def syn_scale(a, Asum_post):
+@check_units(a=1, vATotalMax=1, Asum_post=1, result=1)
+def syn_scale(a, vATotalMax, Asum_post):
     return -1.
 
 

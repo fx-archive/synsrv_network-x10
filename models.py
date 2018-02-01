@@ -51,7 +51,7 @@ synEE_post = '''
 #                 a = clip(a*(ATotalMax/Asum_post),0,amax)
 #                 '''
 synEE_scaling = '''
-                a = syn_scale(a, Asum_post)
+                a = syn_scale(a, ATotalMax, Asum_post)
                 '''
 
 intrinsic_mod = '''
