@@ -112,15 +112,15 @@ def add_params(tr):
 
 @implementation('cpp', code=r'''
    
-    double syn_scale(double a, double ATotalMax, double Asum_post) {
+    double syn_scale(double a, double ATotalMax, double kkAsum_post) {
       
       double a_out;
 
-      if (Asum_post==0.){
+      if (kkAsum_post==0.){
           a_out = 0.;
       }
       else{
-          a_out = a*(ATotalMax/Asum_post);
+          a_out = a*(ATotalMax/kkAsum_post);
       }
 
       return a_out;
