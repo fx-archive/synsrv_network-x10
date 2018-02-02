@@ -3,7 +3,7 @@ import os
 
 import standard_params as prm
 import models as mod
-from utils import generate_connections
+from utils import generate_connections, generate_full_connectivity
 
 import numpy as np
 
@@ -206,7 +206,8 @@ def run_net(tr):
     
 
     if tr.strct_active:
-        SynEE.connect(True)
+        sEE_src, sEE_tar = generate_full_connectivity(tr.N_e, same=True)
+        SynEE.connect(i=sEE_src, j=sEE_tar)
         SynEE.syn_active = 0
     else:
         sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee,

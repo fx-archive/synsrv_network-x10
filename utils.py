@@ -22,3 +22,17 @@ def generate_connections(N_tar, N_src, p, same=False):
                                      size=n, replace=False))
 
     return i, np.array(j)
+
+def generate_full_connectivity(N, same):
+    if not same==True:
+        raise NotImplementedError
+    i = []
+    j = []
+    for k in range(N):
+        i.extend([k]*(N-1))
+        targets = list(range(N))
+        del targets[k]
+        j.extend(targets)
+
+    assert len(i)==len(j)
+    return np.array(i), np.array(j)
