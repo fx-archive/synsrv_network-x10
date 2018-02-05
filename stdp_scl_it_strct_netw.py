@@ -168,7 +168,7 @@ def record_turnover(t, was_active_before, should_become_active,
        if (syn_active > 0){
           std::ofstream outfile;          
           outfile.open("spike_register", std::ios_base::app);
-          outfile << t << "," << i << "," << j << "," << a << "," << Apre << "," Apost << "," << preorpost << "\n";
+          outfile << t << "," << i << "," << j << "," << a << "," << Apre << "," << Apost << "," << preorpost << "\n";
        }
 
       return 0.0; // we need to return a dummy value
