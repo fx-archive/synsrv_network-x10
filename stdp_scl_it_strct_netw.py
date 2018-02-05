@@ -331,3 +331,7 @@ def run_net(tr):
     tr.f_add_result('turnover', turnover_data)
     # clean up
     os.remove(fpath+'turnover')
+
+    spike_register_data = np.genfromtxt(fpath+'spike_register',delimiter=',')
+    tr.f_add_result('spike_register', spike_register_data)
+    
