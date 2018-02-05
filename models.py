@@ -40,11 +40,13 @@ synEE_pre = '''
             ge_post += syn_active*a
             Apre += syn_active*Aplus
             a = syn_active*clip(a+Apost, 0, amax)
+            dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 0)
             '''
 
 synEE_post = '''
              Apost+= syn_active*Aminus
              a = syn_active*clip(a+Apre, 0, amax)
+             dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 1)
              '''
 
 # synEE_scaling = '''
