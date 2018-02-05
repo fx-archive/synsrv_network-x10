@@ -167,7 +167,7 @@ def record_turnover(t, was_active_before, should_become_active,
 
        if (syn_active > 0){
           std::ofstream outfile;          
-          outfile.open("spike_register", std::ios_base::app);
+          outfile.open("spk_register", std::ios_base::app);
           outfile << t << "," << i << "," << j << "," << a << "," << Apre << "," << Apost << "," << preorpost << "\n";
        }
 
@@ -332,6 +332,6 @@ def run_net(tr):
     # clean up
     os.remove(fpath+'turnover')
 
-    spike_register_data = np.genfromtxt(fpath+'spike_register',delimiter=',')
-    tr.f_add_result('spike_register', spike_register_data)
+    spk_register_data = np.genfromtxt(fpath+'spk_register',delimiter=',')
+    tr.f_add_result('spk_register', spk_register_data)
     
