@@ -340,4 +340,4 @@ def run_net(tr):
         tr.f_add_result('spk_register', spk_register_data)
         os.remove(fpath+'spk_register')
     except OSError:
-        add_result('spk_register', np.array([]))
+        tr.add_result('spk_register', np.array([]))
