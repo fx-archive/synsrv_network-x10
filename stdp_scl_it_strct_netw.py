@@ -328,16 +328,15 @@ def run_net(tr):
     # ----------------- add raw data ------------------------
     fpath = './builds/%.4d/'%(tr.v_idx)
 
-    try:
-        turnover_data = np.genfromtxt(fpath+'turnover',delimiter=',')
-        tr.f_add_result('turnover', turnover_data)
-        os.remove(fpath+'turnover')
-    except OSError:
-        tr.f_add_result('turnover', np.array([]))
+    from pathlib import Path
 
-    try:
-        spk_register_data = np.genfromtxt(fpath+'spk_register',delimiter=',')
-        tr.f_add_result('spk_register', spk_register_data)
-        os.remove(fpath+'spk_register')
-    except OSError:
-        tr.add_result('spk_register', np.array([]))
+    Path(fpath+'turnover').touch()
+    turnover_data = np.genfromtxt(fpath+'turnover',delimiter=',')
+    tr.f_add_result('turnover', turnover_data)
+    os.remove(fpath+'turnover')
+
+    Path(fpath+'spk_register').touch()
+    spk_register_data = np.genfromtxt(fpath+'spk_register',delimiter=',')
+    tr.f_add_result('spk_register', spk_register_data)
+    os.remove(fpath+'spk_register')
+    
