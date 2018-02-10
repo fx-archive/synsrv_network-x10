@@ -313,7 +313,7 @@ def run_net(tr):
     GInh_spks = []
 
     GExc_vts = []
-    SynEE_a = []
+    # SynEE_a = []
     
     run(tr.sim.T, report='text')
     device.build(directory='./builds/%.4d'%(tr.v_idx))
