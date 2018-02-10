@@ -54,6 +54,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.Aplus',     prm.Aplus)
     tr.f_add_parameter('netw.Aminus',    prm.Aminus)
     tr.f_add_parameter('netw.amax',      prm.amax)
+    tr.f_add_parameter('netw.synEE_rec',      prm.synEE_rec)
+    
 
     # scaling
     tr.f_add_parameter('netw.config.scl_active', prm.scl_active)
@@ -210,6 +212,11 @@ def run_net(tr):
                        np.random.uniform(tr.Vr_i/mV, tr.Vt_i/mV,
                                          size=tr.N_i)*mV
 
+
+    if tr.synEE_rec:
+        tr.synEE_pre += prm.synEE_pre_rec
+        tr.synEE_post += prm.synEE_post_rec
+
     # E<-E advanced synapse model, rest simple
     SynEE = Synapses(target=GExc, source=GExc, model=tr.synEE_mod,
                      on_pre=tr.synEE_pre, on_post=tr.synEE_post,
@@ -283,24 +290,36 @@ def run_net(tr):
     # -------------- recording ------------------        
 
     #run(tr.sim.preT)
-    
-    GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
-    SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=range(20))
 
-    GExc_spks = SpikeMonitor(GExc)
     
-    GInh_stat = StateMonitor(GInh, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
-    GInh_spks = SpikeMonitor(GInh)
+    # GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
+    # SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=range(20))
 
-    GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
+    # GExc_spks = SpikeMonitor(GExc)
+    
+    # GInh_stat = StateMonitor(GInh, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
+    # GInh_spks = SpikeMonitor(GInh)
+
+    # GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)), dt=tr.sim.T/10.)
     
 
+    GExc_stat = []
+    SynEE_stat = []
+
+    GExc_spks = []
+    
+    GInh_stat = []
+    GInh_spks = []
+
+    GExc_vts = []
+    SynEE_a = []
+    
     run(tr.sim.T, report='text')
     device.build(directory='./builds/%.4d'%(tr.v_idx))
 
-    GExc_vts.record_single_timestep()
+    #GExc_vts.record_single_timestep()
     SynEE_a.record_single_timestep()
 
     # it looks like only pure numpy arrays can be stored as results
@@ -316,10 +335,10 @@ def run_net(tr):
 
     tr.f_add_result('GExc_stat', GExc_stat)
     tr.f_add_result('SynEE_stat', SynEE_stat)
-    print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
+    #print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
     tr.f_add_result('GExc_spks', GExc_spks)
     tr.f_add_result('GInh_stat', GInh_stat)
-    print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
+    #print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
     tr.f_add_result('GInh_spks', GInh_spks)
     tr.f_add_result('SynEE_a', SynEE_a)
 

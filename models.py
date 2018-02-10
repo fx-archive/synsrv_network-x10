@@ -28,26 +28,31 @@ synEE_mod = '''
             a : 1
             syn_active : integer
 
-            dApre  /dt = -Apre/taupre  : 1 
-            dApost /dt = -Apost/taupost : 1
+            dApre  /dt = -Apre/taupre  : 1 (event-driven)
+            dApost /dt = -Apost/taupost : 1 (event-driven)
 
             Asum_post = a : 1 (summed)         
             insert_P : 1 (shared) 
             '''
 
-
 synEE_pre = '''
             ge_post += syn_active*a
             Apre += syn_active*Aplus
             a = syn_active*clip(a+Apost, 0, amax)
-            dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 0)
             '''
+
+synEE_pre_rec = '''
+                dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 0)
+                '''
 
 synEE_post = '''
              Apost+= syn_active*Aminus
              a = syn_active*clip(a+Apre, 0, amax)
-             dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 1)
              '''
+
+synEE_post_rec = '''
+                 dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 1)
+                 '''
 
 # synEE_scaling = '''
 #                 a = clip(a*(ATotalMax/Asum_post),0,amax)
