@@ -77,7 +77,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.mod.condlif_sig',   mod.condlif_sig)
     tr.f_add_parameter('netw.mod.nrnEE_thrshld', mod.nrnEE_thrshld)
     tr.f_add_parameter('netw.mod.nrnEE_reset',   mod.nrnEE_reset)
-    tr.f_add_parameter('netw.mod.synEE_mod',     mod.synEE_mod)
+    # tr.f_add_parameter('netw.mod.synEE_mod',     mod.synEE_mod)
+    # gets added later taking into accout tr.synEE_rec!
     tr.f_add_parameter('netw.mod.synEE_pre',     mod.synEE_pre)
     tr.f_add_parameter('netw.mod.synEE_post',    mod.synEE_post)
     tr.f_add_parameter('netw.mod.synEE_scaling', mod.synEE_scaling)
@@ -212,11 +213,10 @@ def run_net(tr):
                        np.random.uniform(tr.Vr_i/mV, tr.Vt_i/mV,
                                          size=tr.N_i)*mV
 
-
     if tr.synEE_rec:
-        tr.synEE_pre += mod.synEE_pre_rec
-        tr.synEE_post += mod.synEE_post_rec
-
+        tr.f_add_parameter('synEE_pre', mod.syn_EE_pre + mod.synEE_pre_rec)
+        tr.f_add_parameter('synEE_post', mod.syn_EE_post + mod.synEE_post_rec)
+    
     # E<-E advanced synapse model, rest simple
     SynEE = Synapses(target=GExc, source=GExc, model=tr.synEE_mod,
                      on_pre=tr.synEE_pre, on_post=tr.synEE_post,
