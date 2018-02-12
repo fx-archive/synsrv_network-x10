@@ -78,8 +78,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.mod.nrnEE_thrshld', mod.nrnEE_thrshld)
     tr.f_add_parameter('netw.mod.nrnEE_reset',   mod.nrnEE_reset)
     tr.f_add_parameter('netw.mod.synEE_mod',     mod.synEE_mod)
-    tr.f_add_parameter('netw.mod.synEE_pre',     mod.synEE_pre)
-    tr.f_add_parameter('netw.mod.synEE_post',    mod.synEE_post)
+    # tr.f_add_parameter('netw.mod.synEE_pre',     mod.synEE_pre)
+    # tr.f_add_parameter('netw.mod.synEE_post',    mod.synEE_post)
     tr.f_add_parameter('netw.mod.synEE_scaling', mod.synEE_scaling)
     tr.f_add_parameter('netw.mod.intrinsic_mod', mod.intrinsic_mod)
     tr.f_add_parameter('netw.mod.strct_mod',     mod.strct_mod)
@@ -212,13 +212,17 @@ def run_net(tr):
                        np.random.uniform(tr.Vr_i/mV, tr.Vt_i/mV,
                                          size=tr.N_i)*mV
 
+    synEE_pre_mod = mod.synEE_pre
+    synEE_post_mod = mod.synEE_post
     if tr.synEE_rec:
-        tr.f_add_parameter('synEE_pre', mod.synEE_pre + mod.synEE_pre_rec)
-        tr.f_add_parameter('synEE_post', mod.synEE_post + mod.synEE_post_rec)
-    
+        synEE_pre_mod  = '''%s 
+                            %s''' %(synEE_pre_mod, mod.synEE_pre_rec)
+        synEE_post_mod = '''%s 
+                            %s''' %(synEE_post_mod, mod.synEE_post_rec)
+                    
     # E<-E advanced synapse model, rest simple
     SynEE = Synapses(target=GExc, source=GExc, model=tr.synEE_mod,
-                     on_pre=tr.synEE_pre, on_post=tr.synEE_post,
+                     on_pre=synEE_pre_mod, on_post=synEE_post_mod,
                      #method=tr.synEE_method,
                      namespace=namespace)
     SynIE = Synapses(target=GInh, source=GExc, on_pre='ge_post += a_ie',
