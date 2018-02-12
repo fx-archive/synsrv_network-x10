@@ -295,34 +295,34 @@ def run_net(tr):
     #run(tr.sim.preT)
 
     
-    # GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
-    # SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=range(20))
+    GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
+    SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=range(20))
 
-    # GExc_spks = SpikeMonitor(GExc)
+    GExc_spks = SpikeMonitor(GExc)
     
-    # GInh_stat = StateMonitor(GInh, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
-    # GInh_spks = SpikeMonitor(GInh)
+    GInh_stat = StateMonitor(GInh, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
+    GInh_spks = SpikeMonitor(GInh)
 
-    # GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
+    GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)), dt=tr.sim.T/10.)
     
 
-    GExc_stat = []
-    SynEE_stat = []
+    # GExc_stat = []
+    # SynEE_stat = []
 
-    GExc_spks = []
+    # GExc_spks = []
     
-    GInh_stat = []
-    GInh_spks = []
+    # GInh_stat = []
+    # GInh_spks = []
 
-    GExc_vts = []
+    # GExc_vts = []
     # SynEE_a = []
     
     run(tr.sim.T, report='text')
     device.build(directory='./builds/%.4d'%(tr.v_idx))
 
-    #GExc_vts.record_single_timestep()
+    GExc_vts.record_single_timestep()
     SynEE_a.record_single_timestep()
 
     # it looks like only pure numpy arrays can be stored as results
