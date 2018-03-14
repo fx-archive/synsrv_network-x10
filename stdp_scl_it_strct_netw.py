@@ -268,7 +268,7 @@ def run_net(tr):
     if tr.strct_active:
         SynEE.a = 0
     else:
-        SynEE.a = tr.a_ee
+        SynEE.a = 0 #tr.a_ee
         
     SynEE.insert_P = tr.insert_P
 
