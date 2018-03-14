@@ -1,4 +1,5 @@
 
+from brian2.units import ms,mV,second
 from brian2 import implementation, check_units
 
 
