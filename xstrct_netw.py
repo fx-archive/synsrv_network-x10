@@ -199,8 +199,6 @@ def run_net(tr):
         GExc.run_regularly(tr.intrinsic_mod, dt = tr.it_dt, when='end')
 
     # structural plasticity
-    number_active_synapses = []
-
     if tr.netw.config.strct_active:
         SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
 
@@ -239,14 +237,6 @@ def run_net(tr):
     GExc_vts.record_single_timestep()
     SynEE_a.record_single_timestep()
 
-    # it looks like only pure numpy arrays can be stored as results
-    number_active_synapses = np.array(number_active_synapses)
-    tr.f_add_result('SynAct_stat', number_active_synapses)
-
-    # it looks like only pure numpy arrays can be stored as results
-    # tr.f_add_result('dead_times', np.array(dead_times))
-    # tr.f_add_result('life_times', np.array(life_times))
- 
     
     tr.v_standard_result = Brian2MonitorResult
 
