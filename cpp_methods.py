@@ -56,7 +56,7 @@ def record_turnover(t, was_active_before, should_become_active,
     return 0.0
 
 
-#
+# record spk
 #
 #
 @implementation('cpp', code=r'''
