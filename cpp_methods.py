@@ -9,7 +9,7 @@ from brian2 import implementation, check_units
 #
 @implementation('cpp', code=r'''
    
-    double syn_scale(double a, double vATotalMax, double Asum_post) {
+    double syn_scale(double a, double vATotalMax, double Asum_post, double eta_scaling) {
       
       double a_out;
 
@@ -17,7 +17,7 @@ from brian2 import implementation, check_units
           a_out = 0.;
       }
       else{
-          a_out = a*(vATotalMax/Asum_post);
+          a_out = a*(1 + eta_scaling*(vATotalMax/Asum_post-1));
       }
 
       return a_out;

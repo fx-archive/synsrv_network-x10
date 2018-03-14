@@ -61,6 +61,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.config.scl_active', prm.scl_active)
     tr.f_add_parameter('netw.ATotalMax',        prm.ATotalMax)
     tr.f_add_parameter('netw.dt_synEE_scaling', prm.dt_synEE_scaling)
+    tr.f_add_parameter('netw.eta_scaling', prm.eta_scaling)
 
     # intrinsic plasticity
     tr.f_add_parameter('netw.config.it_active', prm.it_active)

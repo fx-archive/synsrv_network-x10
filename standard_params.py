@@ -41,6 +41,7 @@ ATotalMax = 40.*0.001
 # scaling
 scl_active = 0
 dt_synEE_scaling = 10*ms
+eta_scaling = 0.2
 
 # intrinsic plasticity
 it_active = 0
