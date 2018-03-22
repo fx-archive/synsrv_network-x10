@@ -32,8 +32,7 @@ taupre = 15*ms
 taupost = 30*ms
 Aplus = 15*0.001
 Aminus = -7.5*0.001
-#amax = 40*0.001
-amax = None
+amax = 40*0.001
 
 synEE_rec = 1
 

@@ -38,7 +38,7 @@ synEE_mod = '''
 synEE_pre = '''
             ge_post += syn_active*a*0
             Apre += syn_active*Aplus
-            a = syn_active*clip(a+Apost, 0)
+            a = syn_active*clip(a+Apost, 0, amax)
             '''
 
 synEE_pre_rec = '''
@@ -47,7 +47,7 @@ synEE_pre_rec = '''
 
 synEE_post = '''
              Apost+= syn_active*Aminus
-             a = syn_active*clip(a+Apre, 0)
+             a = syn_active*clip(a+Apre, 0, amax)
              '''
 
 synEE_post_rec = '''
