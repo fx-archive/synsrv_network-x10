@@ -58,7 +58,7 @@ synEE_post_rec = '''
 #                 a = clip(a*(ATotalMax/Asum_post),0,amax)
 #                 '''
 synEE_scaling = '''
-                a = syn_scale(a, ATotalMax, Asum_post, eta_scaling)
+                a = syn_active*syn_scale(a, ATotalMax, Asum_post, eta_scaling)
                 '''
 
 intrinsic_mod = '''
