@@ -97,6 +97,8 @@ def add_params(tr):
     # recording
     tr.f_add_parameter('rec.memtraces_rec', prm.memtraces_rec)
     tr.f_add_parameter('rec.vttraces_rec', prm.vttraces_rec)
+    tr.f_add_parameter('rec.getraces_rec', prm.getraces_rec)
+    tr.f_add_parameter('rec.gitraces_rec', prm.gitraces_rec)
 
     
 def run_net(tr):
@@ -209,11 +211,15 @@ def run_net(tr):
 
     #run(tr.sim.preT)
 
-    GExc_recvars = ['ge', 'gi']
+    GExc_recvars = []
     if tr.memtraces_rec:
         GExc_recvars.append('V')
     if tr.vttraces_rec:
         GExc_recvars.append('Vt')
+    if tr.getraces_rec:
+        GExc_recvars.append('ge')
+    if tr.gitraces_rec:
+        GExc_recvars.append('gi')
 
     GInh_recvars = GExc_recvars
     
