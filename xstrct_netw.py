@@ -94,6 +94,9 @@ def add_params(tr):
 
     tr.f_add_parameter('netw.config.strct_active', prm.strct_active)
 
+    # recording
+    tr.f_add_parameter('rec.memtraces_rec', prm.memtraces_rec)
+    tr.f_add_parameter('rec.vttraces_rec', prm.vttraces_rec)
 
     
 def run_net(tr):
@@ -206,13 +209,20 @@ def run_net(tr):
 
     #run(tr.sim.preT)
 
+    GExc_recvars = ['ge', 'gi']
+    if tr.memtraces_rec:
+        GExc_recvars.append('V')
+    if tr.vttraces_rec:
+        GExc_recvars.append('Vt')
+
+    GInh_recvars = GExc_recvars
     
-    GExc_stat = StateMonitor(GExc, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
+    GExc_stat = StateMonitor(GExc, GExc_recvars, record=[0,1,2])
     SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=range(20))
 
     GExc_spks = SpikeMonitor(GExc)
     
-    GInh_stat = StateMonitor(GInh, ['V', 'Vt', 'ge', 'gi'], record=[0,1,2])
+    GInh_stat = StateMonitor(GInh, GInh_recvars, record=[0,1,2])
     GInh_spks = SpikeMonitor(GInh)
 
     GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)

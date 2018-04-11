@@ -64,3 +64,8 @@ netw_dt = 0.1*ms
 
 # neuron_method = 'euler'
 # synEE_method = 'euler'
+
+
+# recording
+memtraces_rec = 1
+vttraces_rec = 1
