@@ -71,3 +71,8 @@ memtraces_rec = 1
 vttraces_rec = 1
 getraces_rec = 1
 gitraces_rec = 1
+
+synee_atraces_rec = 1
+synee_Apretraces_rec = 1
+synee_Aposttraces_rec = 1
+n_synee_traces_rec = 20

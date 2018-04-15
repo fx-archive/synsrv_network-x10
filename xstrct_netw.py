@@ -100,6 +100,12 @@ def add_params(tr):
     tr.f_add_parameter('rec.getraces_rec', prm.getraces_rec)
     tr.f_add_parameter('rec.gitraces_rec', prm.gitraces_rec)
 
+    tr.f_add_parameter('rec.synee_atraces_rec', prm.synee_atraces_rec)
+    tr.f_add_parameter('rec.synee_Apretraces_rec', prm.synee_Apretraces_rec)
+    tr.f_add_parameter('rec.synee_Aposttraces_rec', prm.synee_Aposttraces_rec)
+    tr.f_add_parameter('rec.n_synee_traces_rec', prm.n_synee_traces_rec)
+    
+
     
 def run_net(tr):
 
@@ -224,11 +230,22 @@ def run_net(tr):
     GInh_recvars = GExc_recvars
     
     GExc_stat = StateMonitor(GExc, GExc_recvars, record=[0,1,2])
-    SynEE_stat = StateMonitor(SynEE, ['a','Apre', 'Apost'], record=range(20))
+
+    SynEE_recvars = []
+    if tr.synee_atraces_rec:
+        SynEE_recvars.append('a')
+    if tr.synee_Apretraces_rec:
+        SynEE_recvars.append('Apre')
+    if tr.synee_Aposttraces_rec:
+        SynEE_recvars.append('Apost')
+
+    SynEE_stat = StateMonitor(SynEE, SynEE_recvars,
+                              record=range(tr.n_synee_traces_rec))
 
     GExc_spks = SpikeMonitor(GExc)
     
     GInh_stat = StateMonitor(GInh, GInh_recvars, record=[0,1,2])
+    
     GInh_spks = SpikeMonitor(GInh)
 
     GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
