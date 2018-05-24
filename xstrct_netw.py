@@ -217,40 +217,41 @@ def run_net(tr):
 
     #run(tr.sim.preT)
 
-    GExc_recvars = []
-    if tr.memtraces_rec:
-        GExc_recvars.append('V')
-    if tr.vttraces_rec:
-        GExc_recvars.append('Vt')
-    if tr.getraces_rec:
-        GExc_recvars.append('ge')
-    if tr.gitraces_rec:
-        GExc_recvars.append('gi')
+    # GExc_recvars = []
+    # if tr.memtraces_rec:
+    #     GExc_recvars.append('V')
+    # if tr.vttraces_rec:
+    #     GExc_recvars.append('Vt')
+    # if tr.getraces_rec:
+    #     GExc_recvars.append('ge')
+    # if tr.gitraces_rec:
+    #     GExc_recvars.append('gi')
 
-    GInh_recvars = GExc_recvars
+    # GInh_recvars = GExc_recvars
     
-    GExc_stat = StateMonitor(GExc, GExc_recvars, record=[0,1,2])
+    # GExc_stat = StateMonitor(GExc, GExc_recvars, record=[0,1,2])
 
-    SynEE_recvars = []
-    if tr.synee_atraces_rec:
-        SynEE_recvars.append('a')
-    if tr.synee_Apretraces_rec:
-        SynEE_recvars.append('Apre')
-    if tr.synee_Aposttraces_rec:
-        SynEE_recvars.append('Apost')
+    # SynEE_recvars = []
+    # if tr.synee_atraces_rec:
+    #     SynEE_recvars.append('a')
+    # if tr.synee_Apretraces_rec:
+    #     SynEE_recvars.append('Apre')
+    # if tr.synee_Aposttraces_rec:
+    #     SynEE_recvars.append('Apost')
 
-    SynEE_stat = StateMonitor(SynEE, SynEE_recvars,
-                              record=range(tr.n_synee_traces_rec))
+    # SynEE_stat = StateMonitor(SynEE, SynEE_recvars,
+    #                           record=range(tr.n_synee_traces_rec))
 
-    GExc_spks = SpikeMonitor(GExc)
+    # GExc_spks = SpikeMonitor(GExc)
     
-    GInh_stat = StateMonitor(GInh, GInh_recvars, record=[0,1,2])
+    # GInh_stat = StateMonitor(GInh, GInh_recvars, record=[0,1,2])
     
     # GInh_spks = SpikeMonitor(GInh)
 
     # GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
-                           record=range(tr.N_e*(tr.N_e-1)), dt=tr.sim.T/10.)
+                           record=range(tr.N_e*(tr.N_e-1)),
+                           dt=tr.sim.T/10.)
     
 
     # GExc_stat = []
@@ -265,10 +266,11 @@ def run_net(tr):
     # SynEE_a = []
     
     run(tr.sim.T, report='text')
+    SynEE_a.record_single_timestep()
     device.build(directory='./builds/%.4d'%(tr.v_idx))
 
     # GExc_vts.record_single_timestep()
-    SynEE_a.record_single_timestep()
+
 
     
     tr.v_standard_result = Brian2MonitorResult
