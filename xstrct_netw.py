@@ -249,9 +249,9 @@ def run_net(tr):
     # GInh_spks = SpikeMonitor(GInh)
 
     # GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
-    SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
-                           record=range(tr.N_e*(tr.N_e-1)),
-                           dt=tr.sim.T/10.)
+    # SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
+    #                        record=range(tr.N_e*(tr.N_e-1)),
+    #                        dt=tr.sim.T/10.)
     
 
     # GExc_stat = []
@@ -266,7 +266,7 @@ def run_net(tr):
     # SynEE_a = []
     
     run(tr.sim.T, report='text')
-    SynEE_a.record_single_timestep()
+    # SynEE_a.record_single_timestep()
     device.build(directory='./builds/%.4d'%(tr.v_idx))
 
     # GExc_vts.record_single_timestep()
@@ -282,7 +282,7 @@ def run_net(tr):
     # tr.f_add_result('GInh_stat', GInh_stat)
     #print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
     # tr.f_add_result('GInh_spks', GInh_spks)
-    tr.f_add_result('SynEE_a', SynEE_a)
+    # tr.f_add_result('SynEE_a', SynEE_a)
 
     # tr.f_add_result('GExc_vts', GExc_vts)
 
