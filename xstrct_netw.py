@@ -231,16 +231,16 @@ def run_net(tr):
     
     # GExc_stat = StateMonitor(GExc, GExc_recvars, record=[0,1,2])
 
-    # SynEE_recvars = []
-    # if tr.synee_atraces_rec:
-    #     SynEE_recvars.append('a')
-    # if tr.synee_Apretraces_rec:
-    #     SynEE_recvars.append('Apre')
-    # if tr.synee_Aposttraces_rec:
-    #     SynEE_recvars.append('Apost')
+    SynEE_recvars = []
+    if tr.synee_atraces_rec:
+        SynEE_recvars.append('a')
+    if tr.synee_Apretraces_rec:
+        SynEE_recvars.append('Apre')
+    if tr.synee_Aposttraces_rec:
+        SynEE_recvars.append('Apost')
 
-    # SynEE_stat = StateMonitor(SynEE, SynEE_recvars,
-    #                           record=range(tr.n_synee_traces_rec))
+    SynEE_stat = StateMonitor(SynEE, SynEE_recvars,
+                              record=range(tr.n_synee_traces_rec))
 
     # GExc_spks = SpikeMonitor(GExc)
     
@@ -276,7 +276,7 @@ def run_net(tr):
     tr.v_standard_result = Brian2MonitorResult
 
     # tr.f_add_result('GExc_stat', GExc_stat)
-    # tr.f_add_result('SynEE_stat', SynEE_stat)
+    tr.f_add_result('SynEE_stat', SynEE_stat)
     #print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
     # tr.f_add_result('GExc_spks', GExc_spks)
     # tr.f_add_result('GInh_stat', GInh_stat)
