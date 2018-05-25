@@ -1,7 +1,7 @@
 
 from brian2.units import *
 
-N_e = 1000
+N_e = 400
 N_i = int(0.2*N_e)
 
 tau = 20*ms                 # membrane time constant
