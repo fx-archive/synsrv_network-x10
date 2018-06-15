@@ -267,7 +267,7 @@ def run_net(tr):
     
     run(tr.sim.T, report='text')
     SynEE_a.record_single_timestep()
-    device.build(directory='./builds/%.4d'%(tr.v_idx))
+    device.build(directory='../builds/%.4d'%(tr.v_idx))
 
     # GExc_vts.record_single_timestep()
 
@@ -287,7 +287,7 @@ def run_net(tr):
     tr.f_add_result('GExc_vts', GExc_vts)
 
     # ----------------- add raw data ------------------------
-    fpath = './builds/%.4d/'%(tr.v_idx)
+    fpath = '../builds/%.4d/'%(tr.v_idx)
 
     from pathlib import Path
 
