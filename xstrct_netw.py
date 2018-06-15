@@ -217,19 +217,19 @@ def run_net(tr):
 
     #run(tr.sim.preT)
 
-    # GExc_recvars = []
-    # if tr.memtraces_rec:
-    #     GExc_recvars.append('V')
-    # if tr.vttraces_rec:
-    #     GExc_recvars.append('Vt')
-    # if tr.getraces_rec:
-    #     GExc_recvars.append('ge')
-    # if tr.gitraces_rec:
-    #     GExc_recvars.append('gi')
+    GExc_recvars = []
+    if tr.memtraces_rec:
+        GExc_recvars.append('V')
+    if tr.vttraces_rec:
+        GExc_recvars.append('Vt')
+    if tr.getraces_rec:
+        GExc_recvars.append('ge')
+    if tr.gitraces_rec:
+        GExc_recvars.append('gi')
 
-    # GInh_recvars = GExc_recvars
+    GInh_recvars = GExc_recvars
     
-    # GExc_stat = StateMonitor(GExc, GExc_recvars, record=[0,1,2])
+    GExc_stat = StateMonitor(GExc, GExc_recvars, record=[0,1,2])
 
     SynEE_recvars = []
     if tr.synee_atraces_rec:
@@ -242,28 +242,28 @@ def run_net(tr):
     SynEE_stat = StateMonitor(SynEE, SynEE_recvars,
                               record=range(tr.n_synee_traces_rec))
 
-    # GExc_spks = SpikeMonitor(GExc)
+    GExc_spks = SpikeMonitor(GExc)
     
-    # GInh_stat = StateMonitor(GInh, GInh_recvars, record=[0,1,2])
+    GInh_stat = StateMonitor(GInh, GInh_recvars, record=[0,1,2])
     
-    # GInh_spks = SpikeMonitor(GInh)
+    GInh_spks = SpikeMonitor(GInh)
 
-    # GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
+    GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
                            dt=tr.sim.T/10.)
     
 
-    # GExc_stat = []
-    # SynEE_stat = []
+    GExc_stat = []
+    SynEE_stat = []
 
-    # GExc_spks = []
+    GExc_spks = []
     
-    # GInh_stat = []
-    # GInh_spks = []
+    GInh_stat = []
+    GInh_spks = []
 
-    # GExc_vts = []
-    # SynEE_a = []
+    GExc_vts = []
+    SynEE_a = []
     
     run(tr.sim.T, report='text')
     SynEE_a.record_single_timestep()
@@ -275,29 +275,29 @@ def run_net(tr):
     
     tr.v_standard_result = Brian2MonitorResult
 
-    # tr.f_add_result('GExc_stat', GExc_stat)
+    tr.f_add_result('GExc_stat', GExc_stat)
     tr.f_add_result('SynEE_stat', SynEE_stat)
-    #print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
-    # tr.f_add_result('GExc_spks', GExc_spks)
-    # tr.f_add_result('GInh_stat', GInh_stat)
-    #print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
-    # tr.f_add_result('GInh_spks', GInh_spks)
+    print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
+    tr.f_add_result('GExc_spks', GExc_spks)
+    tr.f_add_result('GInh_stat', GInh_stat)
+    print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
+    tr.f_add_result('GInh_spks', GInh_spks)
     tr.f_add_result('SynEE_a', SynEE_a)
 
-    # tr.f_add_result('GExc_vts', GExc_vts)
+    tr.f_add_result('GExc_vts', GExc_vts)
 
     # ----------------- add raw data ------------------------
-    # fpath = './builds/%.4d/'%(tr.v_idx)
+    fpath = './builds/%.4d/'%(tr.v_idx)
 
-    # from pathlib import Path
+    from pathlib import Path
 
-    # Path(fpath+'turnover').touch()
-    # turnover_data = np.genfromtxt(fpath+'turnover',delimiter=',')
-    # tr.f_add_result('turnover', turnover_data)
-    # os.remove(fpath+'turnover')
+    Path(fpath+'turnover').touch()
+    turnover_data = np.genfromtxt(fpath+'turnover',delimiter=',')
+    tr.f_add_result('turnover', turnover_data)
+    os.remove(fpath+'turnover')
 
-    # Path(fpath+'spk_register').touch()
-    # spk_register_data = np.genfromtxt(fpath+'spk_register',delimiter=',')
-    # tr.f_add_result('spk_register', spk_register_data)
-    # os.remove(fpath+'spk_register')
+    Path(fpath+'spk_register').touch()
+    spk_register_data = np.genfromtxt(fpath+'spk_register',delimiter=',')
+    tr.f_add_result('spk_register', spk_register_data)
+    os.remove(fpath+'spk_register')
     
