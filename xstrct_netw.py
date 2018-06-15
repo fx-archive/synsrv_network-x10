@@ -254,16 +254,16 @@ def run_net(tr):
                            dt=tr.sim.T/10.)
     
 
-    GExc_stat = []
-    SynEE_stat = []
+    # GExc_stat = []
+    # SynEE_stat = []
 
-    GExc_spks = []
+    # GExc_spks = []
     
-    GInh_stat = []
-    GInh_spks = []
+    # GInh_stat = []
+    # GInh_spks = []
 
-    GExc_vts = []
-    SynEE_a = []
+    # GExc_vts = []
+    # SynEE_a = []
     
     run(tr.sim.T, report='text')
     SynEE_a.record_single_timestep()
