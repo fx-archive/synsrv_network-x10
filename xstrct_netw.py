@@ -150,11 +150,11 @@ def run_net(tr):
                      on_pre=synEE_pre_mod, on_post=synEE_post_mod,
                      #method=tr.synEE_method,
                      namespace=namespace)
-    SynIE = Synapses(target=GInh, source=GExc, on_pre='ge_post += a_ie',
+    SynIE = Synapses(target=GInh, source=GExc, on_pre='ge_post += a_ie*0',
                      namespace=namespace)
-    SynEI = Synapses(target=GExc, source=GInh, on_pre='gi_post += a_ei',
+    SynEI = Synapses(target=GExc, source=GInh, on_pre='gi_post += a_ei*0',
                      namespace=namespace)
-    SynII = Synapses(target=GInh, source=GInh, on_pre='gi_post += a_ii',
+    SynII = Synapses(target=GInh, source=GInh, on_pre='gi_post += a_ii*0',
                      namespace=namespace)
 
     
