@@ -253,23 +253,12 @@ def run_net(tr):
                            record=range(tr.N_e*(tr.N_e-1)),
                            dt=tr.sim.T/10.)
     
-
-    # GExc_stat = []
-    # SynEE_stat = []
-
-    # GExc_spks = []
-    
-    # GInh_stat = []
-    # GInh_spks = []
-
-    # GExc_vts = []
-    # SynEE_a = []
     
     run(tr.sim.T, report='text')
     SynEE_a.record_single_timestep()
     device.build(directory='../builds/%.4d'%(tr.v_idx))
 
-    # GExc_vts.record_single_timestep()
+    GExc_vts.record_single_timestep()
 
 
     
