@@ -34,6 +34,9 @@ Aplus = 15*0.001
 Aminus = -7.5*0.001
 amax = 40*0.001
 
+#STDP
+stdp_active = 1
+
 synEE_rec = 1
 
 ATotalMax = 40.*0.001

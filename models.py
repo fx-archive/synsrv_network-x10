@@ -38,8 +38,11 @@ synEE_mod = '''
 synEE_pre = '''
             ge_post += syn_active*a*0
             Apre += syn_active*Aplus
-            a = syn_active*clip(a+Apost, 0, amax)
             '''
+
+synEE_pre_STDP = '''
+                 a = syn_active*clip(a+Apost, 0, amax)
+                 '''
 
 synEE_pre_rec = '''
                 dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 0)
@@ -47,8 +50,11 @@ synEE_pre_rec = '''
 
 synEE_post = '''
              Apost+= syn_active*Aminus
-             a = syn_active*clip(a+Apre, 0, amax)
              '''
+
+synEE_post_STDP = '''
+                  a = syn_active*clip(a+Apre, 0, amax)
+                  '''
 
 synEE_post_rec = '''
                  dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 1)

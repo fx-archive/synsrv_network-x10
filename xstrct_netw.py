@@ -49,6 +49,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.p_ii',  prm.p_ii)
 
     # STDP
+    tr.f_add_parameter('netw.config.stdp_active', prm.stdp_active)
     tr.f_add_parameter('netw.taupre',    prm.taupre)
     tr.f_add_parameter('netw.taupost',   prm.taupost)
     tr.f_add_parameter('netw.Aplus',     prm.Aplus)
@@ -139,12 +140,21 @@ def run_net(tr):
 
     synEE_pre_mod = mod.synEE_pre
     synEE_post_mod = mod.synEE_post
+
+    if tr.stdp_active:
+        synEE_pre_mod  = '''%s 
+                            %s''' %(synEE_pre_mod, mod.synEE_pre_STDP)
+        synEE_post_mod = '''%s 
+                            %s''' %(synEE_post_mod, mod.synEE_post_STDP)
+
+    
     if tr.synEE_rec:
         synEE_pre_mod  = '''%s 
                             %s''' %(synEE_pre_mod, mod.synEE_pre_rec)
         synEE_post_mod = '''%s 
                             %s''' %(synEE_post_mod, mod.synEE_post_rec)
-                    
+
+        
     # E<-E advanced synapse model, rest simple
     SynEE = Synapses(target=GExc, source=GExc, model=tr.synEE_mod,
                      on_pre=synEE_pre_mod, on_post=synEE_post_mod,
