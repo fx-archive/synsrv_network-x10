@@ -30,7 +30,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.El',    prm.El)
     tr.f_add_parameter('netw.Ee',    prm.Ee)
     tr.f_add_parameter('netw.Ei',    prm.Ei)
-    tr.f_add_parameter('netw.sigma', prm.sigma)
+    tr.f_add_parameter('netw.sigma_e', prm.sigma_e)
+    tr.f_add_parameter('netw.sigma_i', prm.sigma_i)
     
     tr.f_add_parameter('netw.Vr_e',  prm.Vr_e)
     tr.f_add_parameter('netw.Vr_i',  prm.Vr_i)
@@ -132,6 +133,7 @@ def run_net(tr):
                        namespace=namespace)
 
     # set initial thresholds fixed, init. potentials uniformly distrib.
+    GExc.sigma, GInh.sigma = tr.sigma_e, tr.sigma_i
     GExc.Vt, GInh.Vt = tr.Vt_e, tr.Vt_i
     GExc.V , GInh.V  = np.random.uniform(tr.Vr_e/mV, tr.Vt_e/mV,
                                          size=tr.N_e)*mV, \
