@@ -175,15 +175,21 @@ def run_net(tr):
         sEE_src, sEE_tar = generate_full_connectivity(tr.N_e, same=True)
         SynEE.connect(i=sEE_src, j=sEE_tar)
         SynEE.syn_active = 0
+
     else:
+        srcs_full, tars_full = generate_full_connectivity(tr.N_e, same=True)
+        SynEE.connect(i=srcs_full, j=tars_full)
+
+        SynEE.syn_active = 0
+
         sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee,
                                                 same=True)
-        SynEE.connect(i=sEE_src, j=sEE_tar)
+        for i,j in zip(sEE_src, sEE_tar):
+            SynEE.syn_active[i,j] = 1
 
         tr.f_add_result('sEE_src', sEE_src)
         tr.f_add_result('sEE_tar', sEE_tar)
 
-        SynEE.syn_active = 1
 
 
     sIE_src, sIE_tar = generate_connections(tr.N_i, tr.N_e, tr.p_ie)
