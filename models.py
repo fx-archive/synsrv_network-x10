@@ -36,6 +36,11 @@ synEE_mod = '''
             insert_P : 1 (shared) 
             '''
 
+synEE_p_activate = '''
+                   r = rand()
+                   syn_active : int(r < p_ee)
+                   '''
+
 synEE_pre = '''
             ge_post += syn_active*a
             Apre += syn_active*Aplus

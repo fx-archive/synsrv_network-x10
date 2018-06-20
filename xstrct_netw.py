@@ -83,6 +83,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.mod.synEE_mod',     mod.synEE_mod)
     # tr.f_add_parameter('netw.mod.synEE_pre',     mod.synEE_pre)
     # tr.f_add_parameter('netw.mod.synEE_post',    mod.synEE_post)
+    tr.f_add_parameter('netw.mod.synEE_p_activate', mod.synEE_p_activate)
     tr.f_add_parameter('netw.mod.synEE_scaling', mod.synEE_scaling)
     tr.f_add_parameter('netw.mod.intrinsic_mod', mod.intrinsic_mod)
     tr.f_add_parameter('netw.mod.strct_mod',     mod.strct_mod)
@@ -179,7 +180,6 @@ def run_net(tr):
     else:
         srcs_full, tars_full = generate_full_connectivity(tr.N_e, same=True)
         SynEE.connect(i=srcs_full, j=tars_full)
-
         SynEE.syn_active = 0
 
 
@@ -205,6 +205,11 @@ def run_net(tr):
         SynEE.a = tr.a_ee
         
     SynEE.insert_P = tr.insert_P
+
+
+    # make synapse active at beginning
+    if not tr.strct_active:
+        SynEE.run_regulary(tr.synEE_p_activate, dt=tr.T, when='start')
 
     # synaptic scaling
     if tr.netw.config.scl_active:
@@ -261,18 +266,6 @@ def run_net(tr):
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
                            dt=tr.sim.T/10.)
-
-    # pre-run
-    run(1*ms, report='text')
-
-    if not tr.strct_active:
-        sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee,
-                                                same=True)
-        for i,j in zip(sEE_src, sEE_tar):
-            SynEE.syn_active[i,j] = 1
-
-        tr.f_add_result('sEE_src', sEE_src)
-        tr.f_add_result('sEE_tar', sEE_tar)
 
     
     run(tr.sim.T, report='text')
