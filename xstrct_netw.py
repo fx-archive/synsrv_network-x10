@@ -265,7 +265,7 @@ def run_net(tr):
     GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
-                           dt=tr.sim.T/10.)
+                           dt=tr.sim.T/10., when='end')
 
     
     run(tr.sim.T, report='text')
