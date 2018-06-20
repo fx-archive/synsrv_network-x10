@@ -39,6 +39,7 @@ synEE_mod = '''
 synEE_p_activate = '''
                    r = rand()
                    syn_active = int(r < p_ee)
+                   a = syn_active*a
                    '''
 
 synEE_pre = '''
