@@ -107,6 +107,8 @@ def add_params(tr):
     tr.f_add_parameter('rec.synee_Apretraces_rec', prm.synee_Apretraces_rec)
     tr.f_add_parameter('rec.synee_Aposttraces_rec', prm.synee_Aposttraces_rec)
     tr.f_add_parameter('rec.n_synee_traces_rec', prm.n_synee_traces_rec)
+    tr.f_add_parameter('rec.synEE_stat_dt', prm.synEE_stat_dt)
+    
     
 
     
@@ -256,7 +258,7 @@ def run_net(tr):
 
     SynEE_stat = StateMonitor(SynEE, SynEE_recvars,
                               record=range(tr.n_synee_traces_rec),
-                              when='end')
+                              when='end', dt=tr.synEE_stat_dt)
 
     GExc_spks = SpikeMonitor(GExc)
     
@@ -264,7 +266,7 @@ def run_net(tr):
     
     GInh_spks = SpikeMonitor(GInh)
 
-    GExc_vts = StateMonitor(GExc, ['Vt'], record=True, dt=tr.sim.T/2.)
+    
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
                            dt=tr.sim.T/10., when='end')
@@ -274,10 +276,7 @@ def run_net(tr):
     SynEE_a.record_single_timestep()
     device.build(directory='../builds/%.4d'%(tr.v_idx))
 
-    GExc_vts.record_single_timestep()
-
-
-    
+        
     tr.v_standard_result = Brian2MonitorResult
 
     tr.f_add_result('GExc_stat', GExc_stat)
@@ -289,7 +288,6 @@ def run_net(tr):
     tr.f_add_result('GInh_spks', GInh_spks)
     tr.f_add_result('SynEE_a', SynEE_a)
 
-    tr.f_add_result('GExc_vts', GExc_vts)
 
     # ----------------- add raw data ------------------------
     fpath = '../builds/%.4d/'%(tr.v_idx)
