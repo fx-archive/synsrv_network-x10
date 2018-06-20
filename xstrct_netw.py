@@ -182,15 +182,6 @@ def run_net(tr):
 
         SynEE.syn_active = 0
 
-        sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee,
-                                                same=True)
-        for i,j in zip(sEE_src, sEE_tar):
-            SynEE.syn_active[i,j] = 1
-
-        tr.f_add_result('sEE_src', sEE_src)
-        tr.f_add_result('sEE_tar', sEE_tar)
-
-
 
     sIE_src, sIE_tar = generate_connections(tr.N_i, tr.N_e, tr.p_ie)
     sEI_src, sEI_tar = generate_connections(tr.N_e, tr.N_i, tr.p_ei)
@@ -270,7 +261,19 @@ def run_net(tr):
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
                            dt=tr.sim.T/10.)
-    
+
+    # pre-run
+    run(1*ms, report='text')
+
+    if not tr.strct_active:
+        sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee,
+                                                same=True)
+        for i,j in zip(sEE_src, sEE_tar):
+            SynEE.syn_active[i,j] = 1
+
+        tr.f_add_result('sEE_src', sEE_src)
+        tr.f_add_result('sEE_tar', sEE_tar)
+
     
     run(tr.sim.T, report='text')
     SynEE_a.record_single_timestep()
