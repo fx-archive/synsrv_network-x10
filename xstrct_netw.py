@@ -255,7 +255,8 @@ def run_net(tr):
         SynEE_recvars.append('Apost')
 
     SynEE_stat = StateMonitor(SynEE, SynEE_recvars,
-                              record=range(tr.n_synee_traces_rec))
+                              record=range(tr.n_synee_traces_rec),
+                              when='end')
 
     GExc_spks = SpikeMonitor(GExc)
     
