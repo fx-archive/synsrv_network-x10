@@ -272,7 +272,7 @@ def run_net(tr):
     
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
-                           dt=tr.sim.T/10., when='end')
+                           dt=tr.sim.T/10., when='end', order=100)
 
     
     run(tr.sim.T, report='text')
