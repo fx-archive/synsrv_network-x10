@@ -211,7 +211,7 @@ def run_net(tr):
         SynEE.a = tr.a_ee
         
     SynEE.insert_P = tr.insert_P
-    SynEE.p_inactivate = p_inactivate
+    SynEE.p_inactivate = tr.p_inactivate
 
 
     # make synapse active at beginning
