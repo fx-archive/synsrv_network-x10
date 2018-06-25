@@ -205,10 +205,8 @@ def run_net(tr):
     tr.f_add_result('sII_src', sII_src)
     tr.f_add_result('sII_tar', sII_tar)
 
-    if tr.strct_active:
-        SynEE.a = 0
-    else:
-        SynEE.a = tr.a_ee
+
+    SynEE.a = tr.a_ee
         
     SynEE.insert_P = tr.insert_P
     SynEE.p_inactivate = tr.p_inactivate
