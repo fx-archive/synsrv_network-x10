@@ -59,6 +59,7 @@ prn_thrshld = 0.001 * ATotalMax
 insert_P = 0.001
 strct_dt = 10*ms
 a_insert = 0.01 * ATotalMax
+p_inactivate = 0.25
 
 
 #preT  = 100*second

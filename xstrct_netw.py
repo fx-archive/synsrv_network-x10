@@ -76,6 +76,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.insert_P',    prm.insert_P)
     tr.f_add_parameter('netw.a_insert',    prm.a_insert)
     tr.f_add_parameter('netw.strct_dt',    prm.strct_dt)
+    tr.f_add_parameter('netw.p_inactivate',    prm.p_inactivate)
+    
     
     tr.f_add_parameter('netw.mod.condlif_sig',   mod.condlif_sig)
     tr.f_add_parameter('netw.mod.nrnEE_thrshld', mod.nrnEE_thrshld)
@@ -209,13 +211,14 @@ def run_net(tr):
         SynEE.a = tr.a_ee
         
     SynEE.insert_P = tr.insert_P
+    SynEE.p_inactivate = p_inactivate
 
 
     # make synapse active at beginning
-    if not tr.strct_active:
-        SynEE.run_regularly(tr.synEE_p_activate, dt=tr.T, when='start',
+    SynEE.run_regularly(tr.synEE_p_activate, dt=tr.T, when='start',
                             order=-100)
-
+            
+        
     # synaptic scaling
     if tr.netw.config.scl_active:
         SynEE.summed_updaters['Asum_post']._clock = Clock(

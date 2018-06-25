@@ -83,7 +83,7 @@ intrinsic_mod = '''
 #strct_mod = ''
 strct_mod = '''
             r = rand()
-            should_stay_active = int(a > prn_thrshld)
+            should_stay_active = int(a > 0) + int(a<=0)*int(r>p_inactivate)
             should_become_active = int(r < insert_P)
             was_active_before = syn_active
             syn_active = int(syn_active==1) * int(should_stay_active) \
