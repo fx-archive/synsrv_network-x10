@@ -34,6 +34,7 @@ synEE_mod = '''
 
             Asum_post = a : 1 (summed)         
             insert_P : 1 (shared) 
+            p_inactivate : (shared)
             '''
 
 synEE_p_activate = '''
