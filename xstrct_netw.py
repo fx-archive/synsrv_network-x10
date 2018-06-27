@@ -89,6 +89,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.mod.synEE_scaling', mod.synEE_scaling)
     tr.f_add_parameter('netw.mod.intrinsic_mod', mod.intrinsic_mod)
     tr.f_add_parameter('netw.mod.strct_mod',     mod.strct_mod)
+    tr.f_add_parameter('netw.mod.strct_mod_thrs',     mod.strct_mod_thrs)
     
     # tr.f_add_parameter('netw.mod.neuron_method', prm.neuron_method)
     # tr.f_add_parameter('netw.mod.synEE_method',  prm.synEE_method)
@@ -98,6 +99,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.sim.dt', prm.netw_dt)
 
     tr.f_add_parameter('netw.config.strct_active', prm.strct_active)
+    tr.f_add_parameter('netw.config.strct_mode', prm.strct_mode)
 
     # recording
     tr.f_add_parameter('rec.memtraces_rec', prm.memtraces_rec)
@@ -231,7 +233,10 @@ def run_net(tr):
 
     # structural plasticity
     if tr.netw.config.strct_active:
-        SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
+        if tr.strct_mode == 'zero':
+            SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
+        elif tr.strct_mode == 'thrs':
+            SynEE.run_regularly(tr.strct_mod_thrs, dt = tr.strct_dt, when='end')
 
     # -------------- recording ------------------        
 
