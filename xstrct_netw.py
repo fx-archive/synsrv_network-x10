@@ -290,10 +290,10 @@ def run_net(tr):
 
     tr.f_add_result('GExc_stat', GExc_stat)
     tr.f_add_result('SynEE_stat', SynEE_stat)
-    print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
+    #print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
     #tr.f_add_result('GExc_spks', GExc_spks)
     tr.f_add_result('GInh_stat', GInh_stat)
-    print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
+    #print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
     #tr.f_add_result('GInh_spks', GInh_spks)
     tr.f_add_result('SynEE_a', SynEE_a)
 
