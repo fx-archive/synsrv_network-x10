@@ -12,7 +12,7 @@ from pypet.brian2.parameter import Brian2Parameter, Brian2MonitorResult
 
 from brian2 import NeuronGroup, StateMonitor, SpikeMonitor, run, \
                    PoissonGroup, Synapses, set_device, device, Clock, \
-                   defaultclock, prefs, network_operation
+                   defaultclock, prefs, network_operation, Network
 
 from cpp_methods import syn_scale, record_turnover, record_spk
 
@@ -280,17 +280,20 @@ def run_net(tr):
                            record=range(tr.N_e*(tr.N_e-1)),
                            dt=tr.sim.T/10., when='end', order=100)
 
+    net = Network(GExc, GInh, SynEE, SynEI, SynIE, SynII,
+                  GExc_stat, GInh_stat, SynEE_stat,
+                  GExc_spks, GInh_spks)
     
-    run(tr.sim.T, report='text')
-    SynEE_a.record_single_timestep()
+    net.run(tr.sim.T, report='text')
+    # SynEE_a.record_single_timestep()
 
     
-    # SynEE.summed_updaters['Asum_post']._clock = Clock(
-    #     dt=tr.dt_synEE_scaling)
-    # SynEE.run_regularly(tr.synEE_scaling, dt = tr.dt_synEE_scaling,
-    #                     when='end')
+    SynEE.summed_updaters['Asum_post']._clock = Clock(
+        dt=tr.dt_synEE_scaling)
+    SynEE.run_regularly(tr.synEE_scaling, dt = tr.dt_synEE_scaling,
+                        when='end')
 
-    run(tr.sim.T*3, report='text')
+    net.run(tr.sim.T*3, report='text')
 
     device.build(directory='../builds/%.4d'%(tr.v_idx))
 
