@@ -98,6 +98,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.sim.T',  prm.T)
     tr.f_add_parameter('netw.sim.T1',  prm.T1)
     tr.f_add_parameter('netw.sim.T2',  prm.T2)
+    tr.f_add_parameter('netw.sim.T3',  prm.T3)
     tr.f_add_parameter('netw.sim.dt', prm.netw_dt)
 
     tr.f_add_parameter('netw.config.strct_active', prm.strct_active)
@@ -286,7 +287,7 @@ def run_net(tr):
                   GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
                   GExc_spks, GInh_spks)
 
-    assert(tr.T1+tr.T2==tr.T)
+    assert(tr.T1+tr.T2+tr.T3==tr.T)
     
     net.run(tr.sim.T1, report='text')
     # SynEE_a.record_single_timestep()
@@ -300,6 +301,10 @@ def run_net(tr):
     net.remove(GExc_spks, GInh_spks, SynEE_stat, GExc_stat, GInh_stat)
 
     net.run(tr.sim.T2, report='text')
+
+    net.add(GExc_spks, GInh_spks, SynEE_stat, GExc_stat, GInh_stat)
+
+    net.run(tr.sim.T3, report='text')
 
     device.build(directory='../builds/%.4d'%(tr.v_idx))
 
