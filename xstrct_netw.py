@@ -285,10 +285,10 @@ def run_net(tr):
     SynEE_a.record_single_timestep()
 
     
-    SynEE.summed_updaters['Asum_post']._clock = Clock(
-        dt=tr.dt_synEE_scaling)
-    SynEE.run_regularly(tr.synEE_scaling, dt = tr.dt_synEE_scaling,
-                        when='end')
+    # SynEE.summed_updaters['Asum_post']._clock = Clock(
+    #     dt=tr.dt_synEE_scaling)
+    # SynEE.run_regularly(tr.synEE_scaling, dt = tr.dt_synEE_scaling,
+    #                     when='end')
 
     run(tr.sim.T*3, report='text')
 
