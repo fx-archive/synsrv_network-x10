@@ -283,7 +283,7 @@ def run_net(tr):
                            dt=tr.sim.T/10., when='end', order=100)
 
     net = Network(GExc, GInh, SynEE, SynEI, SynIE, SynII,
-                  GExc_stat, GInh_stat, SynEE_stat,
+                  GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
                   GExc_spks, GInh_spks)
 
     assert(tr.T1+tr.T2==tr.T)
