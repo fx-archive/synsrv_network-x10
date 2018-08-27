@@ -297,6 +297,8 @@ def run_net(tr):
     SynEE.run_regularly(tr.synEE_scaling, dt = tr.dt_synEE_scaling,
                         when='end')
 
+    net.remove(GExc_spks, GInh_spks, SynEE_stat, GExc_stat, GInh_stat)
+
     net.run(tr.sim.T2, report='text')
 
     device.build(directory='../builds/%.4d'%(tr.v_idx))
