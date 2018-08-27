@@ -97,7 +97,7 @@ def add_params(tr):
     #tr.f_add_parameter('netw.sim.preT',  prm.T)
     tr.f_add_parameter('netw.sim.T',  prm.T)
     tr.f_add_parameter('netw.sim.T1',  prm.T1)
-    tr.f_add_parameter('netw.sim.T1',  prm.T2)
+    tr.f_add_parameter('netw.sim.T2',  prm.T2)
     tr.f_add_parameter('netw.sim.dt', prm.netw_dt)
 
     tr.f_add_parameter('netw.config.strct_active', prm.strct_active)
