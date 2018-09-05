@@ -89,6 +89,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.mod.synEE_scaling', mod.synEE_scaling)
     tr.f_add_parameter('netw.mod.intrinsic_mod', mod.intrinsic_mod)
     tr.f_add_parameter('netw.mod.strct_mod',     mod.strct_mod)
+    tr.f_add_parameter('netw.mod.turnover_rec_mod',     mod.turnover_rec_mod)
     tr.f_add_parameter('netw.mod.strct_mod_thrs',     mod.strct_mod_thrs)
     
     # tr.f_add_parameter('netw.mod.neuron_method', prm.neuron_method)
@@ -103,20 +104,21 @@ def add_params(tr):
 
     tr.f_add_parameter('netw.config.strct_active', prm.strct_active)
     tr.f_add_parameter('netw.config.strct_mode', prm.strct_mode)
+    tr.f_add_parameter('netw.rec.turnover_rec', prm.turnover_rec)
 
     # recording
-    tr.f_add_parameter('rec.memtraces_rec', prm.memtraces_rec)
-    tr.f_add_parameter('rec.vttraces_rec', prm.vttraces_rec)
-    tr.f_add_parameter('rec.getraces_rec', prm.getraces_rec)
-    tr.f_add_parameter('rec.gitraces_rec', prm.gitraces_rec)
-    tr.f_add_parameter('rec.GExc_stat_dt', prm.GExc_stat_dt)
-    tr.f_add_parameter('rec.GInh_stat_dt', prm.GInh_stat_dt)
+    tr.f_add_parameter('netw.rec.memtraces_rec', prm.memtraces_rec)
+    tr.f_add_parameter('netw.rec.vttraces_rec', prm.vttraces_rec)
+    tr.f_add_parameter('netw.rec.getraces_rec', prm.getraces_rec)
+    tr.f_add_parameter('netw.rec.gitraces_rec', prm.gitraces_rec)
+    tr.f_add_parameter('netw.rec.GExc_stat_dt', prm.GExc_stat_dt)
+    tr.f_add_parameter('netw.rec.GInh_stat_dt', prm.GInh_stat_dt)
 
-    tr.f_add_parameter('netw.synee_atraces_rec', prm.synee_atraces_rec)
-    tr.f_add_parameter('netw.synee_Apretraces_rec', prm.synee_Apretraces_rec)
-    tr.f_add_parameter('netw.synee_Aposttraces_rec', prm.synee_Aposttraces_rec)
-    tr.f_add_parameter('netw.n_synee_traces_rec', prm.n_synee_traces_rec)
-    tr.f_add_parameter('netw.synEE_stat_dt', prm.synEE_stat_dt)
+    tr.f_add_parameter('netw.rec.synee_atraces_rec', prm.synee_atraces_rec)
+    tr.f_add_parameter('netw.rec.synee_Apretraces_rec', prm.synee_Apretraces_rec)
+    tr.f_add_parameter('netw.rec.synee_Aposttraces_rec', prm.synee_Aposttraces_rec)
+    tr.f_add_parameter('netw.rec.n_synee_traces_rec', prm.n_synee_traces_rec)
+    tr.f_add_parameter('netw.rec.synEE_stat_dt', prm.synEE_stat_dt)
     
     
 
@@ -236,11 +238,26 @@ def run_net(tr):
 
     # structural plasticity
     if tr.netw.config.strct_active:
-        if tr.strct_mode == 'zero':
-            SynEE.run_regularly(tr.strct_mod, dt = tr.strct_dt, when='end')
+        if tr.strct_mode == 'zero':    
+            if tr.turnover_rec:
+                strct_mod  = '''%s 
+                                %s''' %(tr.strct_mod, tr.turnover_rec_mod)
+            else:
+                strct_mod = tr.strct_mod
+                
+            SynEE.run_regularly(strct_mod, dt = tr.strct_dt, when='end')
+           
         elif tr.strct_mode == 'thrs':
-            SynEE.run_regularly(tr.strct_mod_thrs, dt = tr.strct_dt, when='end')
+            if tr.turnover_rec:
+                strct_mod_thrs  = '''%s 
+                                %s''' %(tr.strct_mod_thrs, tr.turnover_rec_mod)
+            else:
+                strct_mod_thrs = tr.strct_mod_thrs
+                
+            SynEE.run_regularly(strct_mod_thrs, dt = tr.strct_dt, when='end')
 
+
+            
     # -------------- recording ------------------        
 
     #run(tr.sim.preT)
