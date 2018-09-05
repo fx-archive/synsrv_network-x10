@@ -112,11 +112,11 @@ def add_params(tr):
     tr.f_add_parameter('rec.GExc_stat_dt', prm.GExc_stat_dt)
     tr.f_add_parameter('rec.GInh_stat_dt', prm.GInh_stat_dt)
 
-    tr.f_add_parameter('rec.synee_atraces_rec', prm.synee_atraces_rec)
-    tr.f_add_parameter('rec.synee_Apretraces_rec', prm.synee_Apretraces_rec)
-    tr.f_add_parameter('rec.synee_Aposttraces_rec', prm.synee_Aposttraces_rec)
-    tr.f_add_parameter('rec.n_synee_traces_rec', prm.n_synee_traces_rec)
-    tr.f_add_parameter('rec.synEE_stat_dt', prm.synEE_stat_dt)
+    tr.f_add_parameter('netw.synee_atraces_rec', prm.synee_atraces_rec)
+    tr.f_add_parameter('netw.synee_Apretraces_rec', prm.synee_Apretraces_rec)
+    tr.f_add_parameter('netw.synee_Aposttraces_rec', prm.synee_Aposttraces_rec)
+    tr.f_add_parameter('netw.n_synee_traces_rec', prm.n_synee_traces_rec)
+    tr.f_add_parameter('netw.synEE_stat_dt', prm.synEE_stat_dt)
     
     
 
@@ -130,7 +130,7 @@ def run_net(tr):
 
     print("Started process with id ", str(tr.v_idx))
 
-    namespace = tr.f_to_dict(short_names=True, fast_access=True)
+    namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
     namespace['idx'] = tr.v_idx
 
     defaultclock.dt = tr.netw.sim.dt
