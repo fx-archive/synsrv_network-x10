@@ -130,7 +130,7 @@ def run_net(tr):
 
     print("Started process with id ", str(tr.v_idx))
 
-    namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
+    namespace = tr.f_to_dict(short_names=True, fast_access=True)
     namespace['idx'] = tr.v_idx
 
     defaultclock.dt = tr.netw.sim.dt
