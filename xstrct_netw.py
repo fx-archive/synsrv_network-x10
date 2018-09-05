@@ -1,5 +1,5 @@
 
-import os
+import os, pickle
 
 import standard_params as prm
 import models as mod
@@ -312,7 +312,34 @@ def run_net(tr):
 
     device.build(directory='../builds/%.4d'%(tr.v_idx))
 
-        
+
+    # save monitors as raws in build directory
+    raw_dir = '../builds/%.4d/raw/'%(tr.v_idx)
+    
+    if not os.path.exists(raw_dir):
+        os.makedirs(raw_dir)
+
+    with open(raw_dir+'gexc_stat.p','wb') as pfile:
+        pickle.dump(GExc_stat.get_states(),pifle)   
+
+    
+
+
+    # ----------------- add raw data ------------------------
+    fpath = '../builds/%.4d/'%(tr.v_idx)
+
+    from pathlib import Path
+
+    Path(fpath+'turnover').touch()
+    turnover_data = np.genfromtxt(fpath+'turnover',delimiter=',')    
+    os.remove(fpath+'turnover')
+
+    Path(fpath+'spk_register').touch()
+    spk_register_data = np.genfromtxt(fpath+'spk_register',delimiter=',')
+    os.remove(fpath+'spk_register')
+    
+
+
     tr.v_standard_result = Brian2MonitorResult
 
     tr.f_add_result('GExc_stat', GExc_stat)
@@ -324,19 +351,5 @@ def run_net(tr):
     tr.f_add_result('GInh_spks', GInh_spks)
     tr.f_add_result('SynEE_a', SynEE_a)
 
-
-    # ----------------- add raw data ------------------------
-    fpath = '../builds/%.4d/'%(tr.v_idx)
-
-    from pathlib import Path
-
-    Path(fpath+'turnover').touch()
-    turnover_data = np.genfromtxt(fpath+'turnover',delimiter=',')
     tr.f_add_result('turnover', turnover_data)
-    os.remove(fpath+'turnover')
-
-    Path(fpath+'spk_register').touch()
-    spk_register_data = np.genfromtxt(fpath+'spk_register',delimiter=',')
     tr.f_add_result('spk_register', spk_register_data)
-    os.remove(fpath+'spk_register')
-    
