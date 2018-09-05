@@ -320,7 +320,7 @@ def run_net(tr):
         os.makedirs(raw_dir)
 
     with open(raw_dir+'gexc_stat.p','wb') as pfile:
-        pickle.dump(GExc_stat.get_states(),pifle)   
+        pickle.dump(GExc_stat.get_states(),pfile)   
 
     
 
