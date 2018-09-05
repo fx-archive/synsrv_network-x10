@@ -319,8 +319,23 @@ def run_net(tr):
     if not os.path.exists(raw_dir):
         os.makedirs(raw_dir)
 
+    with open(raw_dir+'namespace.p','wb') as pfile:
+        pickle.dump(namespace,pfile)   
+
     with open(raw_dir+'gexc_stat.p','wb') as pfile:
         pickle.dump(GExc_stat.get_states(),pfile)   
+    with open(raw_dir+'gexc_spks.p','wb') as pfile:
+        pickle.dump(GExc_spks.get_states(),pfile)   
+    with open(raw_dir+'ginh_stat.p','wb') as pfile:
+        pickle.dump(GInh_stat.get_states(),pfile)   
+    with open(raw_dir+'ginh_spks.p','wb') as pfile:
+        pickle.dump(GInh_spks.get_states(),pfile)
+        
+    with open(raw_dir+'synee_stat.p','wb') as pfile:
+        pickle.dump(SynEE_stat.get_states(),pfile)   
+    with open(raw_dir+'synee_a.p','wb') as pfile:
+        pickle.dump(SynEE_a.get_states(),pfile)   
+
 
     
 
@@ -334,11 +349,19 @@ def run_net(tr):
     turnover_data = np.genfromtxt(fpath+'turnover',delimiter=',')    
     os.remove(fpath+'turnover')
 
+    with open(raw_dir+'turnover.p','wb') as pfile:
+        pickle.dump(turnover_data,pfile)   
+    
     Path(fpath+'spk_register').touch()
     spk_register_data = np.genfromtxt(fpath+'spk_register',delimiter=',')
     os.remove(fpath+'spk_register')
     
+    with open(raw_dir+'spk_register.p','wb') as pfile:
+        pickle.dump(spk_register_data,pfile)   
 
+        
+    tr.f_add_result('turnover', turnover_data)
+    tr.f_add_result('spk_register', spk_register_data)
 
     tr.v_standard_result = Brian2MonitorResult
 
@@ -351,5 +374,3 @@ def run_net(tr):
     tr.f_add_result('GInh_spks', GInh_spks)
     tr.f_add_result('SynEE_a', SynEE_a)
 
-    tr.f_add_result('turnover', turnover_data)
-    tr.f_add_result('spk_register', spk_register_data)
