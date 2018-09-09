@@ -319,6 +319,13 @@ def run_net(tr):
     for rcc in recorders:
         rcc.active=False
 
+    # save monitors as raws in build directory
+    raw_dir = '../builds/%.4d/raw/'%(tr.v_idx)
+    
+    if not os.path.exists(raw_dir):
+        os.makedirs(raw_dir)
+
+
     if tr.sim.T2 > 10*second:
         step = tr.sim.T2/10.
 
