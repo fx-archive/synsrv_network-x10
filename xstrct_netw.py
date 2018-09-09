@@ -341,19 +341,18 @@ def run_net(tr):
 
     with open(raw_dir+'gexc_stat.p','wb') as pfile:
         pickle.dump(GExc_stat.get_states(),pfile)   
-    with open(raw_dir+'gexc_spks.p','wb') as pfile:
-        pickle.dump(GExc_spks.get_states(),pfile)   
     with open(raw_dir+'ginh_stat.p','wb') as pfile:
         pickle.dump(GInh_stat.get_states(),pfile)   
-    with open(raw_dir+'ginh_spks.p','wb') as pfile:
-        pickle.dump(GInh_spks.get_states(),pfile)
         
     with open(raw_dir+'synee_stat.p','wb') as pfile:
         pickle.dump(SynEE_stat.get_states(),pfile)   
     with open(raw_dir+'synee_a.p','wb') as pfile:
         pickle.dump(SynEE_a.get_states(),pfile)   
 
-
+    with open(raw_dir+'gexc_spks.p','wb') as pfile:
+        pickle.dump(GExc_spks.get_states(),pfile)   
+    with open(raw_dir+'ginh_spks.p','wb') as pfile:
+        pickle.dump(GInh_spks.get_states(),pfile)
     
 
 
