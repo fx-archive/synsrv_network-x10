@@ -91,3 +91,4 @@ synEE_stat_dt = 0.1*ms
 
 turnover_rec = 0
 spks_rec = 0
+synee_a_nrecpoints = 10

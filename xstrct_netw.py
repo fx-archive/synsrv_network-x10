@@ -120,7 +120,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.rec.n_synee_traces_rec', prm.n_synee_traces_rec)
     tr.f_add_parameter('netw.rec.synEE_stat_dt', prm.synEE_stat_dt)
     tr.f_add_parameter('netw.rec.spks_rec', prm.spks_rec)
-    
+    tr.f_add_parameter('netw.synee_a_nrecpoints', prm.synee_a_nrecpoints)
     
 
     
@@ -300,7 +300,7 @@ def run_net(tr):
     
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
-                           dt=tr.sim.T/10., when='end', order=100)
+                           dt=tr.sim.T/tr.synee_a_nrecpoints, when='end', order=100)
 
     net = Network(GExc, GInh, SynEE, SynEI, SynIE, SynII,
                   GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
