@@ -319,7 +319,32 @@ def run_net(tr):
     for rcc in recorders:
         rcc.active=False
 
-    net.run(tr.sim.T2, report='text')
+    if tr.sim.T2 > 10*second:
+        step = tr.sim.T2/10.
+
+        for k in range(10):
+
+            net.run(step, report='text')
+            
+            print("Saving intermediate results..")
+            with open(raw_dir+'namespace.p','wb') as pfile:
+                pickle.dump(namespace,pfile)   
+            with open(raw_dir+'gexc_stat.p','wb') as pfile:
+                pickle.dump(GExc_stat.get_states(),pfile)   
+            with open(raw_dir+'ginh_stat.p','wb') as pfile:
+                pickle.dump(GInh_stat.get_states(),pfile)   
+            with open(raw_dir+'synee_stat.p','wb') as pfile:
+                pickle.dump(SynEE_stat.get_states(),pfile)   
+            with open(raw_dir+'synee_a.p','wb') as pfile:
+                pickle.dump(SynEE_a.get_states(),pfile)   
+            with open(raw_dir+'gexc_spks.p','wb') as pfile:
+                pickle.dump(GExc_spks.get_states(),pfile)   
+            with open(raw_dir+'ginh_spks.p','wb') as pfile:
+                pickle.dump(GInh_spks.get_states(),pfile)
+
+
+    else:
+        net.run(tr.sim.T2, report='text')
 
     recorders = [GExc_spks, GInh_spks, SynEE_stat, GExc_stat, GInh_stat]
     for rcc in recorders:
