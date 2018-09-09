@@ -119,6 +119,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.rec.synee_Aposttraces_rec', prm.synee_Aposttraces_rec)
     tr.f_add_parameter('netw.rec.n_synee_traces_rec', prm.n_synee_traces_rec)
     tr.f_add_parameter('netw.rec.synEE_stat_dt', prm.synEE_stat_dt)
+    tr.f_add_parameter('netw.rec.spks_rec', prm.spks_rec)
     
     
 
@@ -292,6 +293,7 @@ def run_net(tr):
                               record=range(tr.n_synee_traces_rec),
                               when='end', dt=tr.synEE_stat_dt)
 
+    
     GExc_spks = SpikeMonitor(GExc)    
     GInh_spks = SpikeMonitor(GInh)
 
@@ -321,9 +323,13 @@ def run_net(tr):
 
     net.run(tr.sim.T2, report='text')
 
-    recorders = [GExc_spks, GInh_spks, SynEE_stat, GExc_stat, GInh_stat]
+    recorders = [SynEE_stat, GExc_stat, GInh_stat]
     for rcc in recorders:
         rcc.active=True
+
+    if tr.spks_rec:
+        GExc_spks.active=True
+        GInh_spks.active=True
 
     net.run(tr.sim.T3, report='text')
 

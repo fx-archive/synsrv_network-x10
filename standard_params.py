@@ -90,3 +90,4 @@ n_synee_traces_rec = 20
 synEE_stat_dt = 0.1*ms
 
 turnover_rec = 0
+spks_rec = 0
