@@ -12,7 +12,8 @@ from pypet.brian2.parameter import Brian2Parameter, Brian2MonitorResult
 
 from brian2 import NeuronGroup, StateMonitor, SpikeMonitor, run, \
                    PoissonGroup, Synapses, set_device, device, Clock, \
-                   defaultclock, prefs, network_operation, Network
+                   defaultclock, prefs, network_operation, Network, \
+                   PoissonGroup
 
 from cpp_methods import syn_scale, record_turnover, record_spk
 
