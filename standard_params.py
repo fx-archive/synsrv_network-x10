@@ -36,7 +36,7 @@ Aminus = -7.5*0.001
 amax = 40*0.001
 
 # Poisson
-NPInp = 400 
+NPInp = 50 
 PInp_rate = 10*Hz
 PInp_a = 0.005
 
