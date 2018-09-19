@@ -51,7 +51,7 @@ def add_params(tr):
 
     # Poisson Input
     tr.f_add_parameter('netw.NPInp',  prm.NPInp)
-    tr.f_add_parameter('netw.NPInp_a',  prm.NPInp_a)
+    tr.f_add_parameter('netw.PInp_a',  prm.PInp_a)
     tr.f_add_parameter('netw.PInp_rate',  prm.PInp_rate)
 
     # STDP
