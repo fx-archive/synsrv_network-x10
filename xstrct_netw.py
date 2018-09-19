@@ -171,6 +171,7 @@ def run_net(tr):
                     on_pre='ge_post += PInp_a_pre')
     S_PN.connect(i=range(tr.NPInp), j=range(tr.N_e))
     S_PN.PInp_a = tr.PInp_a
+    GExc.ge = 0.5
     
 
     if tr.stdp_active:
