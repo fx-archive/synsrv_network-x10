@@ -165,8 +165,8 @@ def run_net(tr):
 
 
     PInp = PoissonGroup(tr.NPInp, tr.PInp_rate)
-    PInp.PInp_a = tr.PInp_a
     S_PN = Synapses(PInp, GExc, on_pre='ge_post += PInp_a')
+    S_PN.PInp_a = tr.PInp_a
     S_PN.connect(j='i')
     
 
