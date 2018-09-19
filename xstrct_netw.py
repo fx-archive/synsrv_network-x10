@@ -49,6 +49,11 @@ def add_params(tr):
     tr.f_add_parameter('netw.p_ei',  prm.p_ei)
     tr.f_add_parameter('netw.p_ii',  prm.p_ii)
 
+    # Poisson Input
+    tr.f_add_parameter('netw.NPInp',  prm.NPInp)
+    tr.f_add_parameter('netw.NPInp_a',  prm.NPInp_a)
+    tr.f_add_parameter('netw.PInp_rate',  prm.PInp_rate)
+
     # STDP
     tr.f_add_parameter('netw.config.stdp_active', prm.stdp_active)
     tr.f_add_parameter('netw.taupre',    prm.taupre)
@@ -157,6 +162,13 @@ def run_net(tr):
 
     synEE_pre_mod = mod.synEE_pre
     synEE_post_mod = mod.synEE_post
+
+
+    PInp = PoissonGroup(tr.NPInp, tr.PInp_rate)
+    PInp.PInp_a = tr.PInp_a
+    S_PN = Synapses(PInp, GExc, on_pre='ge_post += PInp_a')
+    S_PN.connect(j='i')
+    
 
     if tr.stdp_active:
         synEE_pre_mod  = '''%s 

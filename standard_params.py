@@ -35,6 +35,11 @@ Aplus = 15*0.001
 Aminus = -7.5*0.001
 amax = 40*0.001
 
+# Poisson
+NPInp = 400 
+PInp_rate = 10*Hz
+PInp_a = 0.005
+
 #STDP
 stdp_active = 1
 
