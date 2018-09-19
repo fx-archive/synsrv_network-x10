@@ -21,6 +21,10 @@ nrnEE_reset = '''
               spk_count = spk_count + 1
               '''
 
+poisson_mod = '''
+               PInp_a : 1
+              '''
+
 # !--- add event-driven for efficiency ---!
 # dApre  /dt = -Apre/taupre  : 1 (event-driven)
 # dApost /dt = -Apost/taupost : 1 (event-driven)
