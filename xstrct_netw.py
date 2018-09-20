@@ -313,6 +313,7 @@ def run_net(tr):
     
     GExc_spks = SpikeMonitor(GExc)    
     GInh_spks = SpikeMonitor(GInh)
+    PInp_spks = SpikeMonitor(PInp)
 
     
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
@@ -376,6 +377,8 @@ def run_net(tr):
         pickle.dump(GExc_spks.get_states(),pfile)   
     with open(raw_dir+'ginh_spks.p','wb') as pfile:
         pickle.dump(GInh_spks.get_states(),pfile)
+    with open(raw_dir+'pinp_spks.p','wb') as pfile:
+        pickle.dump(PInp_spks.get_states(),pfile)
     
 
 
