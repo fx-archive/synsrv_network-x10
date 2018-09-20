@@ -162,17 +162,18 @@ def run_net(tr):
                        np.random.uniform(tr.Vr_i/mV, tr.Vt_i/mV,
                                          size=tr.N_i)*mV
 
+    print("need to fix?")
     synEE_pre_mod = mod.synEE_pre
     synEE_post_mod = mod.synEE_post
 
 
-    PInp = PoissonGroup(400, rates=15*Hz, namespace=namespace)
-    S_PN = Synapses(target=GExc, source=PInp,
+    PInp = PoissonGroup(tr.NPInp, rates=tr.PInp_rate,
+                        namespace=namespace)
+    S_PN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
                     on_pre='ge_post += PInp_a',
                     namespace=namespace)
     S_PN.connect(i=range(tr.NPInp), j=range(tr.N_e))
-    # S_PN.PInp_a = tr.PInp_a
-    # GExc.ge = 0.5
+    S_PN.PInp_a = tr.PInp_a
     
 
     if tr.stdp_active:
