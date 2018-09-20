@@ -175,7 +175,7 @@ def run_net(tr):
     sPN_src, sPN_tar = generate_connections(N_tar=tr.N_e,
                                             N_src=tr.NPInp, p=0.2)
     
-    S_PN.connect(i=sPN_src, j=sPN_tar)
+    sPN.connect(i=sPN_src, j=sPN_tar)
     sPN.PInp_a = tr.PInp_a
     
 
