@@ -320,9 +320,9 @@ def run_net(tr):
                            record=range(tr.N_e*(tr.N_e-1)),
                            dt=tr.sim.T/tr.synee_a_nrecpoints, when='end', order=100)
 
-    net = Network(GExc, GInh, PInp, SynEE, SynEI, SynIE, SynII,
+    net = Network(GExc, GInh, PInp, S_PN, SynEE, SynEI, SynIE, SynII,
                   GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
-                  GExc_spks, GInh_spks)
+                  GExc_spks, GInh_spks, PInp_spks)
 
     assert(tr.T1+tr.T2+tr.T3==tr.T)
     
