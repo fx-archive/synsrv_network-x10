@@ -169,11 +169,14 @@ def run_net(tr):
 
     PInp = PoissonGroup(tr.NPInp, rates=tr.PInp_rate,
                         namespace=namespace)
-    S_PN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
+    sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
                     on_pre='ge_post += PInp_a',
                     namespace=namespace)
-    S_PN.connect(i=range(tr.NPInp), j=range(tr.N_e))
-    S_PN.PInp_a = tr.PInp_a
+    sPN_src, sPN_tar = generate_connections(N_tar=tr.N_e,
+                                            N_src=tr.NPInp, p=0.2)
+    
+    S_PN.connect(i=sPN_src, j=sPN_tar)
+    sPN.PInp_a = tr.PInp_a
     
 
     if tr.stdp_active:
@@ -321,7 +324,7 @@ def run_net(tr):
                            record=range(tr.N_e*(tr.N_e-1)),
                            dt=tr.sim.T/tr.synee_a_nrecpoints, when='end', order=100)
 
-    net = Network(GExc, GInh, PInp, S_PN, SynEE, SynEI, SynIE, SynII,
+    net = Network(GExc, GInh, PInp, sPN, SynEE, SynEI, SynIE, SynII,
                   GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
                   GExc_spks, GInh_spks, PInp_spks)
 
