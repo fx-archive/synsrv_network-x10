@@ -166,7 +166,7 @@ def run_net(tr):
     synEE_post_mod = mod.synEE_post
 
 
-    PInp = PoissonGroup(tr.NPInp, tr.PInp_rate)
+    PInp = PoissonGroup(tr.NPInp, tr.PInp_rate, namespace=namespace)
     S_PN = Synapses(target=GExc, source=PInp,
                     on_pre='ge_post += PInp_a',
                     namespace=namespace)
