@@ -38,8 +38,8 @@ amax = 40*0.001
 # Poisson
 NPInp = 400 
 PInp_rate = 10*Hz
-PInp_a = 0.005
-
+a_EPoi = 0.005
+a_IPoi = 0.
 p_EPoi = 0.2
 p_IPoi = 0.1
 

@@ -52,7 +52,8 @@ def add_params(tr):
 
     # Poisson Input
     tr.f_add_parameter('netw.NPInp',  prm.NPInp)
-    tr.f_add_parameter('netw.PInp_a',  prm.PInp_a)
+    tr.f_add_parameter('netw.a_EPoi',  prm.a_EPoi)
+    tr.f_add_parameter('netw.a_IPoi',  prm.a_IPoi)
     tr.f_add_parameter('netw.PInp_rate',  prm.PInp_rate)
     tr.f_add_parameter('netw.p_EPoi',  prm.p_EPoi)
     tr.f_add_parameter('netw.p_IPoi',  prm.p_IPoi)
@@ -172,13 +173,13 @@ def run_net(tr):
     PInp = PoissonGroup(tr.NPInp, rates=tr.PInp_rate,
                         namespace=namespace)
     sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
-                    on_pre='ge_post += PInp_a',
+                    on_pre='ge_post += a_EPoi',
                     namespace=namespace)
     sPN_src, sPN_tar = generate_connections(N_tar=tr.N_e,
                                             N_src=tr.NPInp, p=tr.p_EPoi)
     
     sPN.connect(i=sPN_src, j=sPN_tar)
-    sPN.PInp_a = tr.PInp_a
+
     
 
     if tr.stdp_active:
