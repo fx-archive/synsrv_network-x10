@@ -54,6 +54,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.NPInp',  prm.NPInp)
     tr.f_add_parameter('netw.PInp_a',  prm.PInp_a)
     tr.f_add_parameter('netw.PInp_rate',  prm.PInp_rate)
+    tr.f_add_parameter('netw.p_EPoi',  prm.p_EPoi)
+    tr.f_add_parameter('netw.p_IPoi',  mod.p_IPoi)
     tr.f_add_parameter('netw.poisson_mod',  mod.poisson_mod)
 
     # STDP
@@ -173,7 +175,7 @@ def run_net(tr):
                     on_pre='ge_post += PInp_a',
                     namespace=namespace)
     sPN_src, sPN_tar = generate_connections(N_tar=tr.N_e,
-                                            N_src=tr.NPInp, p=0.2)
+                                            N_src=tr.NPInp, p=tr.p_EPoi)
     
     sPN.connect(i=sPN_src, j=sPN_tar)
     sPN.PInp_a = tr.PInp_a
@@ -339,7 +341,7 @@ def run_net(tr):
     SynEE.run_regularly(tr.synEE_scaling, dt = tr.dt_synEE_scaling,
                         when='end')
 
-    recorders = [GExc_spks, GInh_spks, SynEE_stat, GExc_stat, GInh_stat]
+    recorders = [GExc_spks, GInh_spks, PInp_spks, SynEE_stat, GExc_stat, GInh_stat]
     for rcc in recorders:
         rcc.active=False
 
@@ -352,6 +354,7 @@ def run_net(tr):
     if tr.spks_rec:
         GExc_spks.active=True
         GInh_spks.active=True
+        PInp_spks.active=True
 
     net.run(tr.sim.T3, report='text')
 

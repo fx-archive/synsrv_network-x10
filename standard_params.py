@@ -40,6 +40,9 @@ NPInp = 400
 PInp_rate = 10*Hz
 PInp_a = 0.005
 
+p_EPoi = 0.2
+p_IPoi = 0.1
+
 #STDP
 stdp_active = 1
 
