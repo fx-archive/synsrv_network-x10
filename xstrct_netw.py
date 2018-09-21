@@ -55,7 +55,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.PInp_a',  prm.PInp_a)
     tr.f_add_parameter('netw.PInp_rate',  prm.PInp_rate)
     tr.f_add_parameter('netw.p_EPoi',  prm.p_EPoi)
-    tr.f_add_parameter('netw.p_IPoi',  mod.p_IPoi)
+    tr.f_add_parameter('netw.p_IPoi',  prm.p_IPoi)
     tr.f_add_parameter('netw.poisson_mod',  mod.poisson_mod)
 
     # STDP
