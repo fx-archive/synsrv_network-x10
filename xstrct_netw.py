@@ -325,7 +325,8 @@ def run_net(tr):
     
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
-                           dt=tr.sim.T/tr.synee_a_nrecpoints, when='end', order=100)
+                           dt=tr.sim.T/tr.synee_a_nrecpoints,
+                           when='end', order=100)
 
     net = Network(GExc, GInh, PInp, sPN, SynEE, SynEI, SynIE, SynII,
                   GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
@@ -342,7 +343,8 @@ def run_net(tr):
     SynEE.run_regularly(tr.synEE_scaling, dt = tr.dt_synEE_scaling,
                         when='end')
 
-    recorders = [GExc_spks, GInh_spks, PInp_spks, SynEE_stat, GExc_stat, GInh_stat]
+    recorders = [GExc_spks, GInh_spks, SynEE_stat,
+                 GExc_stat, GInh_stat]#, PInp_spks] 
     for rcc in recorders:
         rcc.active=False
 
@@ -355,7 +357,7 @@ def run_net(tr):
     if tr.spks_rec:
         GExc_spks.active=True
         GInh_spks.active=True
-        PInp_spks.active=True
+        # PInp_spks.active=True
 
     net.run(tr.sim.T3, report='text')
 
