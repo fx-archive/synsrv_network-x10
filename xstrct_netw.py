@@ -358,14 +358,16 @@ def run_net(tr):
     SynEE.run_regularly(tr.synEE_scaling, dt = tr.dt_synEE_scaling,
                         when='end')
 
-    recorders = [GExc_spks, GInh_spks, SynEE_stat,
-                 GExc_stat, GInh_stat]#, PInp_spks] 
+    recorders = [GExc_spks, GInh_spks, PInp_spks, SynEE_stat,
+                 GExc_stat, GInh_stat, GExc_rate, GInh_rate,
+                 PInp_rate]
     for rcc in recorders:
         rcc.active=False
 
     net.run(tr.sim.T2, report='text')
 
-    recorders = [SynEE_stat, GExc_stat, GInh_stat]
+    recorders = [SynEE_stat, GExc_stat, GInh_stat, GExc_rate, GInh_rate,
+                 PInp_rate]
     for rcc in recorders:
         rcc.active=True
 
