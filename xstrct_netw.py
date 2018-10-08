@@ -178,7 +178,17 @@ def run_net(tr):
     sPN_src, sPN_tar = generate_connections(N_tar=tr.N_e,
                                             N_src=tr.NPInp, p=tr.p_EPoi)
     
+    
     sPN.connect(i=sPN_src, j=sPN_tar)
+
+
+    sPNInh = Synapses(target=GInh, source=PInp, model=tr.poisson_mod,
+                       on_pre='ge_post += a_EPoi',
+                       namespace=namespace)
+    sPNInh_src, sPNInh_tar = generate_connections(N_tar=tr.N_i,
+                                                  N_src=tr.NPInp, p=tr.p_EPoi)
+        
+    sPNInh.connect(i=sPNInh_src, j=sPNInh_tar)
 
     
 
@@ -328,7 +338,7 @@ def run_net(tr):
                            dt=tr.sim.T/tr.synee_a_nrecpoints,
                            when='end', order=100)
 
-    net = Network(GExc, GInh, PInp, sPN, SynEE, SynEI, SynIE, SynII,
+    net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
                   GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
                   GExc_spks, GInh_spks, PInp_spks)
 
