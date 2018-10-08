@@ -405,12 +405,12 @@ def run_net(tr):
     with open(raw_dir+'pinp_spks.p','wb') as pfile:
         pickle.dump(PInp_spks.get_states(),pfile)
 
-    with open(raw_dir+'gexc_rates.p','wb') as pfile:
-        pickle.dump(GExc_rates.get_states(),pfile)   
-    with open(raw_dir+'ginh_rates.p','wb') as pfile:
-        pickle.dump(GInh_rates.get_states(),pfile)
-    with open(raw_dir+'pinp_rates.p','wb') as pfile:
-        pickle.dump(PInp_rates.get_states(),pfile)
+    with open(raw_dir+'gexc_rate.p','wb') as pfile:
+        pickle.dump(GExc_rate.get_states(),pfile)   
+    with open(raw_dir+'ginh_rate.p','wb') as pfile:
+        pickle.dump(GInh_rate.get_states(),pfile)
+    with open(raw_dir+'pinp_rate.p','wb') as pfile:
+        pickle.dump(PInp_rate.get_states(),pfile)
 
 
     # ----------------- add raw data ------------------------
