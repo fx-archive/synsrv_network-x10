@@ -13,7 +13,7 @@ from pypet.brian2.parameter import Brian2Parameter, Brian2MonitorResult
 from brian2 import NeuronGroup, StateMonitor, SpikeMonitor, run, \
                    PoissonGroup, Synapses, set_device, device, Clock, \
                    defaultclock, prefs, network_operation, Network, \
-                   PoissonGroup
+                   PoissonGroup, PopulationRateMonitor
 
 from cpp_methods import syn_scale, record_turnover, record_spk
 
@@ -332,6 +332,10 @@ def run_net(tr):
     GInh_spks = SpikeMonitor(GInh)
     PInp_spks = SpikeMonitor(PInp)
 
+    GExc_rate = PopulationRateMonitor(GExc)
+    GInh_rate = PopulationRateMonitor(GInh)
+    PInp_rate = PopulationRateMonitor(GPInp)
+
     
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
@@ -340,7 +344,8 @@ def run_net(tr):
 
     net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
                   GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
-                  GExc_spks, GInh_spks, PInp_spks)
+                  GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
+                  PInp_rate)
 
     assert(tr.T1+tr.T2+tr.T3==tr.T)
     
@@ -399,7 +404,13 @@ def run_net(tr):
         pickle.dump(GInh_spks.get_states(),pfile)
     with open(raw_dir+'pinp_spks.p','wb') as pfile:
         pickle.dump(PInp_spks.get_states(),pfile)
-    
+
+    with open(raw_dir+'gexc_rates.p','wb') as pfile:
+        pickle.dump(GExc_rates.get_states(),pfile)   
+    with open(raw_dir+'ginh_rates.p','wb') as pfile:
+        pickle.dump(GInh_rates.get_states(),pfile)
+    with open(raw_dir+'pinp_rates.p','wb') as pfile:
+        pickle.dump(PInp_rates.get_states(),pfile)
 
 
     # ----------------- add raw data ------------------------
