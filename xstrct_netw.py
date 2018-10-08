@@ -376,7 +376,7 @@ def run_net(tr):
 
     net.run(tr.sim.T3, report='text')
 
-    device.build(directory='../builds/%.4d'%(tr.v_idx), clean=True)
+    device.build(directory='../builds/%.4d'%(tr.v_idx))
 
 
     # save monitors as raws in build directory
