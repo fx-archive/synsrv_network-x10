@@ -334,7 +334,7 @@ def run_net(tr):
 
     GExc_rate = PopulationRateMonitor(GExc)
     GInh_rate = PopulationRateMonitor(GInh)
-    PInp_rate = PopulationRateMonitor(GPInp)
+    PInp_rate = PopulationRateMonitor(PInp)
 
     
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
