@@ -370,13 +370,18 @@ def run_net(tr):
                            dt=T/tr.synee_a_nrecpoints,
                            when='end', order=100)
 
-    net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
-                  GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
-                  GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
-                  PInp_rate)
+
 
     if tr.PInp_mode == 'indep':
-        net.append(PInp_inh)
+        net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
+                      GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
+                      GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
+                      PInp_rate, PInp_inh)
+    else:
+        net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
+                      GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
+                      GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
+                      PInp_rate)
 
        
     net.run(tr.sim.T1, report='text')
