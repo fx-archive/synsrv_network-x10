@@ -210,11 +210,12 @@ def run_net(tr):
 
         PInp_inh = PoissonGroup(tr.N_i, rates=tr.PInp_rate,
                             namespace=namespace)
-        sPN = Synapses(target=GInh, source=PInp, model=tr.poisson_mod,
-                       on_pre='ge_post += a_EPoi',
-                       namespace=namespace)
+        sPNInh = Synapses(target=GInh, source=PInp_inh, model=tr.poisson_mod,
+                          on_pre='ge_post += a_EPoi',
+                          namespace=namespace)
         sPNInh_src, sPNInh_tar = range(tr.N_i), range(tr.N_i)
 
+        
     sPNInh.connect(i=sPNInh_src, j=sPNInh_tar)
     
     
