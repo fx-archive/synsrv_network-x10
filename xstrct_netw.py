@@ -206,7 +206,7 @@ def run_net(tr):
                                                       p=tr.p_EPoi)
 
 
-    elif tr.PInp_mode = 'indep':
+    elif tr.PInp_mode == 'indep':
 
         PInp_inh = PoissonGroup(tr.N_i, rates=tr.PInp_rate,
                             namespace=namespace)
@@ -374,7 +374,7 @@ def run_net(tr):
                   GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
                   PInp_rate)
 
-    if tr.PInp_mode = 'indep':
+    if tr.PInp_mode == 'indep':
         net.append(PInp_inh)
 
        
