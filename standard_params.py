@@ -39,6 +39,7 @@ amax = 40*0.001
 PInp_mode = 'indep' #pool
 NPInp = 400 
 PInp_rate = 10*Hz
+PInp_inh_rate = 10*Hz
 a_EPoi = 0.005
 a_IPoi = 0.
 p_EPoi = 0.2

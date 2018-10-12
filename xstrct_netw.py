@@ -56,6 +56,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.a_EPoi',  prm.a_EPoi)
     tr.f_add_parameter('netw.a_IPoi',  prm.a_IPoi)
     tr.f_add_parameter('netw.PInp_rate',  prm.PInp_rate)
+    tr.f_add_parameter('netw.PInp_inh_rate',  prm.PInp_inh_rate)
     tr.f_add_parameter('netw.p_EPoi',  prm.p_EPoi)
     tr.f_add_parameter('netw.p_IPoi',  prm.p_IPoi)
     tr.f_add_parameter('netw.poisson_mod',  mod.poisson_mod)
@@ -208,7 +209,7 @@ def run_net(tr):
 
     elif tr.PInp_mode == 'indep':
 
-        PInp_inh = PoissonGroup(tr.N_i, rates=tr.PInp_rate,
+        PInp_inh = PoissonGroup(tr.N_i, rates=tr.PInp_inh_rate,
                             namespace=namespace)
         sPNInh = Synapses(target=GInh, source=PInp_inh, model=tr.poisson_mod,
                           on_pre='ge_post += a_EPoi',
