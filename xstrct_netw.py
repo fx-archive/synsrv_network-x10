@@ -51,6 +51,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.p_ii',  prm.p_ii)
 
     # Poisson Input
+    tr.f_add_parameter('netw.PInp_mode',  prm.PInp_mode)
     tr.f_add_parameter('netw.NPInp',  prm.NPInp)
     tr.f_add_parameter('netw.a_EPoi',  prm.a_EPoi)
     tr.f_add_parameter('netw.a_IPoi',  prm.a_IPoi)
@@ -171,26 +172,51 @@ def run_net(tr):
     synEE_post_mod = mod.synEE_post
 
 
-    PInp = PoissonGroup(tr.NPInp, rates=tr.PInp_rate,
+
+
+    if tr.PInp_mode == 'pool':
+        PInp = PoissonGroup(tr.NPInp, rates=tr.PInp_rate,
                         namespace=namespace)
-    sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
-                    on_pre='ge_post += a_EPoi',
-                    namespace=namespace)
-    sPN_src, sPN_tar = generate_connections(N_tar=tr.N_e,
-                                            N_src=tr.NPInp, p=tr.p_EPoi)
-    
-    
-    sPN.connect(i=sPN_src, j=sPN_tar)
-
-
-    sPNInh = Synapses(target=GInh, source=PInp, model=tr.poisson_mod,
+        sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
                        on_pre='ge_post += a_EPoi',
                        namespace=namespace)
-    sPNInh_src, sPNInh_tar = generate_connections(N_tar=tr.N_i,
-                                                  N_src=tr.NPInp, p=tr.p_EPoi)
         
-    sPNInh.connect(i=sPNInh_src, j=sPNInh_tar)
+        sPN_src, sPN_tar = generate_connections(N_tar=tr.N_e,
+                                                N_src=tr.NPInp, p=tr.p_EPoi)
 
+    elif tr.PInp_mode == 'indep':
+        PInp = PoissonGroup(tr.N_e, rates=tr.PInp_rate,
+                        namespace=namespace)
+        sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
+                       on_pre='ge_post += a_EPoi',
+                       namespace=namespace)
+        sPN_src, sPN_tar = range(tr.N_e), range(tr.N_e)
+
+
+    sPN.connect(i=sPN_src, j=sPN_tar)
+    
+
+    
+    if tr.PInp_mode == 'pool':
+        sPNInh = Synapses(target=GInh, source=PInp, model=tr.poisson_mod,
+                           on_pre='ge_post += a_EPoi',
+                           namespace=namespace)
+        sPNInh_src, sPNInh_tar = generate_connections(N_tar=tr.N_i,
+                                                      N_src=tr.NPInp,
+                                                      p=tr.p_EPoi)
+
+
+    elif tr.PInp_mode = 'indep':
+
+        PInp_inh = PoissonGroup(tr.N_i, rates=tr.PInp_rate,
+                            namespace=namespace)
+        sPN = Synapses(target=GInh, source=PInp, model=tr.poisson_mod,
+                       on_pre='ge_post += a_EPoi',
+                       namespace=namespace)
+        sPNInh_src, sPNInh_tar = range(tr.N_i), range(tr.N_i)
+
+    sPNInh.connect(i=sPNInh_src, j=sPNInh_tar)
+    
     
 
     if tr.stdp_active:
@@ -347,6 +373,9 @@ def run_net(tr):
                   GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
                   GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
                   PInp_rate)
+
+    if tr.PInp_mode = 'indep':
+        net.append(PInp_inh)
 
        
     net.run(tr.sim.T1, report='text')

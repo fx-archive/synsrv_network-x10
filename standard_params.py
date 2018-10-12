@@ -36,6 +36,7 @@ Aminus = -7.5*0.001
 amax = 40*0.001
 
 # Poisson
+PInp_mode = 'indep' #pool
 NPInp = 400 
 PInp_rate = 10*Hz
 a_EPoi = 0.005
