@@ -106,7 +106,6 @@ def add_params(tr):
     # tr.f_add_parameter('netw.mod.synEE_method',  prm.synEE_method)
 
     #tr.f_add_parameter('netw.sim.preT',  prm.T)
-    tr.f_add_parameter('netw.sim.T',  prm.T)
     tr.f_add_parameter('netw.sim.T1',  prm.T1)
     tr.f_add_parameter('netw.sim.T2',  prm.T2)
     tr.f_add_parameter('netw.sim.T3',  prm.T3)
@@ -142,6 +141,8 @@ def run_net(tr):
                build_on_run=False)
 
     print("Started process with id ", str(tr.v_idx))
+
+    T = tr.T1 + tr.T2 + tr.T3
 
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
     namespace['idx'] = tr.v_idx
@@ -255,7 +256,7 @@ def run_net(tr):
 
 
     # make synapse active at beginning
-    SynEE.run_regularly(tr.synEE_p_activate, dt=tr.T, when='start',
+    SynEE.run_regularly(tr.synEE_p_activate, dt=T, when='start',
                             order=-100)
             
         
@@ -339,7 +340,7 @@ def run_net(tr):
     
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
-                           dt=tr.sim.T/tr.synee_a_nrecpoints,
+                           dt=T/tr.synee_a_nrecpoints,
                            when='end', order=100)
 
     net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
@@ -347,8 +348,7 @@ def run_net(tr):
                   GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
                   PInp_rate)
 
-    assert(tr.T1+tr.T2+tr.T3==tr.T)
-    
+       
     net.run(tr.sim.T1, report='text')
     # SynEE_a.record_single_timestep()
 

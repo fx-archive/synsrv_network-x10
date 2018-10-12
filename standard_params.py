@@ -72,7 +72,6 @@ p_inactivate = 0.25
 
 
 #preT  = 100*second
-T  = 15*second
 T1 = 5*second
 T2 = 5*second
 T3 = 5*second
