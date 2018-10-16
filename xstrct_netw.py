@@ -395,12 +395,17 @@ def run_net(tr):
     
     for rcc in recorders:
         rcc.active=False
+    for rcc in rate_recorders:
+        rcc.active=False
+
 
     net.run(tr.sim.T2, report='text')
 
     recorders = [SynEE_stat, GExc_stat, GInh_stat, GExc_rate, GInh_rate,
                  PInp_rate]
     for rcc in recorders:
+        rcc.active=True
+    for rcc in rate_recorders:
         rcc.active=True
 
     if tr.spks_rec:
