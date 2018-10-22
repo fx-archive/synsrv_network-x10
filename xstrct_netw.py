@@ -138,12 +138,6 @@ def add_params(tr):
     
 def run_net(tr):
 
-    #sys.path.append('../analysis/file_based')
-
-    from analysis.file_based.test import test_func
-    test_func()
-    
-
     # prefs.codegen.target = 'numpy'
     # prefs.codegen.target = 'cython'
     set_device('cpp_standalone', directory='./builds/%.4d'%(tr.v_idx),
@@ -421,11 +415,11 @@ def run_net(tr):
     net.run(tr.sim.T3, report='text')
     SynEE_a.record_single_timestep()
 
-    device.build(directory='../builds/%.4d'%(tr.v_idx), clean=True)
+    device.build(directory='builds/%.4d'%(tr.v_idx), clean=True)
 
 
     # save monitors as raws in build directory
-    raw_dir = '../builds/%.4d/raw/'%(tr.v_idx)
+    raw_dir = 'builds/%.4d/raw/'%(tr.v_idx)
     
     if not os.path.exists(raw_dir):
         os.makedirs(raw_dir)
@@ -462,7 +456,7 @@ def run_net(tr):
 
 
     # ----------------- add raw data ------------------------
-    fpath = '../builds/%.4d/'%(tr.v_idx)
+    fpath = 'builds/%.4d/'%(tr.v_idx)
 
     from pathlib import Path
 
@@ -509,7 +503,9 @@ def run_net(tr):
 
     # ---------------- plot results --------------------------
 
-    #import sys
+    from analysis.file_based.overview_fb import network_activity_figure
+    network_activity_figure('builds/%.4d'%(tr.v_idx), namespace)
+
 
                         
             
