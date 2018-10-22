@@ -138,6 +138,12 @@ def add_params(tr):
     
 def run_net(tr):
 
+    sys.path.append('../analysis/file_based')
+
+    from file_based.test import test_func
+    test_func()
+    
+
     # prefs.codegen.target = 'numpy'
     # prefs.codegen.target = 'cython'
     set_device('cpp_standalone', directory='./builds/%.4d'%(tr.v_idx),
@@ -474,11 +480,6 @@ def run_net(tr):
     with open(raw_dir+'spk_register.p','wb') as pfile:
         pickle.dump(spk_register_data,pfile)
 
-
-    # ---------------- plot results --------------------------
-
-    
-
     # ---------------- create the powerlaw fit ---------------
 
 
@@ -504,7 +505,12 @@ def run_net(tr):
             pickle.dump({'fit_wstart': fit_wstart,
                          'fit_nostart': fit_nostart}, pfile)
                         
-                        
+
+
+    # ---------------- plot results --------------------------
+
+    #import sys
+
                         
             
     # tr.f_add_result('turnover', turnover_data)
