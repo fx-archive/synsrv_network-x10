@@ -1,5 +1,5 @@
 
-import os, pickle, powerlaw
+import sys, os, pickle, powerlaw
 
 import standard_params as prm
 import models as mod
