@@ -1,5 +1,6 @@
 
 import sys, os, pickle, powerlaw
+import matplotlib.pyplot as pl
 
 import standard_params as prm
 import models as mod
