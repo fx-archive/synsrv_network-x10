@@ -1,9 +1,10 @@
 
-import os, pickle
+import os, pickle, powerlaw
 
 import standard_params as prm
 import models as mod
-from utils import generate_connections, generate_full_connectivity
+from utils import generate_connections, generate_full_connectivity, \
+                  extract_lifetimes
 
 import numpy as np
 
@@ -386,8 +387,6 @@ def run_net(tr):
 
        
     net.run(tr.sim.T1, report='text')
-    # SynEE_a.record_single_timestep()
-
 
     recorders      = [GExc_spks, GInh_spks, PInp_spks, SynEE_stat,
                       GExc_stat, GInh_stat]
@@ -414,6 +413,7 @@ def run_net(tr):
         # PInp_spks.active=True
 
     net.run(tr.sim.T3, report='text')
+    SynEE_a.record_single_timestep()
 
     device.build(directory='../builds/%.4d'%(tr.v_idx), clean=True)
 
@@ -472,14 +472,46 @@ def run_net(tr):
     os.remove(fpath+'spk_register')
     
     with open(raw_dir+'spk_register.p','wb') as pfile:
-        pickle.dump(spk_register_data,pfile)   
+        pickle.dump(spk_register_data,pfile)
 
-        
+
+    # ---------------- plot results --------------------------
+
+    
+
+    # ---------------- create the powerlaw fit ---------------
+
+
+    if len(turnover_data) > 0:
+    
+        _lt, _dt = extract_lifetimes(turnover_data, tr.N_e,
+                                     with_starters=True)
+        life_t, death_t = _lt*second, _dt*second
+
+        if len(life_t)>25:                                         
+            fit_wstart = powerlaw.Fit(life_t/ms, discrete=True)
+
+            
+        _lt, _dt = extract_lifetimes(turnover_data, tr.N_e,
+                                     with_starters=False)
+        life_t, death_t = _lt*second, _dt*second
+
+        if len(life_t)>25:                                         
+            fit_nostart = powerlaw.Fit(life_t/ms, discrete=True)
+
+
+        with open(raw_dir+'powerlaw_fit.p', 'wb') as pfile:
+            pickle.dump({'fit_wstart': fit_wstart,
+                         'fit_nostart': fit_nostart}, pfile)
+                        
+                        
+                        
+            
     # tr.f_add_result('turnover', turnover_data)
     # tr.f_add_result('spk_register', spk_register_data)
-
+                        
     # tr.v_standard_result = Brian2MonitorResult
-
+                        
     # tr.f_add_result('GExc_stat', GExc_stat)
     # tr.f_add_result('SynEE_stat', SynEE_stat)
     # print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
@@ -488,4 +520,4 @@ def run_net(tr):
     # print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
     # tr.f_add_result('GInh_spks', GInh_spks)
     # tr.f_add_result('SynEE_a', SynEE_a)
-
+                    
