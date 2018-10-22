@@ -503,12 +503,62 @@ def run_net(tr):
 
     # ---------------- plot results --------------------------
 
-    os.chdir('./analysis/file_based/')
+    # os.chdir('./analysis/file_based/')
 
-    from analysis.file_based.overview_fb import network_activity_figure
-    network_activity_figure('../../builds/%.4d'%(tr.v_idx), namespace)
+    # from analysis.file_based.overview_fb import network_activity_figure
+    # network_activity_figure('../../builds/%.4d'%(tr.v_idx), namespace)
+
+    fig = pl.figure()
+    ax_lines, ax_cols = 6,4
+    axs = {}
+    for x,y in itertools.product(range(ax_lines),range(ax_cols)):
+        axs['%d,%d'%(x+1,y+1)] = pl.subplot2grid((ax_lines, ax_cols), (x, y))
+
+    fig.set_size_inches(1920/150*5/4,1080/150*7/3)
+
+    bpath='./builds/%.4d'%(tr.v_idx)
+    nsp = namespace
+
+    ax = axs['1,1']
+    
+    with open(bpath+'/raw/gexc_spks.p', 'rb') as pfile:
+        GExc_spks = pickle.load(pfile)
+    with open(bpath+'/raw/ginh_spks.p', 'rb') as pfile:
+        GInh_spks = pickle.load(pfile)
+
+    try:
+        indx = np.logical_and(GExc_spks['t']/ms>tmin/ms, GExc_spks['t']/ms<tmax/ms)
+        ax.plot(GExc_spks['t'][indx]/second, GExc_spks['i'][indx],
+                marker='.', color='blue', markersize=.5,
+                linestyle='None')
+    except AttributeError:
+        print(bpath[-4:], "reports: AttributeError. Guess: no exc. spikes from",
+              "{:d}s to {:d}s".format(int(tmin/second),int(tmax/second)))
+
+    try:
+        indx = np.logical_and(GInh_spks['t']/ms>tmin/ms, GInh_spks['t']/ms<tmax/ms)
+        ax.plot(GInh_spks['t'][indx]/second,
+                GInh_spks['i'][indx]+nsp['N_e'], marker='.',
+                color='red', markersize=.5, linestyle='None')
+    except AttributeError:
+        print(bpath[-4:], "reports: AttributeError. Guess: no inh. spikes from",
+              "{:d}s to {:d}s".format(int(tmin/second),int(tmax/second)))
 
 
+    ax.set_xlim(tmin/second, tmax/second)
+    ax.set_xlabel('time [s]')
+    ax.set_ylim(0, nsp['N_e'] + nsp['N_i'])
+    
+    # ax.set_title('T='+str(T/second)+' s')
+
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.yaxis.set_ticks_position('left')
+    ax.xaxis.set_ticks_position('bottom')
+
+
+    pl.savefig(directory+"/{:s}.png".format(bpath[-4:]), dpi=100,
+               bbox_inches='tight')
                         
             
     # tr.f_add_result('turnover', turnover_data)
