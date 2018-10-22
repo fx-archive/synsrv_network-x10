@@ -138,9 +138,9 @@ def add_params(tr):
     
 def run_net(tr):
 
-    sys.path.append('../analysis/file_based')
+    #sys.path.append('../analysis/file_based')
 
-    from file_based.test import test_func
+    from analysis.file_based.test import test_func
     test_func()
     
 
