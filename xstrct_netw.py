@@ -1,5 +1,5 @@
 
-import sys, os, pickle, powerlaw
+import sys, os, pickle, powerlaw, itertools
 import matplotlib.pyplot as pl
 
 import standard_params as prm
