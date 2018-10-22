@@ -19,10 +19,10 @@ ncores = int(args.ncores[0])
 print("Using {:d} cores".format(ncores))
 
 # get info on git repository
-repo = git.Repo('./')
+repo = git.Repo('./code/')
 commit = repo.commit(None)
 
-filename = os.path.join('../data', name+'_'+str(commit)[:6]+'.hdf5')
+filename = os.path.join('data', name+'_'+str(commit)[:6]+'.hdf5')
 
 # if not the first run, tr2 will be merged later
 label = 'tr1'
