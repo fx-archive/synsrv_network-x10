@@ -503,8 +503,10 @@ def run_net(tr):
 
     # ---------------- plot results --------------------------
 
+    os.chdir('./analysis/file_based/')
+
     from analysis.file_based.overview_fb import network_activity_figure
-    network_activity_figure('builds/%.4d'%(tr.v_idx), namespace)
+    network_activity_figure('../../builds/%.4d'%(tr.v_idx), namespace)
 
 
                         
