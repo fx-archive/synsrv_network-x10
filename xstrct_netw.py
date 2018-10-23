@@ -508,7 +508,6 @@ def run_net(tr):
     from analysis.overview_fb import overview_figure, turnover_figure
 
     overview_figure('builds/%.4d'%(tr.v_idx), namespace)
-
     turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=False)
 
     
