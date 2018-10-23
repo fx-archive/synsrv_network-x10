@@ -477,7 +477,7 @@ def run_net(tr):
 
     # ---------------- create the powerlaw fit ---------------
 
-    if len(turnover_data) > 0:
+    if len(turnover_data) > 10:
     
         _lt, _dt = extract_lifetimes(turnover_data, tr.N_e,
                                      with_starters=True)
