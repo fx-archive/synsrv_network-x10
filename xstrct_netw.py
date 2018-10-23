@@ -1,5 +1,5 @@
 
-import sys, os, pickle, powerlaw
+import sys, os, shutil, pickle, powerlaw
 
 from . import standard_params as prm
 from . import models as mod
@@ -511,25 +511,14 @@ def run_net(tr):
     from analysis.turnover_fb import turnover_figure
     turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=False)
 
-    from analysis.synapse_weight_snapshots_fb import synw_figure
+    from analysis.synw_fb import synw_figure
     synw_figure('builds/%.4d'%(tr.v_idx), namespace)
 
-    
+    from analysis.synw_log_fb import synw_log_figure
+    synw_log_figure('builds/%.4d'%(tr.v_idx), namespace)
 
 
+    # -----------------  clean up  ---------------------------
+    shutil.rmtree('builds/%.4d/results/'%(tr.v_idx))
                         
             
-    # tr.f_add_result('turnover', turnover_data)
-    # tr.f_add_result('spk_register', spk_register_data)
-                        
-    # tr.v_standard_result = Brian2MonitorResult
-                        
-    # tr.f_add_result('GExc_stat', GExc_stat)
-    # tr.f_add_result('SynEE_stat', SynEE_stat)
-    # print("Saving exc spikes...   ", GExc_spks.get_states()['N'])
-    # tr.f_add_result('GExc_spks', GExc_spks)
-    # tr.f_add_result('GInh_stat', GInh_stat)
-    # print("Saving inh spikes...   ", GInh_spks.get_states()['N'])
-    # tr.f_add_result('GInh_spks', GInh_spks)
-    # tr.f_add_result('SynEE_a', SynEE_a)
-                    
