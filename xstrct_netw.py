@@ -511,6 +511,9 @@ def run_net(tr):
     from analysis.turnover_fb import turnover_figure
     turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=False)
 
+    from analysis.synapse_weight_snapshots_fb import synw_figure
+    synw_figure('builds/%.4d'%(tr.v_idx), namespace)
+
     
 
 
