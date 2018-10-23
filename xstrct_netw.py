@@ -477,27 +477,27 @@ def run_net(tr):
 
     # ---------------- create the powerlaw fit ---------------
 
-    if len(turnover_data) > 10:
+    # if len(turnover_data) > 10:
     
-        _lt, _dt = extract_lifetimes(turnover_data, tr.N_e,
-                                     with_starters=True)
-        life_t, death_t = _lt*second, _dt*second
+    #     _lt, _dt = extract_lifetimes(turnover_data, tr.N_e,
+    #                                  with_starters=True)
+    #     life_t, death_t = _lt*second, _dt*second
 
-        if len(life_t)>25:                                         
-            fit_wstart = powerlaw.Fit(life_t/ms, discrete=True)
+    #     if len(life_t)>25:                                         
+    #         fit_wstart = powerlaw.Fit(life_t/ms, discrete=True)
 
             
-        _lt, _dt = extract_lifetimes(turnover_data, tr.N_e,
-                                     with_starters=False)
-        life_t, death_t = _lt*second, _dt*second
+    #     _lt, _dt = extract_lifetimes(turnover_data, tr.N_e,
+    #                                  with_starters=False)
+    #     life_t, death_t = _lt*second, _dt*second
 
         
-        if len(life_t)>25:                                         
-            fit_nostart = powerlaw.Fit(life_t/ms, discrete=True)
+    #     if len(life_t)>25:                                         
+    #         fit_nostart = powerlaw.Fit(life_t/ms, discrete=True)
             
-            with open(raw_dir+'powerlaw_fit.p', 'wb') as pfile:
-                pickle.dump({'fit_wstart': fit_wstart,
-                             'fit_nostart': fit_nostart}, pfile)
+    #         with open(raw_dir+'powerlaw_fit.p', 'wb') as pfile:
+    #             pickle.dump({'fit_wstart': fit_wstart,
+    #                          'fit_nostart': fit_nostart}, pfile)
                         
 
 
@@ -509,7 +509,7 @@ def run_net(tr):
     overview_figure('builds/%.4d'%(tr.v_idx), namespace)
 
     from analysis.turnover_fb import turnover_figure
-    turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=False)
+    turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=True)
 
     from analysis.synw_fb import synw_figure
     synw_figure('builds/%.4d'%(tr.v_idx), namespace)
