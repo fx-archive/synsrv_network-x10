@@ -505,9 +505,13 @@ def run_net(tr):
 
     #os.chdir('./analysis/file_based/')
 
-    from analysis.overview_fb import overview_figure
+    from analysis.overview_fb import overview_figure, turnover_figure
 
     overview_figure('builds/%.4d'%(tr.v_idx), namespace)
+
+    turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=False)
+
+    
 
 
                         
