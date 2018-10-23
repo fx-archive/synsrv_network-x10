@@ -1,9 +1,9 @@
 
 import sys, os, pickle, powerlaw
 
-import standard_params as prm
-import models as mod
-from utils import generate_connections, generate_full_connectivity, \
+import .standard_params as prm
+import .models as mod
+from .utils import generate_connections, generate_full_connectivity, \
                   extract_lifetimes
 
 import numpy as np
@@ -16,7 +16,7 @@ from brian2 import NeuronGroup, StateMonitor, SpikeMonitor, run, \
                    defaultclock, prefs, network_operation, Network, \
                    PoissonGroup, PopulationRateMonitor
 
-from cpp_methods import syn_scale, record_turnover, record_spk
+from .cpp_methods import syn_scale, record_turnover, record_spk
 
 def add_params(tr):
 
