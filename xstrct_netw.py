@@ -493,9 +493,8 @@ def run_net(tr):
 
         if len(life_t)>25:                                         
             fit_nostart = powerlaw.Fit(life_t/ms, discrete=True)
-
-
-        with open(raw_dir+'powerlaw_fit.p', 'wb') as pfile:
+            
+            with open(raw_dir+'powerlaw_fit.p', 'wb') as pfile:
             pickle.dump({'fit_wstart': fit_wstart,
                          'fit_nostart': fit_nostart}, pfile)
                         
