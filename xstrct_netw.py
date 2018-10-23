@@ -1,8 +1,8 @@
 
 import sys, os, pickle, powerlaw
 
-import .standard_params as prm
-import .models as mod
+from . import standard_params as prm
+from . import models as mod
 from .utils import generate_connections, generate_full_connectivity, \
                   extract_lifetimes
 
