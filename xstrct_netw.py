@@ -401,8 +401,8 @@ def run_net(tr):
     #          to avoid missing simulation chunks''')
     # net.run(tr.dt)
         
-    for time_step in range(int(tr.sim.T2/(1000*second)*2)):
-        net.run(500*second, report='text')
+    for time_step in range(int(tr.sim.T2/(100*second))):
+        net.run(100*second, report='text')
         
     recorders = [SynEE_stat, GExc_stat, GInh_stat, GExc_rate, GInh_rate,
                  PInp_rate]
