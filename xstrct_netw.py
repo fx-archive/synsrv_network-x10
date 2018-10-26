@@ -369,8 +369,8 @@ def run_net(tr):
     
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
-                           dt=T, when='end', order=100)
-
+                           dt=(tr.sim.T2/tr.synee_a_nrecpoints),
+                           when='end', order=100)
 
 
     if tr.PInp_mode == 'indep':
@@ -401,10 +401,9 @@ def run_net(tr):
              to avoid missing simulation chunks''')
     net.run(tr.dt)
         
-    for time_step in range(25):
-        net.run((tr.sim.T2/second)/25*second, report='text')
-        SynEE_a.record_single_timestep()
-
+    for time_step in range(int(tr.sim.T2/(1000*second)*2)):
+        net.run(500*second, report='text')
+        
     recorders = [SynEE_stat, GExc_stat, GInh_stat, GExc_rate, GInh_rate,
                  PInp_rate]
     for rcc in recorders:
