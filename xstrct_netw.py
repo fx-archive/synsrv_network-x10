@@ -512,14 +512,18 @@ def run_net(tr):
     from analysis.overview_fb import overview_figure
     overview_figure('builds/%.4d'%(tr.v_idx), namespace)
 
-    from analysis.turnover_fb import turnover_figure
-    turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=True)
-
     from analysis.synw_fb import synw_figure
     synw_figure('builds/%.4d'%(tr.v_idx), namespace)
 
     from analysis.synw_log_fb import synw_log_figure
     synw_log_figure('builds/%.4d'%(tr.v_idx), namespace)
+
+    from analysis.turnover_fb import turnover_figure
+    turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=False)
+
+    from analysis.turnover_fb import turnover_figure
+    turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=True)
+
 
 
     # -----------------  clean up  ---------------------------
