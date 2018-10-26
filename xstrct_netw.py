@@ -397,9 +397,9 @@ def run_net(tr):
         rcc.active=False
 
 
-    print('''Hack solution: Simulate single timestep 
-             to avoid missing simulation chunks''')
-    net.run(tr.dt)
+    # print('''Hack solution: Simulate single timestep 
+    #          to avoid missing simulation chunks''')
+    # net.run(tr.dt)
         
     for time_step in range(int(tr.sim.T2/(1000*second)*2)):
         net.run(500*second, report='text')
