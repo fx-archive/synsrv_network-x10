@@ -43,7 +43,7 @@ def generate_N_connections(N_tar, N_src, N, same=False):
     print(i,j)
     assert len(i)==len(j)
 
-    return i, j
+    return i.astype(int), j.astype(int)
 
 
 
