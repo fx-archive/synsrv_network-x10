@@ -40,10 +40,10 @@ def generate_N_connections(N_tar, N_src, N, same=False):
         srcs = np.random.choice(range(N_src), size=N, replace=False)
         i = np.concatenate((i,srcs))
 
-    print(i,j)
+    i,j = i.astype(int), j.astype(int)
     assert len(i)==len(j)
 
-    return i.astype(int), j.astype(int)
+    return i,j
 
 
 
