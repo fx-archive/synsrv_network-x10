@@ -37,7 +37,7 @@ def generate_N_connections(N_tar, N_src, N, same=False):
     j = np.repeat(range(N_tar), N)
 
     for k in range(N_tar):
-        srcs = np.random.choice(N_src, size=N, replace=False)
+        srcs = np.random.choice(range(N_src), size=N, replace=False)
         i = np.concatenate((i,srcs))
 
     print(i,j)
