@@ -37,7 +37,10 @@ amax = 40*0.001
 
 # Poisson
 PInp_mode = 'indep' #pool
-NPInp = 400 
+NPInp = 400
+NPInp_1n = 10
+NPInp_inh = 80
+NPInp_inh_1n = 10
 PInp_rate = 10*Hz
 PInp_inh_rate = 10*Hz
 a_EPoi = 0.005

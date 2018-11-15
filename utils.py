@@ -23,6 +23,30 @@ def generate_connections(N_tar, N_src, p, same=False):
 
     return i, np.array(j)
 
+
+def generate_N_connections(N_tar, N_src, N, same=False):
+    ''' 
+    connect source to target with N connections per target
+
+    return list of sources i and targets j
+    '''
+    if same:
+        return NotImplementedError
+
+    i = np.array([])
+    j = np.repeat(range(N_tar), N)
+
+    for k in range(N_tar):
+        srcs = np.random.choice(N_src, size=N, replace=False)
+        i = np.concatenate((i,srcs))
+
+    print(i,j)
+    assert len(i)==len(j)
+
+    return i, j
+
+
+
 def generate_full_connectivity(N, same):
     if not same==True:
         raise NotImplementedError

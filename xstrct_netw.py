@@ -4,7 +4,7 @@ import sys, os, shutil, pickle, powerlaw
 from . import standard_params as prm
 from . import models as mod
 from .utils import generate_connections, generate_full_connectivity, \
-                  extract_lifetimes
+                   extract_lifetimes, generate_N_connections
 
 import numpy as np
 
@@ -54,6 +54,9 @@ def add_params(tr):
     # Poisson Input
     tr.f_add_parameter('netw.PInp_mode',  prm.PInp_mode)
     tr.f_add_parameter('netw.NPInp',  prm.NPInp)
+    tr.f_add_parameter('netw.NPInp_1n',  prm.NPInp_1n)
+    tr.f_add_parameter('netw.NPInp_inh',  prm.NPInp_inh)
+    tr.f_add_parameter('netw.NPInp_inh_1n',  prm.NPInp_inh_1n)    
     tr.f_add_parameter('netw.a_EPoi',  prm.a_EPoi)
     tr.f_add_parameter('netw.a_IPoi',  prm.a_IPoi)
     tr.f_add_parameter('netw.PInp_rate',  prm.PInp_rate)
@@ -178,13 +181,14 @@ def run_net(tr):
 
     if tr.PInp_mode == 'pool':
         PInp = PoissonGroup(tr.NPInp, rates=tr.PInp_rate,
-                        namespace=namespace)
+                            namespace=namespace)
         sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
                        on_pre='ge_post += a_EPoi',
                        namespace=namespace)
         
-        sPN_src, sPN_tar = generate_connections(N_tar=tr.N_e,
-                                                N_src=tr.NPInp, p=tr.p_EPoi)
+        sPN_src, sPN_tar = generate_N_connections(N_tar=tr.N_e,
+                                                  N_src=tr.NPInp,
+                                                  N=tr.NPInp_1n)
 
     elif tr.PInp_mode == 'indep':
         PInp = PoissonGroup(tr.N_e, rates=tr.PInp_rate,
@@ -200,12 +204,14 @@ def run_net(tr):
 
     
     if tr.PInp_mode == 'pool':
-        sPNInh = Synapses(target=GInh, source=PInp, model=tr.poisson_mod,
+        PInp_inh = PoissonGroup(tr.NPInp_inh, rates=tr.PInp_inh_rate,
+                                namespace=namespace)
+        sPNInh = Synapses(target=GInh, source=PInp_inh, model=tr.poisson_mod,
                            on_pre='ge_post += a_EPoi',
                            namespace=namespace)
-        sPNInh_src, sPNInh_tar = generate_connections(N_tar=tr.N_i,
-                                                      N_src=tr.NPInp,
-                                                      p=tr.p_EPoi)
+        sPNInh_src, sPNInh_tar = generate_N_connections(N_tar=tr.N_i,
+                                                        N_src=tr.NPInp_inh,
+                                                        N=tr.NPInp_inh_1n)
 
 
     elif tr.PInp_mode == 'indep':
@@ -373,16 +379,11 @@ def run_net(tr):
                            when='end', order=100)
 
 
-    if tr.PInp_mode == 'indep':
-        net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
-                      GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
-                      GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
-                      PInp_rate, PInp_inh)
-    else:
-        net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
-                      GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
-                      GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
-                      PInp_rate)
+    net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
+                  GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
+                  GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
+                  PInp_rate, PInp_inh)
+
 
        
     net.run(tr.sim.T1, report='text')
