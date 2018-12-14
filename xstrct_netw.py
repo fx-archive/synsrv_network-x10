@@ -503,8 +503,12 @@ def run_net(tr):
     #         with open(raw_dir+'powerlaw_fit.p', 'wb') as pfile:
     #             pickle.dump({'fit_wstart': fit_wstart,
     #                          'fit_nostart': fit_nostart}, pfile)
-                        
 
+
+    # -----------------  clean up  ---------------------------
+    shutil.rmtree('builds/%.4d/results/'%(tr.v_idx))
+                    
+        
 
     # ---------------- plot results --------------------------
 
@@ -527,7 +531,4 @@ def run_net(tr):
 
 
 
-    # -----------------  clean up  ---------------------------
-    shutil.rmtree('builds/%.4d/results/'%(tr.v_idx))
-                        
-            
+
