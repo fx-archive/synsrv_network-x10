@@ -126,8 +126,11 @@ def add_params(tr):
     tr.f_add_parameter('netw.rec.vttraces_rec', prm.vttraces_rec)
     tr.f_add_parameter('netw.rec.getraces_rec', prm.getraces_rec)
     tr.f_add_parameter('netw.rec.gitraces_rec', prm.gitraces_rec)
+    tr.f_add_parameter('netw.rec.rates_rec', prm.rates_rec)
     tr.f_add_parameter('netw.rec.GExc_stat_dt', prm.GExc_stat_dt)
     tr.f_add_parameter('netw.rec.GInh_stat_dt', prm.GInh_stat_dt)
+
+    
 
     tr.f_add_parameter('netw.rec.synee_atraces_rec', prm.synee_atraces_rec)
     tr.f_add_parameter('netw.rec.synee_Apretraces_rec', prm.synee_Apretraces_rec)
@@ -409,8 +412,10 @@ def run_net(tr):
                  PInp_rate]
     for rcc in recorders:
         rcc.active=True
-    for rcc in rate_recorders:
-        rcc.active=True
+
+    if tr.rates_rec:
+        for rcc in rate_recorders:
+            rcc.active=True
 
     if tr.spks_rec:
         GExc_spks.active=True
