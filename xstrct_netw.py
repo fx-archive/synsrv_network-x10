@@ -391,11 +391,13 @@ def run_net(tr):
        
     net.run(tr.sim.T1, report='text')
 
-    recorders      = [GExc_spks, GInh_spks, PInp_spks, SynEE_stat,
-                      GExc_stat, GInh_stat]
+    spks_recorders = [GExc_spks, GInh_spks, PInp_spks]
+    stat_recorders = [SynEE_stat, GExc_stat, GInh_stat]
     rate_recorders = [GExc_rate, GInh_rate, PInp_rate]
     
-    for rcc in recorders:
+    for rcc in spks_recorders:
+        rcc.active=False
+    for rcc in stat_recorders:
         rcc.active=False
     for rcc in rate_recorders:
         rcc.active=False
@@ -408,15 +410,12 @@ def run_net(tr):
     for time_step in range(int(tr.sim.T2/(100*second))):
         net.run(100*second, report='text')
         
-    recorders = [SynEE_stat, GExc_stat, GInh_stat, GExc_rate, GInh_rate,
-                 PInp_rate]
-    for rcc in recorders:
-        rcc.active=True
 
+    for rcc in stat_recorders:
+        rcc.active=True
     if tr.rates_rec:
         for rcc in rate_recorders:
             rcc.active=True
-
     if tr.spks_rec:
         GExc_spks.active=True
         GInh_spks.active=True
