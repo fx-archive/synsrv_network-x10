@@ -388,13 +388,31 @@ def run_net(tr):
                   PInp_rate, PInp_inh)
 
 
-       
-    net.run(tr.sim.T1, report='text')
 
     spks_recorders = [GExc_spks, GInh_spks, PInp_spks]
     stat_recorders = [SynEE_stat, GExc_stat, GInh_stat]
     rate_recorders = [GExc_rate, GInh_rate, PInp_rate]
+
+    for rcc in spks_recorders:
+        rcc.active=False
+    for rcc in stat_recorders:
+        rcc.active=False
+    for rcc in rate_recorders:
+        rcc.active=False
     
+    for rcc in stat_recorders:
+        rcc.active=True
+    if tr.rates_rec:
+        for rcc in rate_recorders:
+            rcc.active=True
+    if tr.spks_rec:
+        GExc_spks.active=True
+        GInh_spks.active=True
+        PInp_spks.active=True
+
+       
+    net.run(tr.sim.T1, report='text')
+
     for rcc in spks_recorders:
         rcc.active=False
     for rcc in stat_recorders:
@@ -419,7 +437,7 @@ def run_net(tr):
     if tr.spks_rec:
         GExc_spks.active=True
         GInh_spks.active=True
-        # PInp_spks.active=True
+        PInp_spks.active=True
 
     net.run(tr.sim.T3, report='text')
     SynEE_a.record_single_timestep()
