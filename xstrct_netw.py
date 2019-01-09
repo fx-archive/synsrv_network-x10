@@ -126,6 +126,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.rec.vttraces_rec', prm.vttraces_rec)
     tr.f_add_parameter('netw.rec.getraces_rec', prm.getraces_rec)
     tr.f_add_parameter('netw.rec.gitraces_rec', prm.gitraces_rec)
+    tr.f_add_parameter('netw.rec.gfwdtraces_rec', prm.gfwdtraces_rec)
     tr.f_add_parameter('netw.rec.rates_rec', prm.rates_rec)
     tr.f_add_parameter('netw.rec.GExc_stat_dt', prm.GExc_stat_dt)
     tr.f_add_parameter('netw.rec.GInh_stat_dt', prm.GInh_stat_dt)
@@ -186,7 +187,7 @@ def run_net(tr):
         PInp = PoissonGroup(tr.NPInp, rates=tr.PInp_rate,
                             namespace=namespace)
         sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
-                       on_pre='ge_post += a_EPoi',
+                       on_pre='gfwd_post += a_EPoi',
                        namespace=namespace)
         
         sPN_src, sPN_tar = generate_N_connections(N_tar=tr.N_e,
@@ -197,7 +198,7 @@ def run_net(tr):
         PInp = PoissonGroup(tr.N_e, rates=tr.PInp_rate,
                         namespace=namespace)
         sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
-                       on_pre='ge_post += a_EPoi',
+                       on_pre='gfwd_post += a_EPoi',
                        namespace=namespace)
         sPN_src, sPN_tar = range(tr.N_e), range(tr.N_e)
 
@@ -210,7 +211,7 @@ def run_net(tr):
         PInp_inh = PoissonGroup(tr.NPInp_inh, rates=tr.PInp_inh_rate,
                                 namespace=namespace)
         sPNInh = Synapses(target=GInh, source=PInp_inh, model=tr.poisson_mod,
-                           on_pre='ge_post += a_EPoi',
+                           on_pre='gfwd_post += a_EPoi',
                            namespace=namespace)
         sPNInh_src, sPNInh_tar = generate_N_connections(N_tar=tr.N_i,
                                                         N_src=tr.NPInp_inh,
@@ -222,7 +223,7 @@ def run_net(tr):
         PInp_inh = PoissonGroup(tr.N_i, rates=tr.PInp_inh_rate,
                             namespace=namespace)
         sPNInh = Synapses(target=GInh, source=PInp_inh, model=tr.poisson_mod,
-                          on_pre='ge_post += a_EPoi',
+                          on_pre='gfwd_post += a_EPoi',
                           namespace=namespace)
         sPNInh_src, sPNInh_tar = range(tr.N_i), range(tr.N_i)
 
@@ -345,6 +346,8 @@ def run_net(tr):
         GExc_recvars.append('ge')
     if tr.gitraces_rec:
         GExc_recvars.append('gi')
+    if tr.gfwdtraces_rec:
+        GExc_recvars.append('gfwd')
 
     GInh_recvars = GExc_recvars
     

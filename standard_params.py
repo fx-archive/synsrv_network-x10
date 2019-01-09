@@ -92,6 +92,7 @@ memtraces_rec = 1
 vttraces_rec = 1
 getraces_rec = 1
 gitraces_rec = 1
+gfwdtraces_rec = 1
 rates_rec = 1
 GExc_stat_dt = 0.1*ms
 GInh_stat_dt = 0.1*ms

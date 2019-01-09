@@ -1,8 +1,9 @@
 
 condlif_sig = '''
-              dV/dt = (El-V + ge*(Ee-V) + gi*(Ei-V))/tau : volt
+              dV/dt = (El-V + (gfwd+ge)*(Ee-V) + gi*(Ei-V))/tau : volt
               Vt : volt 
               dge /dt = -ge/tau_e : 1
+              dgfwd /dt = -gfwd/tau_e : 1
               dgi /dt = -gi/tau_i : 1
 
               Asum : 1
