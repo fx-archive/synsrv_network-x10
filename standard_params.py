@@ -98,6 +98,7 @@ GExc_stat_dt = 0.1*ms
 GInh_stat_dt = 0.1*ms
 
 synee_atraces_rec = 1
+synee_activetraces_rec = 0
 synee_Apretraces_rec = 1
 synee_Aposttraces_rec = 1
 n_synee_traces_rec = 20

@@ -134,6 +134,8 @@ def add_params(tr):
     
 
     tr.f_add_parameter('netw.rec.synee_atraces_rec', prm.synee_atraces_rec)
+    tr.f_add_parameter('netw.rec.synee_activetraces_rec', prm.synee_activetraces_rec)
+
     tr.f_add_parameter('netw.rec.synee_Apretraces_rec', prm.synee_Apretraces_rec)
     tr.f_add_parameter('netw.rec.synee_Aposttraces_rec', prm.synee_Aposttraces_rec)
     tr.f_add_parameter('netw.rec.n_synee_traces_rec', prm.n_synee_traces_rec)
@@ -360,6 +362,8 @@ def run_net(tr):
     SynEE_recvars = []
     if tr.synee_atraces_rec:
         SynEE_recvars.append('a')
+    if tr.synee_activetraces_rec:
+        SynEE_recvars.append('syn_active')
     if tr.synee_Apretraces_rec:
         SynEE_recvars.append('Apre')
     if tr.synee_Aposttraces_rec:
