@@ -378,10 +378,14 @@ def run_net(tr):
     GInh_rate = PopulationRateMonitor(GInh)
     PInp_rate = PopulationRateMonitor(PInp)
 
-    
+
+    if tr.synee_a_nrecpoints==0:
+        SynEE_a_dt = 10*tr.sim.T2
+    else:
+        SynEE_a_dt = tr.sim.T2/tr.synee_a_nrecpoints
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
-                           dt=(tr.sim.T2/tr.synee_a_nrecpoints),
+                           dt=SynEE_a_dt,
                            when='end', order=100)
 
 
