@@ -562,10 +562,10 @@ def run_net(tr):
     from analysis.turnover_fb import turnover_figure
     turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=False)
 
-    from analysis.turnover_fb import turnover_figure
-    turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=True)
+    # from analysis.turnover_fb import turnover_figure
+    # turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=True)
 
-
+    
     from analysis.methods.process_survival import extract_survival
 
     bin_w = 1*second
