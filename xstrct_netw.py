@@ -566,5 +566,24 @@ def run_net(tr):
     turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=True)
 
 
+    from analysis.methods.process_survival import extract_survival
+
+    bin_w = 1*second
+    t_cut = 20*second
+    t_split = (tr.T2-t_cut)/2.
+
+    if t_split/second > 0:
+
+        with open('builds/%.4d/raw/turnover.p' %(tr.v_idx), 'rb') as pfile:
+            turnover = pickle.load(pfile)
+
+        s_times, s_counts = extract_survival(turnover, bin_w,
+                                             tr.N_e,
+                                             t_split=t_split,
+                                             t_cut=t_cut)
 
 
+        with open(bpath+'/raw/survival.p', 'wb') as pfile:
+            out = {'t_split': t_split, 't_cut': t_cut,
+                   's_times': s_times, 's_counts': s_counts}
+            pickle.dump(out, pfile)
