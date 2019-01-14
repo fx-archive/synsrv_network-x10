@@ -503,7 +503,7 @@ def run_net(tr):
 
     Path(fpath+'turnover').touch()
     turnover_data = np.genfromtxt(fpath+'turnover',delimiter=',')    
-    # os.remove(fpath+'turnover')
+    os.remove(fpath+'turnover')
 
     with open(raw_dir+'turnover.p','wb') as pfile:
         pickle.dump(turnover_data,pfile)   
