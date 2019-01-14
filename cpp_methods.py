@@ -49,7 +49,7 @@ def syn_scale(a, vATotalMax, Asum_post, eta_scaling):
       return 0.0; // we need to return a dummy value
     } ''')
 
-@check_units(t=second, was_active_before=1, should_become_active=1,
+@check_units(t=ms, was_active_before=1, should_become_active=1,
              should_stay_active=1, syn_active=1, i=1, j=1, result=1)
 def record_turnover(t, was_active_before, should_become_active,
                     should_stay_active, syn_active, i, j):
