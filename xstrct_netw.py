@@ -581,7 +581,8 @@ def run_net(tr):
                                           t_split=t_split,
                                           t_cut=t_cut)
 
-        with open('builds/%.4d/raw/survival_full_t.p', 'wb') as pfile:
+        fpath = 'builds/%.4d/raw/survival_full_t.p' %(tr.v_idx)
+        with open(fpath, 'wb') as pfile:
             out = {'t_split': t_split, 't_cut': t_cut,
                    'full_t': full_t, 'excluded_ids': ex_ids}
             pickle.dump(out, pfile)
