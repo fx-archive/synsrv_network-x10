@@ -568,7 +568,7 @@ def run_net(tr):
     
     from analysis.methods.process_survival import extract_survival
 
-    t_cut = 20*second
+    t_cut = 100*second
     t_split = (tr.T2-t_cut)/2.
 
     if t_split/second > 0:
@@ -586,3 +586,76 @@ def run_net(tr):
             out = {'t_split': t_split, 't_cut': t_cut,
                    'full_t': full_t, 'excluded_ids': ex_ids}
             pickle.dump(out, pfile)
+
+
+    from analysis.methods.process_turnover_pd import extract_lifetimes
+
+    t_cut = 100*second
+    Tmax = tr.sim.T1+tr.sim.T2+tr.sim.T3
+
+    lts_wthsrv, lts_dthonly, ex_ids = extract_lifetimes(turnover,
+                                                        tr.N_e,
+                                                        t_cut=t_cut,
+                                                        Tmax=Tmax)
+
+    bpath = 'builds/%.4d' %(tr.v_idx)
+    for bin_w in [0.1*second, 0.5*second, 1*second, 10*second, 100*second]:
+
+        bins = np.arange(bin_w/second,
+                         Tmax/second+2*bin_w/second,
+                         bin_w/second)
+
+        f_add = 'bin%dcs' %(int(bin_w/second*10.))
+
+        counts, edges = np.histogram(lts_wthsrv, bins=bins,
+                                     density=True)
+        centers = (edges[:-1] + edges[1:])/2.            
+        
+        with open(bpath+'/raw/lts_wthsrv_'+f_add+'.p', 'wb') as pfile:
+            out = {'Tmax': Tmax, 't_cut': t_cut,
+                   'counts': counts, 'excluded_ids': ex_ids,
+                   'bins': bins, 'centers': centers, 'bin_w': bin_w}
+            pickle.dump(out, pfile)
+
+
+        counts, edges = np.histogram(lts_dthonly, bins=bins,
+                                     density=True)
+        centers = (edges[:-1] + edges[1:])/2.            
+
+        with open(bpath+'/raw/lts_dthonly_'+f_add+'.p', 'wb') as pfile:
+            out = {'Tmax': Tmax, 't_cut': t_cut,
+                   'counts': counts, 'excluded_ids': ex_ids,
+                   'bins': bins, 'centers': centers, 'bin_w': bin_w}
+            pickle.dump(out, pfile)
+
+
+    for nbins in [25,50,100,250,500,1000,2500,5000]:
+
+        bins = np.logspace(np.log10(1),
+                           np.log10((Tmax-t_cut)/second+0.5),
+                           num=nbins)
+
+        f_add = 'lognbin%d' %(nbins)
+
+        counts, edges = np.histogram(lts_wthsrv, bins=bins,
+                                     density=True)
+        centers = (edges[:-1] + edges[1:])/2.            
+
+        with open(bpath+'/raw/lts_wthsrv_'+f_add+'.p', 'wb') as pfile:
+            out = {'Tmax': Tmax, 't_cut': t_cut,
+                   'counts': counts, 'excluded_ids': ex_ids,
+                   'bins': bins, 'centers': centers, 'nbins': nbins}
+            pickle.dump(out, pfile)
+
+
+        counts, edges = np.histogram(lts_dthonly, bins=bins,
+                                     density=True)
+        centers = (edges[:-1] + edges[1:])/2.            
+
+        with open(bpath+'/raw/lts_dthonly_'+f_add+'.p', 'wb') as pfile:
+            out = {'Tmax': Tmax, 't_cut': t_cut,
+                   'counts': counts, 'excluded_ids': ex_ids,
+                   'bins': bins, 'centers': centers, 'nbins': nbins}
+            pickle.dump(out, pfile)
+
+
