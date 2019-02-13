@@ -32,8 +32,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.El',    prm.El)
     tr.f_add_parameter('netw.Ee',    prm.Ee)
     tr.f_add_parameter('netw.Ei',    prm.Ei)
-    tr.f_add_parameter('netw.sigma_e', prm.sigma_e)
-    tr.f_add_parameter('netw.sigma_i', prm.sigma_i)
+    # tr.f_add_parameter('netw.sigma_e', prm.sigma_e)
+    # tr.f_add_parameter('netw.sigma_i', prm.sigma_i)
     
     tr.f_add_parameter('netw.Vr_e',  prm.Vr_e)
     tr.f_add_parameter('netw.Vr_i',  prm.Vr_i)
@@ -171,18 +171,16 @@ def run_net(tr):
                        namespace=namespace)
 
     # set initial thresholds fixed, init. potentials uniformly distrib.
-    GExc.sigma, GInh.sigma = tr.sigma_e, tr.sigma_i
+    # GExc.sigma, GInh.sigma = tr.sigma_e, tr.sigma_i
     GExc.Vt, GInh.Vt = tr.Vt_e, tr.Vt_i
     GExc.V , GInh.V  = np.random.uniform(tr.Vr_e/mV, tr.Vt_e/mV,
                                          size=tr.N_e)*mV, \
                        np.random.uniform(tr.Vr_i/mV, tr.Vt_i/mV,
                                          size=tr.N_i)*mV
 
-    print("need to fix?")
+
     synEE_pre_mod = mod.synEE_pre
     synEE_post_mod = mod.synEE_post
-
-
 
 
     if tr.PInp_mode == 'pool':
@@ -198,7 +196,7 @@ def run_net(tr):
 
     elif tr.PInp_mode == 'indep':
         PInp = PoissonGroup(tr.N_e, rates=tr.PInp_rate,
-                        namespace=namespace)
+                            namespace=namespace)
         sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
                        on_pre='gfwd_post += a_EPoi',
                        namespace=namespace)
@@ -397,8 +395,6 @@ def run_net(tr):
                   GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
                   GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
                   PInp_rate, PInp_inh)
-
-
 
     spks_recorders = [GExc_spks, GInh_spks, PInp_spks]
     stat_recorders = [SynEE_stat, GExc_stat, GInh_stat]
