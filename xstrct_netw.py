@@ -519,8 +519,9 @@ def run_net(tr):
         pickle.dump(spk_register_data,pfile)
 
 
+        
     with open(raw_dir+'profiling_summary.txt', 'wb') as tfile:
-        tfile.write(net.profiling_summary(net))
+        tfile.write(profiling_summary(net))
 
 
     # ---------------- create the powerlaw fit ---------------
