@@ -458,8 +458,6 @@ def run_net(tr):
 
     device.build(directory='builds/%.4d'%(tr.v_idx), clean=True,
                  compile=True, run=True, debug=False)
-
-    print(profiling_summary(net))
     
     # save monitors as raws in build directory
     raw_dir = 'builds/%.4d/raw/'%(tr.v_idx)
@@ -523,7 +521,7 @@ def run_net(tr):
 
         
     with open(raw_dir+'profiling_summary.txt', 'wb') as tfile:
-        tfile.write(profiling_summary(net))
+        tfile.write(str(profiling_summary(net)))
 
 
     # ---------------- create the powerlaw fit ---------------
