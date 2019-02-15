@@ -520,7 +520,7 @@ def run_net(tr):
 
 
         
-    with open(raw_dir+'profiling_summary.txt', 'wb') as tfile:
+    with open(raw_dir+'profiling_summary.txt', 'w+') as tfile:
         tfile.write(str(profiling_summary(net)))
 
 
