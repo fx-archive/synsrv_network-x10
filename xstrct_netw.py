@@ -116,6 +116,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.sim.T2',  prm.T2)
     tr.f_add_parameter('netw.sim.T3',  prm.T3)
     tr.f_add_parameter('netw.sim.dt', prm.netw_dt)
+    tr.f_add_parameter('netw.sim.n_threads', prm.n_threads)
 
     tr.f_add_parameter('netw.config.strct_active', prm.strct_active)
     tr.f_add_parameter('netw.config.strct_mode', prm.strct_mode)
@@ -149,6 +150,7 @@ def run_net(tr):
 
     # prefs.codegen.target = 'numpy'
     # prefs.codegen.target = 'cython'
+    prefs.devices.cpp_standalone.openmp_threads = tr.n_threads
     set_device('cpp_standalone', directory='./builds/%.4d'%(tr.v_idx),
                build_on_run=False)
 
@@ -418,7 +420,8 @@ def run_net(tr):
         PInp_spks.active=True
 
        
-    net.run(tr.sim.T1, report='text')
+    net.run(tr.sim.T1, report='text',
+            report_period=300*second, profile=True)
 
     for rcc in spks_recorders:
         rcc.active=False
@@ -433,7 +436,8 @@ def run_net(tr):
     # net.run(tr.dt)
         
     for time_step in range(int(tr.sim.T2/(10*second))):
-        net.run(10*second, report='text')
+        net.run(10*second, report='text',
+                report_period=300*second, profile=True)
         
 
     for rcc in stat_recorders:
@@ -446,7 +450,8 @@ def run_net(tr):
         GInh_spks.active=True
         PInp_spks.active=True
 
-    net.run(tr.sim.T3, report='text')
+    net.run(tr.sim.T3, report='text',
+            report_period=300*second, profile=True)
     SynEE_a.record_single_timestep()
 
     device.build(directory='builds/%.4d'%(tr.v_idx), clean=True)

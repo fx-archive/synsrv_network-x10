@@ -81,7 +81,7 @@ T1 = 5*second
 T2 = 5*second
 T3 = 5*second
 netw_dt = 0.1*ms
-
+n_threads = 1
 
 # neuron_method = 'euler'
 # synEE_method = 'euler'
