@@ -456,7 +456,8 @@ def run_net(tr):
             report_period=300*second, profile=True)
     SynEE_a.record_single_timestep()
 
-    device.build(directory='builds/%.4d'%(tr.v_idx), clean=True)
+    device.build(directory='builds/%.4d'%(tr.v_idx), clean=True,
+                 compile=True, run=True, debug=False)
 
 
     # save monitors as raws in build directory
