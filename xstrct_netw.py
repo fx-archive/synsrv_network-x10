@@ -189,10 +189,10 @@ def run_net(tr):
 
     if tr.PInp_mode == 'pool':
         PInp = PoissonGroup(tr.NPInp, rates=tr.PInp_rate,
-                            namespace=namespace)
+                            namespace=namespace, name='poissongroup_exc')
         sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
                        on_pre='gfwd_post += a_EPoi',
-                       namespace=namespace)
+                       namespace=namespace, name='synPInpExc')
         
         sPN_src, sPN_tar = generate_N_connections(N_tar=tr.N_e,
                                                   N_src=tr.NPInp,
@@ -225,10 +225,10 @@ def run_net(tr):
     elif tr.PInp_mode == 'indep':
 
         PInp_inh = PoissonGroup(tr.N_i, rates=tr.PInp_inh_rate,
-                            namespace=namespace)
+                                namespace=namespace, name='poissongroup_inh')
         sPNInh = Synapses(target=GInh, source=PInp_inh, model=tr.poisson_mod,
                           on_pre='gfwd_post += a_EPoi',
-                          namespace=namespace)
+                          namespace=namespace, name='synPInp_inhInh')
         sPNInh_src, sPNInh_tar = range(tr.N_i), range(tr.N_i)
 
         
@@ -324,7 +324,8 @@ def run_net(tr):
             else:
                 strct_mod = tr.strct_mod
                 
-            SynEE.run_regularly(strct_mod, dt = tr.strct_dt, when='end', name='this_is_it')
+            SynEE.run_regularly(strct_mod, dt = tr.strct_dt,
+                                when='end', name='strct_plst_zero')
            
         elif tr.strct_mode == 'thrs':
             if tr.turnover_rec:
@@ -333,7 +334,8 @@ def run_net(tr):
             else:
                 strct_mod_thrs = tr.strct_mod_thrs
                 
-            SynEE.run_regularly(strct_mod_thrs, dt = tr.strct_dt, when='end')
+            SynEE.run_regularly(strct_mod_thrs, dt = tr.strct_dt,
+                                when='end', name='strct_plst_thrs')
 
 
             
