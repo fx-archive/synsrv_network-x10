@@ -437,8 +437,8 @@ def run_net(tr):
     #          to avoid missing simulation chunks''')
     # net.run(tr.dt)
         
-    for time_step in range(int(tr.sim.T2/(10*second))):
-        net.run(10*second, report='text',
+    for time_step in range(int(tr.sim.T2/(50*second))):
+        net.run(50*second, report='text',
                 report_period=300*second, profile=True)
         
 
