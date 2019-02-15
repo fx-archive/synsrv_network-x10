@@ -300,7 +300,7 @@ def run_net(tr):
 
     # make synapse active at beginning
     SynEE.run_regularly(tr.synEE_p_activate, dt=T, when='start',
-                            order=-100)
+                        order=-100)
             
         
     # synaptic scaling
@@ -324,7 +324,7 @@ def run_net(tr):
             else:
                 strct_mod = tr.strct_mod
                 
-            SynEE.run_regularly(strct_mod, dt = tr.strct_dt, when='end')
+            SynEE.run_regularly(strct_mod, dt = tr.strct_dt, when='end', name='this_is_it')
            
         elif tr.strct_mode == 'thrs':
             if tr.turnover_rec:
