@@ -459,7 +459,6 @@ def run_net(tr):
     device.build(directory='builds/%.4d'%(tr.v_idx), clean=True,
                  compile=True, run=True, debug=False)
 
-
     # save monitors as raws in build directory
     raw_dir = 'builds/%.4d/raw/'%(tr.v_idx)
     
@@ -518,6 +517,10 @@ def run_net(tr):
     
     with open(raw_dir+'spk_register.p','wb') as pfile:
         pickle.dump(spk_register_data,pfile)
+
+
+    with open(raw_dir+'profiling_summary.txt', 'wb') as tfile:
+        tfile.write(net.profiling_summary(net))
 
 
     # ---------------- create the powerlaw fit ---------------
