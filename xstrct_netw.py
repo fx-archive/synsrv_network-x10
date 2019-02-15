@@ -150,7 +150,9 @@ def run_net(tr):
 
     # prefs.codegen.target = 'numpy'
     # prefs.codegen.target = 'cython'
-    prefs.devices.cpp_standalone.openmp_threads = tr.n_threads
+    if tr.n_threads > 1:
+        prefs.devices.cpp_standalone.openmp_threads = tr.n_threads
+        
     set_device('cpp_standalone', directory='./builds/%.4d'%(tr.v_idx),
                build_on_run=False)
 
