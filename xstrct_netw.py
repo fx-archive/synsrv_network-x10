@@ -417,7 +417,7 @@ def run_net(tr):
                       GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
                       PInp_rate, PInp_inh)
     else:
-        net = Network(GExc, GInh, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
+        net = Network(GExc, GInh, SynEE, SynEI, SynIE, SynII,
                       GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
                       GExc_spks, GInh_spks, GExc_rate, GInh_rate)
 
