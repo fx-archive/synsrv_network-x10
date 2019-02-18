@@ -26,6 +26,7 @@ condlif_memnoise = '''
               spk_count : 1
               h_ip : Hz (constant)
               sigma: volt (constant)
+              mu : volt (constant)
               '''
 
 
