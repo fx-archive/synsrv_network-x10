@@ -10,6 +10,8 @@ tau_i = 5*ms                # IPSP time constant
 El = -60*mV                 # resting value
 Ee = 0*mV                   # reversal potential Excitation 
 Ei = -80*mV                 # reversal potential Inhibition
+mu_e = 4.0*mV
+mu_i = 4.0*mV
 sigma_e = 4.0**0.5 *mV        # noise amplitude
 sigma_i = 4.0**0.5 *mV
 

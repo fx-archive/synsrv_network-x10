@@ -51,6 +51,8 @@ def add_params(tr):
 
     # Poisson Input
     tr.f_add_parameter('netw.external_mode', prm.external_mode)
+    tr.f_add_parameter('netw.mu_e', prm.mu_e)
+    tr.f_add_parameter('netw.mu_i', prm.mu_i)
     tr.f_add_parameter('netw.sigma_e', prm.sigma_e)
     tr.f_add_parameter('netw.sigma_i', prm.sigma_i)
 
