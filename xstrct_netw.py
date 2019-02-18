@@ -186,6 +186,7 @@ def run_net(tr):
     # set initial thresholds fixed, init. potentials uniformly distrib.
 
     if tr.external_mode=='memnoise':
+        GExc.mu, GInh.mu = tr.mu_e, tr.mu_i
         GExc.sigma, GInh.sigma = tr.sigma_e, tr.sigma_i
         
     GExc.Vt, GInh.Vt = tr.Vt_e, tr.Vt_i
