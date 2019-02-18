@@ -32,8 +32,6 @@ def add_params(tr):
     tr.f_add_parameter('netw.El',    prm.El)
     tr.f_add_parameter('netw.Ee',    prm.Ee)
     tr.f_add_parameter('netw.Ei',    prm.Ei)
-    # tr.f_add_parameter('netw.sigma_e', prm.sigma_e)
-    # tr.f_add_parameter('netw.sigma_i', prm.sigma_i)
     
     tr.f_add_parameter('netw.Vr_e',  prm.Vr_e)
     tr.f_add_parameter('netw.Vr_i',  prm.Vr_i)
@@ -52,6 +50,10 @@ def add_params(tr):
     tr.f_add_parameter('netw.p_ii',  prm.p_ii)
 
     # Poisson Input
+    tr.f_add_parameter('netw.external_mode', prm.external_mode)
+    tr.f_add_parameter('netw.sigma_e', prm.sigma_e)
+    tr.f_add_parameter('netw.sigma_i', prm.sigma_i)
+
     tr.f_add_parameter('netw.PInp_mode',  prm.PInp_mode)
     tr.f_add_parameter('netw.NPInp',  prm.NPInp)
     tr.f_add_parameter('netw.NPInp_1n',  prm.NPInp_1n)
@@ -94,8 +96,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.strct_dt',    prm.strct_dt)
     tr.f_add_parameter('netw.p_inactivate',    prm.p_inactivate)
     
-    
-    tr.f_add_parameter('netw.mod.condlif_sig',   mod.condlif_sig)
+    tr.f_add_parameter('netw.mod.condlif_poisson',   mod.condlif_poisson)
+    tr.f_add_parameter('netw.mod.condlif_memnoise',   mod.condlif_memnoise)
     tr.f_add_parameter('netw.mod.nrnEE_thrshld', mod.nrnEE_thrshld)
     tr.f_add_parameter('netw.mod.nrnEE_reset',   mod.nrnEE_reset)
     tr.f_add_parameter('netw.mod.synEE_mod',     mod.synEE_mod)
@@ -165,17 +167,25 @@ def run_net(tr):
 
     defaultclock.dt = tr.netw.sim.dt
 
-    GExc = NeuronGroup(N=tr.N_e, model=tr.condlif_sig,
+    if tr.external_mode=='memnoise':
+        neuron_model = tr.condlif_memnoise
+    elif tr.external_mode=='poisson':
+        neuron_model = tr.condlif_poisson
+
+    GExc = NeuronGroup(N=tr.N_e, model=neuron_model,
                        threshold=tr.nrnEE_thrshld,
                        reset=tr.nrnEE_reset, #method=tr.neuron_method,
                        namespace=namespace)
-    GInh = NeuronGroup(N=tr.N_i, model=tr.condlif_sig,
+    GInh = NeuronGroup(N=tr.N_i, model=neuron_model,
                        threshold ='V > Vt',
                        reset='V=Vr_i', #method=tr.neuron_method,
                        namespace=namespace)
 
     # set initial thresholds fixed, init. potentials uniformly distrib.
-    # GExc.sigma, GInh.sigma = tr.sigma_e, tr.sigma_i
+
+    if tr.external_mode=='memnoise':
+        GExc.sigma, GInh.sigma = tr.sigma_e, tr.sigma_i
+        
     GExc.Vt, GInh.Vt = tr.Vt_e, tr.Vt_i
     GExc.V , GInh.V  = np.random.uniform(tr.Vr_e/mV, tr.Vt_e/mV,
                                          size=tr.N_e)*mV, \
@@ -186,53 +196,54 @@ def run_net(tr):
     synEE_pre_mod = mod.synEE_pre
     synEE_post_mod = mod.synEE_post
 
-
-    if tr.PInp_mode == 'pool':
-        PInp = PoissonGroup(tr.NPInp, rates=tr.PInp_rate,
-                            namespace=namespace, name='poissongroup_exc')
-        sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
-                       on_pre='gfwd_post += a_EPoi',
-                       namespace=namespace, name='synPInpExc')
-        
-        sPN_src, sPN_tar = generate_N_connections(N_tar=tr.N_e,
-                                                  N_src=tr.NPInp,
-                                                  N=tr.NPInp_1n)
-
-    elif tr.PInp_mode == 'indep':
-        PInp = PoissonGroup(tr.N_e, rates=tr.PInp_rate,
-                            namespace=namespace)
-        sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
-                       on_pre='gfwd_post += a_EPoi',
-                       namespace=namespace, name='synPInp_inhInh')
-        sPN_src, sPN_tar = range(tr.N_e), range(tr.N_e)
-
-
-    sPN.connect(i=sPN_src, j=sPN_tar)
+    if tr.external_mode=='poisson':
     
-
-    
-    if tr.PInp_mode == 'pool':
-        PInp_inh = PoissonGroup(tr.NPInp_inh, rates=tr.PInp_inh_rate,
-                                namespace=namespace, name='poissongroup_inh')
-        sPNInh = Synapses(target=GInh, source=PInp_inh, model=tr.poisson_mod,
+        if tr.PInp_mode == 'pool':
+            PInp = PoissonGroup(tr.NPInp, rates=tr.PInp_rate,
+                                namespace=namespace, name='poissongroup_exc')
+            sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
                            on_pre='gfwd_post += a_EPoi',
-                           namespace=namespace)
-        sPNInh_src, sPNInh_tar = generate_N_connections(N_tar=tr.N_i,
-                                                        N_src=tr.NPInp_inh,
-                                                        N=tr.NPInp_inh_1n)
+                           namespace=namespace, name='synPInpExc')
 
+            sPN_src, sPN_tar = generate_N_connections(N_tar=tr.N_e,
+                                                      N_src=tr.NPInp,
+                                                      N=tr.NPInp_1n)
 
-    elif tr.PInp_mode == 'indep':
-
-        PInp_inh = PoissonGroup(tr.N_i, rates=tr.PInp_inh_rate,
+        elif tr.PInp_mode == 'indep':
+            PInp = PoissonGroup(tr.N_e, rates=tr.PInp_rate,
                                 namespace=namespace)
-        sPNInh = Synapses(target=GInh, source=PInp_inh, model=tr.poisson_mod,
-                          on_pre='gfwd_post += a_EPoi',
-                          namespace=namespace)
-        sPNInh_src, sPNInh_tar = range(tr.N_i), range(tr.N_i)
+            sPN = Synapses(target=GExc, source=PInp, model=tr.poisson_mod,
+                           on_pre='gfwd_post += a_EPoi',
+                           namespace=namespace, name='synPInp_inhInh')
+            sPN_src, sPN_tar = range(tr.N_e), range(tr.N_e)
 
-        
-    sPNInh.connect(i=sPNInh_src, j=sPNInh_tar)
+
+        sPN.connect(i=sPN_src, j=sPN_tar)
+
+
+
+        if tr.PInp_mode == 'pool':
+            PInp_inh = PoissonGroup(tr.NPInp_inh, rates=tr.PInp_inh_rate,
+                                    namespace=namespace, name='poissongroup_inh')
+            sPNInh = Synapses(target=GInh, source=PInp_inh, model=tr.poisson_mod,
+                               on_pre='gfwd_post += a_EPoi',
+                               namespace=namespace)
+            sPNInh_src, sPNInh_tar = generate_N_connections(N_tar=tr.N_i,
+                                                            N_src=tr.NPInp_inh,
+                                                            N=tr.NPInp_inh_1n)
+
+
+        elif tr.PInp_mode == 'indep':
+
+            PInp_inh = PoissonGroup(tr.N_i, rates=tr.PInp_inh_rate,
+                                    namespace=namespace)
+            sPNInh = Synapses(target=GInh, source=PInp_inh, model=tr.poisson_mod,
+                              on_pre='gfwd_post += a_EPoi',
+                              namespace=namespace)
+            sPNInh_src, sPNInh_tar = range(tr.N_i), range(tr.N_i)
+
+
+        sPNInh.connect(i=sPNInh_src, j=sPNInh_tar)
     
     
 
@@ -380,11 +391,15 @@ def run_net(tr):
     
     GExc_spks = SpikeMonitor(GExc)    
     GInh_spks = SpikeMonitor(GInh)
-    PInp_spks = SpikeMonitor(PInp)
+    
+    if tr.external_mode=='poisson':
+        PInp_spks = SpikeMonitor(PInp)
 
     GExc_rate = PopulationRateMonitor(GExc)
     GInh_rate = PopulationRateMonitor(GInh)
-    PInp_rate = PopulationRateMonitor(PInp)
+
+    if tr.external_mode=='poisson':
+        PInp_rate = PopulationRateMonitor(PInp)
 
 
     if tr.synee_a_nrecpoints==0:
@@ -396,15 +411,26 @@ def run_net(tr):
                            dt=SynEE_a_dt,
                            when='end', order=100)
 
+    if tr.external_mode=='poisson':
+        net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
+                      GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
+                      GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
+                      PInp_rate, PInp_inh)
+    else:
+        net = Network(GExc, GInh, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
+                      GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
+                      GExc_spks, GInh_spks, GExc_rate, GInh_rate)
 
-    net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
-                  GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
-                  GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
-                  PInp_rate, PInp_inh)
 
-    spks_recorders = [GExc_spks, GInh_spks, PInp_spks]
+    spks_recorders = [GExc_spks, GInh_spks]
+    if tr.external_mode=='poisson':
+        spks_recorders.append(PInp_spks)
+        
     stat_recorders = [SynEE_stat, GExc_stat, GInh_stat]
-    rate_recorders = [GExc_rate, GInh_rate, PInp_rate]
+    
+    rate_recorders = [GExc_rate, GInh_rate]
+    if tr.external_mode=='poisson':
+        rate_recorders.append(PInp_rate)
 
     for rcc in spks_recorders:
         rcc.active=False
@@ -419,10 +445,8 @@ def run_net(tr):
         for rcc in rate_recorders:
             rcc.active=True
     if tr.spks_rec:
-        GExc_spks.active=True
-        GInh_spks.active=True
-        PInp_spks.active=True
-
+        for spr in spks_recorders:
+            spr.active=True
        
     net.run(tr.sim.T1, report='text',
             report_period=300*second, profile=True)
@@ -439,9 +463,8 @@ def run_net(tr):
     #          to avoid missing simulation chunks''')
     # net.run(tr.dt)
         
-    for time_step in range(int(tr.sim.T2/(1000*second))):
-        net.run(1000*second, report='text',
-                report_period=300*second, profile=True)
+    net.run(tr.sim.T2, report='text', report_period=300*second,
+            profile=True)
         
 
     for rcc in stat_recorders:
@@ -450,12 +473,11 @@ def run_net(tr):
         for rcc in rate_recorders:
             rcc.active=True
     if tr.spks_rec:
-        GExc_spks.active=True
-        GInh_spks.active=True
-        PInp_spks.active=True
+        for spr in spks_recorders:
+            spr.active=True
 
-    net.run(tr.sim.T3, report='text',
-            report_period=300*second, profile=True)
+    net.run(tr.sim.T3, report='text', report_period=300*second,
+            profile=True)
     SynEE_a.record_single_timestep()
 
     device.build(directory='builds/%.4d'%(tr.v_idx), clean=True,
@@ -484,8 +506,10 @@ def run_net(tr):
         pickle.dump(GExc_spks.get_states(),pfile)   
     with open(raw_dir+'ginh_spks.p','wb') as pfile:
         pickle.dump(GInh_spks.get_states(),pfile)
-    with open(raw_dir+'pinp_spks.p','wb') as pfile:
-        pickle.dump(PInp_spks.get_states(),pfile)
+
+    if tr.external_mode=='poisson':
+        with open(raw_dir+'pinp_spks.p','wb') as pfile:
+            pickle.dump(PInp_spks.get_states(),pfile)
 
     with open(raw_dir+'gexc_rate.p','wb') as pfile:
         pickle.dump(GExc_rate.get_states(),pfile)
@@ -494,11 +518,13 @@ def run_net(tr):
     with open(raw_dir+'ginh_rate.p','wb') as pfile:
         pickle.dump(GInh_rate.get_states(),pfile)
         if tr.rates_rec:
-            pickle.dump(GInh_rate.smooth_rate(width=25*ms),pfile)   
-    with open(raw_dir+'pinp_rate.p','wb') as pfile:
-        pickle.dump(PInp_rate.get_states(),pfile)
-        if tr.rates_rec:
-            pickle.dump(PInp_rate.smooth_rate(width=25*ms),pfile)   
+            pickle.dump(GInh_rate.smooth_rate(width=25*ms),pfile)
+
+    if tr.external_mode=='poisson':
+        with open(raw_dir+'pinp_rate.p','wb') as pfile:
+            pickle.dump(PInp_rate.get_states(),pfile)
+            if tr.rates_rec:
+                pickle.dump(PInp_rate.smooth_rate(width=25*ms),pfile)   
 
 
     # ----------------- add raw data ------------------------

@@ -36,6 +36,7 @@ Aminus = -7.5*0.001
 amax = 40*0.001
 
 # Poisson
+external_mode = 'poisson'
 PInp_mode = 'indep' #pool
 NPInp = 400
 NPInp_1n = 10

@@ -1,5 +1,5 @@
 
-condlif_sig = '''
+condlif_poisson = '''
               dV/dt = (El-V + (gfwd+ge)*(Ee-V) + gi*(Ei-V))/tau : volt
               Vt : volt 
               dge /dt = -ge/tau_e : 1
@@ -12,6 +12,22 @@ condlif_sig = '''
               h_ip : Hz (constant)
               sigma: volt (constant)
               '''
+
+
+condlif_memnoise = '''
+              dV/dt = (El-V + (gfwd+ge)*(Ee-V) + gi*(Ei-V))/tau + sigma * xi / (tau **.5) : volt
+              Vt : volt 
+              dge /dt = -ge/tau_e : 1
+              dgfwd /dt = -gfwd/tau_e : 1
+              dgi /dt = -gi/tau_i : 1
+
+              Asum : 1
+              
+              spk_count : 1
+              h_ip : Hz (constant)
+              sigma: volt (constant)
+              '''
+
 
 # refractory period???
 
