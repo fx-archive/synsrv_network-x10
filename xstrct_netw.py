@@ -107,7 +107,7 @@ def add_params(tr):
     # tr.f_add_parameter('netw.mod.synEE_post',    mod.synEE_post)
     tr.f_add_parameter('netw.mod.synEE_p_activate', mod.synEE_p_activate)
     tr.f_add_parameter('netw.mod.synEE_scaling', mod.synEE_scaling)
-    tr.f_add_parameter('netw.mod.intrinsic_mod', mod.intrinsic_mod)
+    # tr.f_add_parameter('netw.mod.intrinsic_mod', mod.intrinsic_mod)
     tr.f_add_parameter('netw.mod.strct_mod',     mod.strct_mod)
     tr.f_add_parameter('netw.mod.turnover_rec_mod',     mod.turnover_rec_mod)
     tr.f_add_parameter('netw.mod.strct_mod_thrs',     mod.strct_mod_thrs)
