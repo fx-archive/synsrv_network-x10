@@ -313,7 +313,7 @@ def run_net(tr):
     rs = np.random.uniform(size=tr.N_e*(tr.N_e-1))
     initial_active = (rs < tr.p_ee).astype('int')
     initial_a = initial_active * tr.a_ee
-    SynEE.active = x
+    SynEE.active = initial_active
     SynEE.a = initial_a
     
         
