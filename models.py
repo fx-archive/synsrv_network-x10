@@ -7,10 +7,6 @@ condlif_poisson = '''
               dgi /dt = -gi/tau_i : 1
 
               Asum : 1
-              
-              spk_count : 1
-              h_ip : Hz (constant)
-              sigma: volt (constant)
               '''
 
 
@@ -22,9 +18,7 @@ condlif_memnoise = '''
               dgi /dt = -gi/tau_i : 1
 
               Asum : 1
-              
-              spk_count : 1
-              h_ip : Hz (constant)
+
               sigma: volt (constant)
               mu : volt (constant)
               '''
@@ -34,14 +28,9 @@ condlif_memnoise = '''
 
 nrnEE_thrshld = 'V > Vt'
 
-nrnEE_reset = '''
-              V = Vr_e
-              spk_count = spk_count + 1
-              '''
+nrnEE_reset = 'V = Vr_e'
 
-poisson_mod = '''
-               PInp_a : 1
-              '''
+poisson_mod = 'PInp_a : 1'
 
 # !--- add event-driven for efficiency ---!
 # dApre  /dt = -Apre/taupre  : 1 (event-driven)
@@ -96,10 +85,6 @@ synEE_scaling = '''
                 a = syn_active*syn_scale(a, ATotalMax, Asum_post, eta_scaling)
                 '''
 
-intrinsic_mod = '''
-                Vt = Vt + eta_ip*(spk_count/it_dt - h_ip)
-                spk_count = 0
-                '''
 
 # rand() == uniform(0,1)
 #strct_mod = ''
