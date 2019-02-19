@@ -323,10 +323,10 @@ def run_net(tr):
         SynEE.run_regularly(tr.synEE_scaling, dt = tr.dt_synEE_scaling,
                             when='end')
 
-    # intrinsic plasticity
-    if tr.netw.config.it_active:
-        GExc.h_ip = tr.h_ip
-        GExc.run_regularly(tr.intrinsic_mod, dt = tr.it_dt, when='end')
+    # # intrinsic plasticity
+    # if tr.netw.config.it_active:
+    #     GExc.h_ip = tr.h_ip
+    #     GExc.run_regularly(tr.intrinsic_mod, dt = tr.it_dt, when='end')
 
     # structural plasticity
     if tr.netw.config.strct_active:
