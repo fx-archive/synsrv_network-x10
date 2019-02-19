@@ -305,18 +305,17 @@ def run_net(tr):
     tr.f_add_result('sII_src', sII_src)
     tr.f_add_result('sII_tar', sII_tar)
 
-
-    SynEE.a = tr.a_ee
         
     SynEE.insert_P = tr.insert_P
     SynEE.p_inactivate = tr.p_inactivate
 
-
-    # make synapse active at beginning
+    # make randomly chosen synapses active at beginning
     rs = np.random.uniform(size=tr.N_e*(tr.N_e-1))
-    x = (rs < tr.p_ee).astype('int')
-    print(x[:400])
-    SynEE.a = x
+    initial_active = (rs < tr.p_ee).astype('int')
+    initial_a = initial_active * tr.a_ee
+    SynEE.active = x
+    SynEE.a = initial_a
+    
         
     # synaptic scaling
     if tr.netw.config.scl_active:
