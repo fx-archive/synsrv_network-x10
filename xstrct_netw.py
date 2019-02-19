@@ -86,10 +86,10 @@ def add_params(tr):
     tr.f_add_parameter('netw.eta_scaling', prm.eta_scaling)
 
     # intrinsic plasticity
-    tr.f_add_parameter('netw.config.it_active', prm.it_active)
-    tr.f_add_parameter('netw.eta_ip', prm.eta_ip)
-    tr.f_add_parameter('netw.it_dt',  prm.it_dt)
-    tr.f_add_parameter('netw.h_ip',   prm.h_ip)
+    # tr.f_add_parameter('netw.config.it_active', prm.it_active)
+    # tr.f_add_parameter('netw.eta_ip', prm.eta_ip)
+    # tr.f_add_parameter('netw.it_dt',  prm.it_dt)
+    # tr.f_add_parameter('netw.h_ip',   prm.h_ip)
 
     # structural plasticity
     tr.f_add_parameter('netw.prn_thrshld', prm.prn_thrshld)
