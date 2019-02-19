@@ -314,7 +314,9 @@ def run_net(tr):
 
     # make synapse active at beginning
     rs = np.random.uniform(size=tr.N_e*(tr.N_e-1))
-    SynEE.a = (rs < tr.p_ee).astype('int')
+    x = (rs < tr.p_ee).astype('int')
+    print(x[:400])
+    SynEE.a = x
         
     # synaptic scaling
     if tr.netw.config.scl_active:
