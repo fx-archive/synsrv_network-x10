@@ -313,8 +313,9 @@ def run_net(tr):
 
 
     # make synapse active at beginning
-    SynEE.run_regularly(tr.synEE_p_activate, dt=T, when='start',
-                        order=-100)
+    rs = np.random.uniform(size=tr.N_e*(tr.N_e-1))
+    SynEE.a = (rs < p_ee).astype('int')
+    print(SynEE.a)
             
         
     # synaptic scaling
