@@ -77,6 +77,7 @@ insert_P = 0.001
 strct_dt = 10*ms
 a_insert = 0.01 * ATotalMax
 p_inactivate = 0.25
+strct_c = 0.
 
 
 #preT  = 100*second

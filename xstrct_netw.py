@@ -97,6 +97,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.a_insert',    prm.a_insert)
     tr.f_add_parameter('netw.strct_dt',    prm.strct_dt)
     tr.f_add_parameter('netw.p_inactivate',    prm.p_inactivate)
+    tr.f_add_parameter('netw.strct_c',    prm.strct_c)
+    
     
     tr.f_add_parameter('netw.mod.condlif_poisson',   mod.condlif_poisson)
     tr.f_add_parameter('netw.mod.condlif_memnoise',   mod.condlif_memnoise)

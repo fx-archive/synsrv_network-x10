@@ -107,7 +107,7 @@ turnover_rec_mod = '''
 
 strct_mod = '''
             r = rand()
-            should_stay_active = int(a > 0) + int(a<=0)*int(r>p_inactivate)
+            should_stay_active = int(a > strct_c) + int(a<= strct_c)*int(r>p_inactivate)
             s = rand()
             should_become_active = int(s < insert_P)
             was_active_before = syn_active
