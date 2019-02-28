@@ -368,7 +368,7 @@ def run_net(tr):
         GExc_recvars.append('ge')
     if tr.gitraces_rec:
         GExc_recvars.append('gi')
-    if tr.gfwdtraces_rec:
+    if tr.gfwdtraces_rec and tr.external_mode=='poisson':
         GExc_recvars.append('gfwd')
 
     GInh_recvars = GExc_recvars
