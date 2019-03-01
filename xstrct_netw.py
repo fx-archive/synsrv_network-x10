@@ -467,9 +467,12 @@ def run_net(tr):
     # print('''Hack solution: Simulate single timestep 
     #          to avoid missing simulation chunks''')
     # net.run(tr.dt)
-        
-    net.run(tr.sim.T2, report='text', report_period=300*second,
-            profile=True)
+
+    for time_step in range(int(tr.sim.T2/(10000*second))):
+        net.run(10000*second, report='text')
+
+    # net.run(tr.sim.T2, report='text', report_period=300*second,
+    #         profile=True)
         
 
     for rcc in stat_recorders:
