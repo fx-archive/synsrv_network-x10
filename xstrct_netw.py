@@ -511,7 +511,6 @@ def run_net(tr):
         SynEE_a_states = SynEE_a.get_states()
         SynEE_a_states['i'] = list(SynEE.i)
         SynEE_a_states['j'] = list(SynEE.j)
-        print(SynEE_a_states)
         pickle.dump(SynEE_a_states,pfile)   
 
     with open(raw_dir+'gexc_spks.p','wb') as pfile:
