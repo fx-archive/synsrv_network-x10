@@ -323,8 +323,8 @@ def run_net(tr):
     if tr.netw.config.scl_active:
         SynEE.summed_updaters['Asum_post']._clock = Clock(
             dt=tr.dt_synEE_scaling)
-        SynEE.run_regularly(tr.synEE_scaling, dt = tr.dt_synEE_scaling,
-                            when='end')
+        synscaling = SynEE.run_regularly(tr.synEE_scaling,
+                                         dt=tr.dt_synEE_scaling, when='end')
 
     # # intrinsic plasticity
     # if tr.netw.config.it_active:
@@ -340,8 +340,8 @@ def run_net(tr):
             else:
                 strct_mod = tr.strct_mod
                 
-            SynEE.run_regularly(strct_mod, dt = tr.strct_dt,
-                                when='end', name='strct_plst_zero')
+            strctplst = SynEE.run_regularly(strct_mod, dt=tr.strct_dt,
+                                            when='end', name='strct_plst_zero')
            
         elif tr.strct_mode == 'thrs':
             if tr.turnover_rec:
@@ -350,8 +350,10 @@ def run_net(tr):
             else:
                 strct_mod_thrs = tr.strct_mod_thrs
                 
-            SynEE.run_regularly(strct_mod_thrs, dt = tr.strct_dt,
-                                when='end', name='strct_plst_thrs')
+            strctplst = SynEE.run_regularly(strct_mod_thrs,
+                                            dt=tr.strct_dt,
+                                            when='end',
+                                            name='strct_plst_thrs')
 
 
             
@@ -483,6 +485,12 @@ def run_net(tr):
     if tr.spks_rec:
         for spr in spks_recorders:
             spr.active=True
+
+    # freeze network
+    synscaling.active=False
+    strctplst.active=False
+    SynEE.on_pre=mod.synEE_pre
+    SynEE.on_post=mod.synEE_post
 
     net.run(tr.sim.T3, report='text', report_period=300*second,
             profile=True)
