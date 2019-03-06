@@ -356,6 +356,11 @@ def run_net(tr):
                                             name='strct_plst_thrs')
 
 
+
+    @network_operation(dt=0.5*ms, when='end')
+    def f():
+        print('This will happen at the end of each timestep.')
+
             
     # -------------- recording ------------------        
 
@@ -489,8 +494,8 @@ def run_net(tr):
     # freeze network
     synscaling.active=False
     strctplst.active=False
-    SynEE.on_pre=mod.synEE_pre
-    SynEE.on_post=mod.synEE_post
+    # SynEE.on_pre=mod.synEE_pre
+    # SynEE.on_post=mod.synEE_post
 
     net.run(tr.sim.T3, report='text', report_period=300*second,
             profile=True)
