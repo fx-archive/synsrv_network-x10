@@ -359,7 +359,7 @@ def run_net(tr):
 
     @network_operation(dt=0.5*ms, when='end')
     def foo():
-        print('This will happen at the end of each timestep.')
+        SynEE.insert_P=1
 
             
     # -------------- recording ------------------        
