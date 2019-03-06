@@ -358,7 +358,7 @@ def run_net(tr):
 
 
     @network_operation(dt=0.5*ms, when='end')
-    def f():
+    def foo():
         print('This will happen at the end of each timestep.')
 
             
@@ -427,11 +427,11 @@ def run_net(tr):
         net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
                       GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
                       GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
-                      PInp_rate, PInp_inh)
+                      PInp_rate, PInp_inh, foo)
     else:
         net = Network(GExc, GInh, SynEE, SynEI, SynIE, SynII,
                       GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
-                      GExc_spks, GInh_spks, GExc_rate, GInh_rate)
+                      GExc_spks, GInh_spks, GExc_rate, GInh_rate, foo)
 
 
     spks_recorders = [GExc_spks, GInh_spks]
