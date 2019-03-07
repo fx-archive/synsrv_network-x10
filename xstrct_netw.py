@@ -1,5 +1,5 @@
 
-import sys, os, shutil, pickle, powerlaw
+import sys, os, shutil, pickle, powerlaw, neo, scipy
 
 from . import standard_params as prm
 from . import models as mod
@@ -15,6 +15,11 @@ from brian2 import NeuronGroup, StateMonitor, SpikeMonitor, run, \
                    PoissonGroup, Synapses, set_device, device, Clock, \
                    defaultclock, prefs, network_operation, Network, \
                    PoissonGroup, PopulationRateMonitor, profiling_summary
+
+from elephant.conversion import BinnedSpikeTrain
+from elephant.spike_train_correlation import corrcoef, cch
+import quantities as pq
+
 
 from .cpp_methods import syn_scale, record_turnover, record_spk
 
@@ -619,7 +624,51 @@ def run_net(tr):
     # -----------------  clean up  ---------------------------
     shutil.rmtree('builds/%.4d/results/'%(tr.v_idx))
                     
-        
+
+    # --------------- cross-correlations ---------------------
+
+    GExc_spks = GExc_spks.get_states()
+    synee_a = SynEE_a_states
+    wsize = 100*pq.ms
+
+    for binsize in [1*pq.ms, 2*pq.ms, 5*pq.ms]: 
+
+        wlen = int(wsize/binsize)
+
+        ts, idxs = GExc_spks['t'], GExc_spks['i']
+        idxs = idxs[ts>tr.T1+tr.T2+tr.T3]
+        ts = ts[ts>tr.T1+tr.T2+tr.T3]
+        ts = ts - (tr.T1+tr.T2+tr.T3)
+
+        sts = [neo.SpikeTrain(ts[idxs==i]/second*pq.s,
+                              t_stop=tr.T4/second*pq.s) for i in
+               range(tr.N_e)]
+
+        crs_crrs, syn_a = [], []
+
+        for f,(i,j) in enumerate(zip(synee_a['i'], synee_a['j'])):
+            if synee_a['syn_active'][-1][f]==1:
+
+                crs_crr, cbin = cch(BinnedSpikeTrain(sts[i], binsize=binsize),
+                                    BinnedSpikeTrain(sts[j], binsize=binsize),
+                                    cross_corr_coef=True, border_correction=True,
+                                    window=(-1*wlen,wlen))
+
+                crs_crrs.append(list(np.array(crs_crr).T[0]))
+                syn_a.append(synee_a['a'][-1][f])
+
+
+        fname = 'crs_crrs_wsize%dms_binsize%fms_full' %(wsize/pq.ms,
+                                                        binsize/pq.ms)
+
+        df = {'cbin': cbin, 'crs_crrs': np.array(crs_crrs),
+              'syn_a': np.array(syn_a), 'binsize': binsize,
+              'wsize': wsize, 'wlen': wlen}
+
+
+        with open('builds/%.4d/raw/'%(tr.v_idx)+fname+'.p', 'wb') as pfile:
+            pickle.dump(df, pfile)
+
 
     # ---------------- plot results --------------------------
 
@@ -639,6 +688,11 @@ def run_net(tr):
 
     # from analysis.turnover_fb import turnover_figure
     # turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=True)
+
+          
+
+    # ------------------------------
+    
 
     
     from analysis.methods.process_survival import extract_survival
