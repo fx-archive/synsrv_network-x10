@@ -121,6 +121,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.sim.T1',  prm.T1)
     tr.f_add_parameter('netw.sim.T2',  prm.T2)
     tr.f_add_parameter('netw.sim.T3',  prm.T3)
+    tr.f_add_parameter('netw.sim.T4',  prm.T3)
     tr.f_add_parameter('netw.sim.dt', prm.netw_dt)
     tr.f_add_parameter('netw.sim.n_threads', prm.n_threads)
 
@@ -496,15 +497,29 @@ def run_net(tr):
         for spr in spks_recorders:
             spr.active=True
 
+    net.run(tr.sim.T3, report='text', report_period=300*second,
+            profile=True)
+
+
     # freeze network
     synscaling.active=False
     strctplst.active=False
     SynEE.stdp_active=0
+    
+    for rcc in stat_recorders:
+        rcc.active=False
+    for rcc in rate_recorders:
+        rcc.active=False
+    for spr in spks_recorders:
+        spr.active=True
 
-
-    net.run(tr.sim.T3, report='text', report_period=300*second,
-            profile=True)
+    if tr.external_mode=='poisson':
+        PInp_rate.active=False        
+    
+    net.run(tr.sim.T4, report='text', report_period=300*second)
+        
     SynEE_a.record_single_timestep()
+ 
 
     device.build(directory='builds/%.4d'%(tr.v_idx), clean=True,
                  compile=True, run=True, debug=False)
