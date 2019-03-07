@@ -358,11 +358,6 @@ def run_net(tr):
                                             name='strct_plst_thrs')
 
 
-
-    @network_operation(dt=0.5*ms, when='end')
-    def foo():
-        SynEE.insert_P=1
-
             
     # -------------- recording ------------------        
 
