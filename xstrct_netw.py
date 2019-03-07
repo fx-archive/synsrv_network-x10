@@ -310,6 +310,7 @@ def run_net(tr):
         
     SynEE.insert_P = tr.insert_P
     SynEE.p_inactivate = tr.p_inactivate
+    SynEE.stdp_active=1
 
     # make randomly chosen synapses active at beginning
     rs = np.random.uniform(size=tr.N_e*(tr.N_e-1))
@@ -459,6 +460,10 @@ def run_net(tr):
     if tr.spks_rec:
         for spr in spks_recorders:
             spr.active=True
+
+    device.insert_code('main', '''
+    cout << "Testing direct insertion of code." << endl;
+    ''')
        
     net.run(tr.sim.T1, report='text',
             report_period=300*second, profile=True)
@@ -494,8 +499,8 @@ def run_net(tr):
     # freeze network
     synscaling.active=False
     strctplst.active=False
-    # SynEE.on_pre=mod.synEE_pre
-    # SynEE.on_post=mod.synEE_post
+    SynEE.stdp_active=0
+
 
     net.run(tr.sim.T3, report='text', report_period=300*second,
             profile=True)

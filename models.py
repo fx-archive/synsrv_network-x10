@@ -44,6 +44,7 @@ synEE_mod = '''
             Asum_post = a : 1 (summed)         
             insert_P : 1 (shared) 
             p_inactivate : 1 (shared)
+            stdp_active : integer (shared)
             '''
 
 synEE_p_activate = '''
@@ -58,7 +59,7 @@ synEE_pre = '''
             '''
 
 synEE_pre_STDP = '''
-                 a = syn_active*clip(a+Apost, 0, amax)
+                 a = syn_active*clip(a+Apost*stpd_active, 0, amax)
                  '''
 
 synEE_pre_rec = '''
@@ -70,7 +71,7 @@ synEE_post = '''
              '''
 
 synEE_post_STDP = '''
-                  a = syn_active*clip(a+Apre, 0, amax)
+                  a = syn_active*clip(a+Apre*stdp_active, 0, amax)
                   '''
 
 synEE_post_rec = '''
