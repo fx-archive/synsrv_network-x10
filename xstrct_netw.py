@@ -627,10 +627,7 @@ def run_net(tr):
     #             pickle.dump({'fit_wstart': fit_wstart,
     #                          'fit_nostart': fit_nostart}, pfile)
 
-
-    # -----------------  clean up  ---------------------------
-    shutil.rmtree('builds/%.4d/results/'%(tr.v_idx))
-                    
+               
 
     # --------------- cross-correlations ---------------------
 
@@ -676,6 +673,10 @@ def run_net(tr):
         with open('builds/%.4d/raw/'%(tr.v_idx)+fname+'.p', 'wb') as pfile:
             pickle.dump(df, pfile)
 
+
+    # -----------------  clean up  ---------------------------
+    shutil.rmtree('builds/%.4d/results/'%(tr.v_idx))
+            
 
     # ---------------- plot results --------------------------
 
