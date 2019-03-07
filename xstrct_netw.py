@@ -429,11 +429,11 @@ def run_net(tr):
         net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
                       GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
                       GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
-                      PInp_rate, PInp_inh, foo)
+                      PInp_rate, PInp_inh)
     else:
         net = Network(GExc, GInh, SynEE, SynEI, SynIE, SynII,
                       GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
-                      GExc_spks, GInh_spks, GExc_rate, GInh_rate, foo)
+                      GExc_spks, GInh_spks, GExc_rate, GInh_rate)
 
 
     spks_recorders = [GExc_spks, GInh_spks]
