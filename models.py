@@ -59,7 +59,7 @@ synEE_pre = '''
             '''
 
 synEE_pre_STDP = '''
-                 a = syn_active*clip(a+Apost*stpd_active, 0, amax)
+                 a = syn_active*clip(a+Apost*stdp_active, 0, amax)
                  '''
 
 synEE_pre_rec = '''
