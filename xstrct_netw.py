@@ -22,6 +22,7 @@ import quantities as pq
 
 from .cpp_methods import syn_scale, record_turnover, record_spk
 
+
     
 def run_net(tr):
 
@@ -454,9 +455,7 @@ def run_net(tr):
     
     with open(raw_dir+'spk_register.p','wb') as pfile:
         pickle.dump(spk_register_data,pfile)
-
-
-        
+     
     with open(raw_dir+'profiling_summary.txt', 'w+') as tfile:
         tfile.write(str(profiling_summary(net)))
 
@@ -536,7 +535,8 @@ def run_net(tr):
           
 
     # ------------------------------
-    
+
+def post_processing(tr):
 
     
     from analysis.methods.process_survival import extract_survival
@@ -632,3 +632,12 @@ def run_net(tr):
             pickle.dump(out, pfile)
 
 
+
+
+
+
+def run_all(tr):
+
+    run_net(tr)
+
+    post_processing(tr)            

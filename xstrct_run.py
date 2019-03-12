@@ -12,7 +12,7 @@ from pypet.brian2.parameter import Brian2Parameter, \
 from .explored_params import explore_dict, name
 
 from .add_parameters import add_params
-from .xstrct_netw import run_net
+from .xstrct_netw import run_all
 
 
 # control the number of cores to be used for computation
@@ -55,7 +55,7 @@ tr.f_add_parameter('mconfig.git.message', commit.message)
 
 tr.f_explore(explore_dict)
 
-env.run(run_net)
+env.run(run_all)
 
 
 
