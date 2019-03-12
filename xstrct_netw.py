@@ -130,18 +130,10 @@ def run_net(tr):
         synEE_post_mod = '''%s 
                             %s''' %(synEE_post_mod, mod.synEE_post_STDP)
 
-    
-    if tr.synEE_rec:
-        synEE_pre_mod  = '''%s 
-                            %s''' %(synEE_pre_mod, mod.synEE_pre_rec)
-        synEE_post_mod = '''%s 
-                            %s''' %(synEE_post_mod, mod.synEE_post_rec)
-
         
     # E<-E advanced synapse model, rest simple
     SynEE = Synapses(target=GExc, source=GExc, model=tr.synEE_mod,
                      on_pre=synEE_pre_mod, on_post=synEE_post_mod,
-                     #method=tr.synEE_method,
                      namespace=namespace)
     SynIE = Synapses(target=GInh, source=GExc, on_pre='ge_post += a_ie',
                      namespace=namespace)
@@ -358,9 +350,9 @@ def run_net(tr):
 
 
     # freeze network
-    synscaling.active=False
-    strctplst.active=False
-    SynEE.stdp_active=0
+    # synscaling.active=False
+    # strctplst.active=False
+    # SynEE.stdp_active=0
     
     for rcc in stat_recorders:
         rcc.active=False
@@ -369,7 +361,45 @@ def run_net(tr):
     for spr in spks_recorders:
         spr.active=True
     if tr.external_mode=='poisson':
-        PInp_rate.active=False        
+        PInp_rate.active=False
+
+
+    if tr.synEE_rec:
+
+        synEE_pre_mod  = '''%s 
+                            %s''' %(synEE_pre_mod, mod.synEE_pre_rec)
+        synEE_post_mod = '''%s 
+                            %s''' %(synEE_post_mod, mod.synEE_post_rec)
+
+        rec_SynEE = Synapses(target=GExc, source=GExc, model=tr.synEE_mod,
+                             on_pre=synEE_pre_mod, on_post=synEE_post_mod,
+                             namespace=namespace)
+
+        if tr.strct_active:
+            sEE_src, sEE_tar = generate_full_connectivity(tr.N_e, same=True)
+            rec_SynEE.connect(i=sEE_src, j=sEE_tar)
+            rec_SynEE.syn_active = 0
+
+        else:
+            srcs_full, tars_full = generate_full_connectivity(tr.N_e, same=True)
+            rec_SynEE.connect(i=srcs_full, j=tars_full)
+            rec_SynEE.syn_active = 0
+
+            
+        rec_SynEE.insert_P = SynEE.insert_P
+        rec_SynEE.p_inactivate = SynEE.p_inactivate
+        rec_SynEE.stdp_active = 1
+
+        rec_SynEE.syn_active = SynEE.syn_active
+        rec_SynEE.a = SynEE.a
+
+        if tr.external_mode=='poisson':
+            net = Network(GExc, GInh, PInp, sPN, sPNInh, rec_SynEE, SynEI,
+                          SynIE, SynII, PInp_inh)
+        else:
+            net = Network(GExc, GInh, rec_SynEE, SynEI, SynIE, SynII)
+
+
     
     net.run(tr.sim.T4, report='text', report_period=300*second)
         
