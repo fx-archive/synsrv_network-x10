@@ -408,8 +408,9 @@ def run_net(tr):
         pickle.dump(SynEE_stat.get_states(),pfile)   
     with open(raw_dir+'synee_a.p','wb') as pfile:
         SynEE_a_states = SynEE_a.get_states()
-        SynEE_a_states['i'] = list(SynEE.i)
-        SynEE_a_states['j'] = list(SynEE.j)
+        if tr.crs_crrs_rec:
+            SynEE_a_states['i'] = list(SynEE.i)
+            SynEE_a_states['j'] = list(SynEE.j)
         pickle.dump(SynEE_a_states,pfile)
 
     with open(raw_dir+'gexc_spks.p','wb') as pfile:
@@ -463,50 +464,52 @@ def run_net(tr):
 
     # --------------- cross-correlations ---------------------
 
-    GExc_spks = GExc_spks.get_states()
-    synee_a = SynEE_a_states
-    wsize = 100*pq.ms
+    if tr.crs_crrs_rec:
 
-    for binsize in [1*pq.ms, 2*pq.ms, 5*pq.ms]: 
+        GExc_spks = GExc_spks.get_states()
+        synee_a = SynEE_a_states
+        wsize = 100*pq.ms
 
-        wlen = int(wsize/binsize)
+        for binsize in [1*pq.ms, 2*pq.ms, 5*pq.ms]: 
 
-        ts, idxs = GExc_spks['t'], GExc_spks['i']
-        idxs = idxs[ts>tr.T1+tr.T2+tr.T3]
-        ts = ts[ts>tr.T1+tr.T2+tr.T3]
-        ts = ts - (tr.T1+tr.T2+tr.T3)
+            wlen = int(wsize/binsize)
 
-        sts = [neo.SpikeTrain(ts[idxs==i]/second*pq.s,
-                              t_stop=tr.T4/second*pq.s) for i in
-               range(tr.N_e)]
+            ts, idxs = GExc_spks['t'], GExc_spks['i']
+            idxs = idxs[ts>tr.T1+tr.T2+tr.T3]
+            ts = ts[ts>tr.T1+tr.T2+tr.T3]
+            ts = ts - (tr.T1+tr.T2+tr.T3)
 
-        crs_crrs, syn_a = [], []
+            sts = [neo.SpikeTrain(ts[idxs==i]/second*pq.s,
+                                  t_stop=tr.T4/second*pq.s) for i in
+                   range(tr.N_e)]
 
-        for f,(i,j) in enumerate(zip(synee_a['i'], synee_a['j'])):
-            if synee_a['syn_active'][-1][f]==1:
+            crs_crrs, syn_a = [], []
 
-                crs_crr, cbin = cch(BinnedSpikeTrain(sts[i],
-                                                     binsize=binsize),
-                                    BinnedSpikeTrain(sts[j],
-                                                     binsize=binsize),
-                                    cross_corr_coef=True,
-                                    border_correction=True,
-                                    window=(-1*wlen,wlen))
+            for f,(i,j) in enumerate(zip(synee_a['i'], synee_a['j'])):
+                if synee_a['syn_active'][-1][f]==1:
 
-                crs_crrs.append(list(np.array(crs_crr).T[0]))
-                syn_a.append(synee_a['a'][-1][f])
+                    crs_crr, cbin = cch(BinnedSpikeTrain(sts[i],
+                                                         binsize=binsize),
+                                        BinnedSpikeTrain(sts[j],
+                                                         binsize=binsize),
+                                        cross_corr_coef=True,
+                                        border_correction=True,
+                                        window=(-1*wlen,wlen))
 
-
-        fname = 'crs_crrs_wsize%dms_binsize%fms_full' %(wsize/pq.ms,
-                                                        binsize/pq.ms)
-
-        df = {'cbin': cbin, 'crs_crrs': np.array(crs_crrs),
-              'syn_a': np.array(syn_a), 'binsize': binsize,
-              'wsize': wsize, 'wlen': wlen}
+                    crs_crrs.append(list(np.array(crs_crr).T[0]))
+                    syn_a.append(synee_a['a'][-1][f])
 
 
-        with open('builds/%.4d/raw/'%(tr.v_idx)+fname+'.p', 'wb') as pfile:
-            pickle.dump(df, pfile)
+            fname = 'crs_crrs_wsize%dms_binsize%fms_full' %(wsize/pq.ms,
+                                                            binsize/pq.ms)
+
+            df = {'cbin': cbin, 'crs_crrs': np.array(crs_crrs),
+                  'syn_a': np.array(syn_a), 'binsize': binsize,
+                  'wsize': wsize, 'wlen': wlen}
+
+
+            with open('builds/%.4d/raw/'%(tr.v_idx)+fname+'.p', 'wb') as pfile:
+                pickle.dump(df, pfile)
 
 
     # -----------------  clean up  ---------------------------
@@ -533,107 +536,6 @@ def run_net(tr):
     # turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=True)
 
           
-
-    # ------------------------------
-
-def post_processing(tr):
-
-    
-    from analysis.methods.process_survival import extract_survival
-
-    t_cut = 100*second
-    t_split = (tr.T2-t_cut)/2.
-
-    if t_split/second > 0:
-
-        with open('builds/%.4d/raw/turnover.p' %(tr.v_idx), 'rb') as pfile:
-            turnover = pickle.load(pfile)
-
-        full_t, ex_ids = extract_survival(turnover,
-                                          tr.N_e,
-                                          t_split=t_split,
-                                          t_cut=t_cut)
-
-        fpath = 'builds/%.4d/raw/survival_full_t.p' %(tr.v_idx)
-        with open(fpath, 'wb') as pfile:
-            out = {'t_split': t_split, 't_cut': t_cut,
-                   'full_t': full_t, 'excluded_ids': ex_ids}
-            pickle.dump(out, pfile)
-
-
-    from analysis.methods.process_turnover_pd import extract_lifetimes
-
-    t_cut = 100*second
-    Tmax = tr.sim.T1+tr.sim.T2+tr.sim.T3
-
-    lts_wthsrv, lts_dthonly, ex_ids = extract_lifetimes(turnover,
-                                                        tr.N_e,
-                                                        t_cut=t_cut,
-                                                        Tmax=Tmax)
-
-    bpath = 'builds/%.4d' %(tr.v_idx)
-    for bin_w in [0.1*second, 0.5*second, 1*second, 10*second, 100*second]:
-
-        bins = np.arange(bin_w/second,
-                         Tmax/second+2*bin_w/second,
-                         bin_w/second)
-
-        f_add = 'bin%dcs' %(int(bin_w/second*10.))
-
-        counts, edges = np.histogram(lts_wthsrv, bins=bins,
-                                     density=True)
-        centers = (edges[:-1] + edges[1:])/2.            
-        
-        with open(bpath+'/raw/lts_wthsrv_'+f_add+'.p', 'wb') as pfile:
-            out = {'Tmax': Tmax, 't_cut': t_cut,
-                   'counts': counts, 'excluded_ids': ex_ids,
-                   'bins': bins, 'centers': centers, 'bin_w': bin_w}
-            pickle.dump(out, pfile)
-
-
-        counts, edges = np.histogram(lts_dthonly, bins=bins,
-                                     density=True)
-        centers = (edges[:-1] + edges[1:])/2.            
-
-        with open(bpath+'/raw/lts_dthonly_'+f_add+'.p', 'wb') as pfile:
-            out = {'Tmax': Tmax, 't_cut': t_cut,
-                   'counts': counts, 'excluded_ids': ex_ids,
-                   'bins': bins, 'centers': centers, 'bin_w': bin_w}
-            pickle.dump(out, pfile)
-
-
-    for nbins in [25,50,100,250,500,1000,2500,5000]:
-
-        bins = np.logspace(np.log10(1),
-                           np.log10((Tmax-t_cut)/second+0.5),
-                           num=nbins)
-
-        f_add = 'lognbin%d' %(nbins)
-
-        counts, edges = np.histogram(lts_wthsrv, bins=bins,
-                                     density=True)
-        centers = (edges[:-1] + edges[1:])/2.            
-
-        with open(bpath+'/raw/lts_wthsrv_'+f_add+'.p', 'wb') as pfile:
-            out = {'Tmax': Tmax, 't_cut': t_cut,
-                   'counts': counts, 'excluded_ids': ex_ids,
-                   'bins': bins, 'centers': centers, 'nbins': nbins}
-            pickle.dump(out, pfile)
-
-
-        counts, edges = np.histogram(lts_dthonly, bins=bins,
-                                     density=True)
-        centers = (edges[:-1] + edges[1:])/2.            
-
-        with open(bpath+'/raw/lts_dthonly_'+f_add+'.p', 'wb') as pfile:
-            out = {'Tmax': Tmax, 't_cut': t_cut,
-                   'counts': counts, 'excluded_ids': ex_ids,
-                   'bins': bins, 'centers': centers, 'nbins': nbins}
-            pickle.dump(out, pfile)
-
-
-
-
 
 
 def run_all(tr):
