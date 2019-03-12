@@ -537,9 +537,3 @@ def run_net(tr):
 
           
 
-
-def run_all(tr):
-
-    run_net(tr)
-
-    post_processing(tr)            
