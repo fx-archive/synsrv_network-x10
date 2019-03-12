@@ -1,4 +1,6 @@
+
 from pypet.brian2.parameter import Brian2Parameter
+from . import standard_params as prm
 
 def add_params(tr):
 
