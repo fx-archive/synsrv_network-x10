@@ -35,7 +35,7 @@ def run_net(tr):
 
     print("Started process with id ", str(tr.v_idx))
 
-    T = tr.T1 + tr.T2 + tr.T3
+    T = tr.T1 + tr.T2 + tr.T3 + tr.T4
 
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
     namespace['idx'] = tr.v_idx
