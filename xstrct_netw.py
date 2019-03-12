@@ -518,9 +518,12 @@ def run_net(tr):
         for f,(i,j) in enumerate(zip(synee_a['i'], synee_a['j'])):
             if synee_a['syn_active'][-1][f]==1:
 
-                crs_crr, cbin = cch(BinnedSpikeTrain(sts[i], binsize=binsize),
-                                    BinnedSpikeTrain(sts[j], binsize=binsize),
-                                    cross_corr_coef=True, border_correction=True,
+                crs_crr, cbin = cch(BinnedSpikeTrain(sts[i],
+                                                     binsize=binsize),
+                                    BinnedSpikeTrain(sts[j],
+                                                     binsize=binsize),
+                                    cross_corr_coef=True,
+                                    border_correction=True,
                                     window=(-1*wlen,wlen))
 
                 crs_crrs.append(list(np.array(crs_crr).T[0]))
