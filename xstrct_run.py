@@ -10,7 +10,9 @@ from pypet.brian2.parameter import Brian2Parameter, \
                                    Brian2MonitorResult
 
 from .explored_params import explore_dict, name
-from .xstrct_netw import add_params, run_net
+
+from .add_parameters import add_params
+from .xstrct_netw import run_net
 
 
 # control the number of cores to be used for computation
