@@ -3,7 +3,7 @@ import sys, os, shutil, pickle, powerlaw, neo, scipy, time
 
 from . import models as mod
 from .utils import generate_connections, generate_full_connectivity, \
-                   extract_lifetimes, generate_N_connections
+                   generate_N_connections
 
 import numpy as np
 
@@ -461,31 +461,6 @@ def run_net(tr):
         tfile.write(str(profiling_summary(net)))
 
 
-    # ---------------- create the powerlaw fit ---------------
-
-    # if len(turnover_data) > 10:
-    
-    #     _lt, _dt = extract_lifetimes(turnover_data, tr.N_e,
-    #                                  with_starters=True)
-    #     life_t, death_t = _lt*second, _dt*second
-
-    #     if len(life_t)>25:                                         
-    #         fit_wstart = powerlaw.Fit(life_t/ms, discrete=True)
-
-            
-    #     _lt, _dt = extract_lifetimes(turnover_data, tr.N_e,
-    #                                  with_starters=False)
-    #     life_t, death_t = _lt*second, _dt*second
-
-        
-    #     if len(life_t)>25:                                         
-    #         fit_nostart = powerlaw.Fit(life_t/ms, discrete=True)
-            
-    #         with open(raw_dir+'powerlaw_fit.p', 'wb') as pfile:
-    #             pickle.dump({'fit_wstart': fit_wstart,
-    #                          'fit_nostart': fit_nostart}, pfile)
-
-               
 
     # --------------- cross-correlations ---------------------
 
