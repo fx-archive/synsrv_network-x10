@@ -1,5 +1,5 @@
 
-import sys, os, shutil, pickle, powerlaw, neo, scipy, time
+import sys, os, shutil, pickle, neo, scipy
 
 from . import models as mod
 from .utils import generate_connections, generate_full_connectivity, \
