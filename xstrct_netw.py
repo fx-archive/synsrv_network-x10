@@ -232,8 +232,6 @@ def run_net(tr):
             
     # -------------- recording ------------------        
 
-    #run(tr.sim.preT)
-
     GExc_recvars = []
     if tr.memtraces_rec:
         GExc_recvars.append('V')
@@ -342,14 +340,6 @@ def run_net(tr):
     for rcc in rate_recorders:
         rcc.active=False
 
-
-    # print('''Hack solution: Simulate single timestep 
-    #          to avoid missing simulation chunks''')
-    # net.run(tr.dt)
-
-    # for time_step in range(int(tr.sim.T2/(10000*second))):
-    #     net.run(10000*second, report='text')
-
     net.run(tr.sim.T2, report='text', report_period=300*second,
             profile=True)
         
@@ -378,7 +368,6 @@ def run_net(tr):
         rcc.active=False
     for spr in spks_recorders:
         spr.active=True
-
     if tr.external_mode=='poisson':
         PInp_rate.active=False        
     
