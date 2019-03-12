@@ -406,17 +406,11 @@ def run_net(tr):
     with open(raw_dir+'synee_stat.p','wb') as pfile:
         pickle.dump(SynEE_stat.get_states(),pfile)   
     with open(raw_dir+'synee_a.p','wb') as pfile:
-        a = time.time()
         SynEE_a_states = SynEE_a.get_states()
-        b = time.time()
-        SynEE_a_states['i'] = list(SynEE.i)
-        SynEE_a_states['j'] = list(SynEE.j)
-        c = time.time()
+        if tr.T2/second > 100:
+            SynEE_a_states['i'] = list(SynEE.i)
+            SynEE_a_states['j'] = list(SynEE.j)
         pickle.dump(SynEE_a_states,pfile)
-        d = time.time()
-        print('get_states: ' , b-a)
-        print('get i,j   : ' , c-b)
-        print('pickle dmp: ' , d-c)
 
     with open(raw_dir+'gexc_spks.p','wb') as pfile:
         pickle.dump(GExc_spks.get_states(),pfile)   
