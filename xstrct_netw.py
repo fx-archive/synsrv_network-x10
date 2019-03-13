@@ -386,9 +386,6 @@ def run_net(tr):
             rec_SynEE.connect(i=srcs_full, j=tars_full)
             rec_SynEE.syn_active = 0
 
-            
-        rec_SynEE.insert_P = SynEE.insert_P
-        rec_SynEE.p_inactivate = SynEE.p_inactivate
         rec_SynEE.stdp_active = 1
 
         # to inherit the .syn_active and .a values of SynEE,
@@ -399,7 +396,9 @@ def run_net(tr):
                             j=range(tr.N_e*(tr.N_e-1)))
 
         val_inherit.run_regularly('''a_post = a_pre
-                                     syn_active_post = syn_active_pre''',
+                                     syn_active_post = syn_active_pre
+                                     insert_P_post = insert_P_pre
+                                     p_inactivate_post = p_inactivate_pre''',
                                   when='start', dt=tr.T4)
         SynEE.active = False
 
