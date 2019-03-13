@@ -395,16 +395,22 @@ def run_net(tr):
         # rec_SynEE and SynEE themselfes need to be connected, 
         # creating a Synapses object between SynEE and rec_SynEE
         val_inherit = Synapses(target=rec_SynEE, source=SynEE)
+        val_inherit.connect(i=range(tr.N_e*(tr.N_e-1)),
+                            j=range(tr.N_e*(tr.N_e-1)))
 
+        val_inherit.run_regularly('''a_post = a_pre
+                                     syn_active_post = syn_active_pre''',
+                                  when='start', dt=tr.T4)
         # rec_SynEE.syn_active = SynEE.syn_active
         # rec_SynEE.a = SynEE.a
 
         if tr.external_mode=='poisson':
-            net = Network(GExc, GInh, PInp, sPN, sPNInh, rec_SynEE, SynEI,
-                          SynIE, SynII, PInp_inh, val_inherit)
-        else:
-            net = Network(GExc, GInh, rec_SynEE, SynEI, SynIE, SynII,
+            net = Network(GExc, GInh, PInp, sPN, sPNInh, rec_SynEE,
+                          SynEE, SynEI, SynIE, SynII, PInp_inh,
                           val_inherit)
+        else:
+            net = Network(GExc, GInh, rec_SynEE, SynEE, SynEI, SynIE,
+                          SynII, val_inherit)
 
 
     
