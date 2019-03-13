@@ -364,7 +364,7 @@ def run_net(tr):
         PInp_rate.active=False
 
 
-    if tr.synEE_rec:
+    if False:
 
         synEE_pre_mod  = '''%s 
                             %s''' %(synEE_pre_mod, mod.synEE_pre_rec)
