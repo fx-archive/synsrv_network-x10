@@ -392,8 +392,7 @@ def run_net(tr):
         # rec_SynEE and SynEE themselfes need to be connected, 
         # creating a Synapses object between SynEE and rec_SynEE
         val_inherit = Synapses(target=rec_SynEE, source=SynEE)
-        val_inherit.connect(i=range(tr.N_e*(tr.N_e-1)),
-                            j=range(tr.N_e*(tr.N_e-1)))
+        val_inherit.connect(i==j)
 
         val_inherit.run_regularly('''a_post = a_pre
                                      syn_active_post = syn_active_pre
