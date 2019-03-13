@@ -57,12 +57,11 @@ def run_net(tr):
                        reset='V=Vr_i', #method=tr.neuron_method,
                        namespace=namespace)
 
-    # set initial thresholds fixed, init. potentials uniformly distrib.
-
     if tr.external_mode=='memnoise':
         GExc.mu, GInh.mu = tr.mu_e, tr.mu_i
         GExc.sigma, GInh.sigma = tr.sigma_e, tr.sigma_i
-        
+
+  
     GExc.Vt, GInh.Vt = tr.Vt_e, tr.Vt_i
     GExc.V , GInh.V  = np.random.uniform(tr.Vr_e/mV, tr.Vt_e/mV,
                                          size=tr.N_e)*mV, \
@@ -188,8 +187,8 @@ def run_net(tr):
     initial_a = initial_active * tr.a_ee
     SynEE.syn_active = initial_active
     SynEE.a = initial_a
-    
-        
+
+       
     # synaptic scaling
     if tr.netw.config.scl_active:
         SynEE.summed_updaters['Asum_post']._clock = Clock(
@@ -225,6 +224,19 @@ def run_net(tr):
                                             dt=tr.strct_dt,
                                             when='end',
                                             name='strct_plst_thrs')
+
+
+    # keep track of the number of active synapses
+    sum_target = NeuronGroup(1, 'c : 1 (shared)')
+
+    sum_model = '''NSyn : 1 (constant)
+                   c_post = (1.0*syn_active_pre)/NSyn : 1 (summed)'''
+    sum_connection = Synapses(target=sum_target, source=SynEE,
+                              model=sum_modl, dt=10*ms)
+    sum_connection.connect()
+    sum_connection.NSyn = tr.N_e * (tr.N_e-1)
+    
+
 
 
             
@@ -264,6 +276,8 @@ def run_net(tr):
                               record=range(tr.n_synee_traces_rec),
                               when='end', dt=tr.synEE_stat_dt)
 
+    C_stat = StateMonitor(sum_target, 'c', dt=10*ms, when='end')
+
     
     GExc_spks = SpikeMonitor(GExc)    
     GInh_spks = SpikeMonitor(GInh)
@@ -291,11 +305,12 @@ def run_net(tr):
         net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
                       GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
                       GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
-                      PInp_rate, PInp_inh)
+                      PInp_rate, PInp_inh, sum_target, sum_connection)
     else:
         net = Network(GExc, GInh, SynEE, SynEI, SynIE, SynII,
                       GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
-                      GExc_spks, GInh_spks, GExc_rate, GInh_rate)
+                      GExc_spks, GInh_spks, GExc_rate, GInh_rate,
+                      sum_target, sum_connection)
 
 
     spks_recorders = [GExc_spks, GInh_spks]
@@ -447,6 +462,10 @@ def run_net(tr):
             SynEE_a_states['i'] = list(SynEE.i)
             SynEE_a_states['j'] = list(SynEE.j)
         pickle.dump(SynEE_a_states,pfile)
+
+    with open(raw_dir+'c_stat.p','wb') as pfile:
+        pickle.dump(C_stat.get_states(),pfile)   
+
 
     with open(raw_dir+'gexc_spks.p','wb') as pfile:
         pickle.dump(GExc_spks.get_states(),pfile)   
