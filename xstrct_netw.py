@@ -276,7 +276,8 @@ def run_net(tr):
                               record=range(tr.n_synee_traces_rec),
                               when='end', dt=tr.synEE_stat_dt)
 
-    C_stat = StateMonitor(sum_target, 'c', dt=10*ms, when='end')
+    C_stat = StateMonitor(sum_target, 'c', dt=10*ms, record=[0],
+                          when='end')
 
     
     GExc_spks = SpikeMonitor(GExc)    
