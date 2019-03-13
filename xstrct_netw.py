@@ -130,6 +130,12 @@ def run_net(tr):
         synEE_post_mod = '''%s 
                             %s''' %(synEE_post_mod, mod.synEE_post_STDP)
 
+    if tr.synEE_rec:
+        synEE_pre_mod  = '''%s 
+                            %s''' %(synEE_pre_mod, mod.synEE_pre_rec)
+        synEE_post_mod = '''%s 
+                            %s''' %(synEE_post_mod, mod.synEE_post_rec)
+
         
     # E<-E advanced synapse model, rest simple
     SynEE = Synapses(target=GExc, source=GExc, model=tr.synEE_mod,
