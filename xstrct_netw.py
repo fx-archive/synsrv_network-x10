@@ -375,6 +375,7 @@ def run_net(tr):
                              on_pre=synEE_pre_mod, on_post=synEE_post_mod,
                              namespace=namespace)
 
+        # connect the GExc->GExc in the same way SynEE connects    
         if tr.strct_active:
             sEE_src, sEE_tar = generate_full_connectivity(tr.N_e, same=True)
             rec_SynEE.connect(i=sEE_src, j=sEE_tar)
@@ -390,14 +391,20 @@ def run_net(tr):
         rec_SynEE.p_inactivate = SynEE.p_inactivate
         rec_SynEE.stdp_active = 1
 
-        rec_SynEE.syn_active = SynEE.syn_active
-        rec_SynEE.a = SynEE.a
+        # to inherit the .syn_active and .a values of SynEE,
+        # rec_SynEE and SynEE themselfes need to be connected, 
+        # creating a Synapses object between SynEE and rec_SynEE
+        val_inherit = Synapses(target=rec_SynEE, source=SynEE)
+
+        # rec_SynEE.syn_active = SynEE.syn_active
+        # rec_SynEE.a = SynEE.a
 
         if tr.external_mode=='poisson':
             net = Network(GExc, GInh, PInp, sPN, sPNInh, rec_SynEE, SynEI,
-                          SynIE, SynII, PInp_inh)
+                          SynIE, SynII, PInp_inh, val_inherit)
         else:
-            net = Network(GExc, GInh, rec_SynEE, SynEI, SynIE, SynII)
+            net = Network(GExc, GInh, rec_SynEE, SynEI, SynIE, SynII,
+                          val_inherit)
 
 
     
