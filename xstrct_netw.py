@@ -401,6 +401,7 @@ def run_net(tr):
         val_inherit.run_regularly('''a_post = a_pre
                                      syn_active_post = syn_active_pre''',
                                   when='start', dt=tr.T4)
+        SynEE.active = False
         # rec_SynEE.syn_active = SynEE.syn_active
         # rec_SynEE.a = SynEE.a
 
