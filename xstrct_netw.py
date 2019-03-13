@@ -402,8 +402,6 @@ def run_net(tr):
                                      syn_active_post = syn_active_pre''',
                                   when='start', dt=tr.T4)
         SynEE.active = False
-        # rec_SynEE.syn_active = SynEE.syn_active
-        # rec_SynEE.a = SynEE.a
 
         if tr.external_mode=='poisson':
             net = Network(GExc, GInh, PInp, sPN, sPNInh, rec_SynEE,
