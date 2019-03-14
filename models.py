@@ -55,7 +55,7 @@ synEE_p_activate = '''
 
 synEE_pre = '''
             ge_post += syn_active*a
-            Apre += syn_active*Aplus
+            Apre = syn_active*Aplus
             '''
 
 synEE_pre_STDP = '''
@@ -67,7 +67,7 @@ synEE_pre_rec = '''
                 '''
 
 synEE_post = '''
-             Apost+= syn_active*Aminus
+             Apost = syn_active*Aminus
              '''
 
 synEE_post_STDP = '''
