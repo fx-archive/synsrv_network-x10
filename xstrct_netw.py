@@ -227,12 +227,12 @@ def run_net(tr):
 
 
     # keep track of the number of active synapses
-    sum_target = NeuronGroup(1, 'c : 1 (shared)')
+    sum_target = NeuronGroup(1, 'c : 1 (shared)', dt=tr.csample_dt)
 
     sum_model = '''NSyn : 1 (constant)
                    c_post = (1.0*syn_active_pre)/NSyn : 1 (summed)'''
     sum_connection = Synapses(target=sum_target, source=SynEE,
-                              model=sum_model, dt=10*second)
+                              model=sum_model, dt=tr.csample_dt)
     sum_connection.connect()
     sum_connection.NSyn = tr.N_e * (tr.N_e-1)
     
@@ -276,7 +276,7 @@ def run_net(tr):
                               record=range(tr.n_synee_traces_rec),
                               when='end', dt=tr.synEE_stat_dt)
 
-    C_stat = StateMonitor(sum_target, 'c', dt=10*second, record=[0],
+    C_stat = StateMonitor(sum_target, 'c', dt=tr.csample_dt, record=[0],
                           when='end')
 
     
