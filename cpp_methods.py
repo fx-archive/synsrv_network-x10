@@ -64,7 +64,7 @@ def record_turnover(t, was_active_before, should_become_active,
     
     double record_spk(double t, int i, int j, double a, double Apre, double Apost, int syn_active, int preorpost) {
 
-       if (t > 500020) {
+       if (t > 12) {
 
          if (syn_active > 0){
             std::ofstream outfile;          
