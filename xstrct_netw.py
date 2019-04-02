@@ -284,6 +284,9 @@ def run_net(tr):
     C_stat = StateMonitor(sum_target, 'c', dt=tr.csample_dt, record=[0],
                           when='end')
 
+    insP_stat = StateMonitor(SynEE, 'insert_P', dt=tr.csample_dt, record=[0],
+                             when='end')
+
     
     GExc_spks = SpikeMonitor(GExc)    
     GInh_spks = SpikeMonitor(GInh)
@@ -312,13 +315,13 @@ def run_net(tr):
                       GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
                       GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
                       PInp_rate, PInp_inh, sum_target, sum_connection,
-                      growth_updater, C_stat)
+                      growth_updater, C_stat, insP_stat)
     else:
         net = Network(GExc, GInh, SynEE, SynEI, SynIE, SynII,
                       GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
                       GExc_spks, GInh_spks, GExc_rate, GInh_rate,
                       sum_target, sum_connection, growth_updater,
-                      C_stat)
+                      C_stat, insP_stat)
 
 
     spks_recorders = [GExc_spks, GInh_spks]
@@ -473,6 +476,9 @@ def run_net(tr):
 
     with open(raw_dir+'c_stat.p','wb') as pfile:
         pickle.dump(C_stat.get_states(),pfile)   
+
+    with open(raw_dir+'insP_stat.p','wb') as pfile:
+        pickle.dump(insP_stat.get_states(),pfile)   
 
 
     with open(raw_dir+'gexc_spks.p','wb') as pfile:
