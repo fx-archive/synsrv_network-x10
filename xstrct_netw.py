@@ -232,7 +232,8 @@ def run_net(tr):
     sum_model = '''NSyn : 1 (constant)
                    c_post = (1.0*syn_active_pre)/NSyn : 1 (summed)'''
     sum_connection = Synapses(target=sum_target, source=SynEE,
-                              model=sum_model, dt=tr.csample_dt)
+                              model=sum_model, dt=tr.csample_dt,
+                              name='get_active_synapse_count')
     sum_connection.connect()
     sum_connection.NSyn = tr.N_e * (tr.N_e-1)
     
@@ -240,7 +241,8 @@ def run_net(tr):
     # homeostatically adjust growth rate
     growth_updater = Synapses(sum_target, SynEE)
     growth_updater.run_regularly('insert_P_post *= 0.1/c_pre',
-                                 when='after_groups', dt=tr.csample_dt)
+                                 when='after_groups', dt=tr.csample_dt,
+                                 name='update_insP')
     growth_updater.connect(j='0')
 
 
