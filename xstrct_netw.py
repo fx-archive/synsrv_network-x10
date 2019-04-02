@@ -237,6 +237,11 @@ def run_net(tr):
     sum_connection.NSyn = tr.N_e * (tr.N_e-1)
     
 
+    # homeostatically adjust growth rate
+    growth_updater = Synapses(sum_target, SynEE)
+    growth_updater.run_regularly('insert_P_post *= 0.1/c_pre',
+                                 when='after_groups', dt=tr.csample_dt)
+    growth_updater.connect(j='0')
 
 
             
