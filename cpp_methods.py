@@ -28,7 +28,7 @@ from brian2 import implementation, check_units
       return a_out;
     } ''')
 @check_units(a=1, vATotalMax=1, Asum_post=1, eta_scaling=1, t=second, syn_active=1, result=1)
-def syn_scale(a, vATotalMax, Asum_post, eta_scaling, t):
+def syn_scale(a, vATotalMax, Asum_post, eta_scaling, t, syn_active):
     return -1.
 
 
