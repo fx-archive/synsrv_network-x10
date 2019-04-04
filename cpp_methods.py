@@ -9,9 +9,10 @@ from brian2 import implementation, check_units
 #
 @implementation('cpp', code=r'''
    
-    double syn_scale(double a, double vATotalMax, double Asum_post, double veta_scaling) {
+    double syn_scale(double a, double vATotalMax, double Asum_post, double veta_scaling, double t) {
       
       double a_out;
+      static std::ofstream outfile("scaling_deltas", std::ios_base::app);
 
       if (Asum_post==0.){
           a_out = 0.;
@@ -20,10 +21,14 @@ from brian2 import implementation, check_units
           a_out = a*(1 + veta_scaling*(vATotalMax/Asum_post-1));
       }
 
+      if (t > 12) {
+          outfile << t << "," << a << "," << a_out << "\n";
+      }
+
       return a_out;
     } ''')
-@check_units(a=1, vATotalMax=1, Asum_post=1, eta_scaling=1, result=1)
-def syn_scale(a, vATotalMax, Asum_post, eta_scaling):
+@check_units(a=1, vATotalMax=1, Asum_post=1, eta_scaling=1, result=1, t=second)
+def syn_scale(a, vATotalMax, Asum_post, eta_scaling, t):
     return -1.
 
 
