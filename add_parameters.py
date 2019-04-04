@@ -146,3 +146,7 @@ def add_params(tr):
 
     tr.f_add_parameter('netw.csample_dt', prm.csample_dt)
     
+
+
+    # post processing
+    tr.f_add_parameter('netw.pp_tcut', prm.pp_tcut)

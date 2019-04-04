@@ -115,3 +115,6 @@ synee_a_nrecpoints = 10
 
 crs_crrs_rec = 1
 csample_dt = 10*second
+
+# post processing
+pp_tcut = 100*second
