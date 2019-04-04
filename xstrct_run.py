@@ -59,8 +59,8 @@ tr.f_explore(explore_dict)
 
 def run_sim(tr):
     run_net(tr)
-
-
+    post_process(tr)
+    
 env.run(run_sim)
 
 
