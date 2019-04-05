@@ -20,7 +20,7 @@ from brian2 import implementation, check_units
           a_out = a*(1 + veta_scaling*(vATotalMax/Asum_post-1));
       }
 
-      if (t > tRec_start && t < tRec_start+0.05 && syn_active==1) {
+      if (t > tRec_start && t < tRec_start+25 && syn_active==1) {
           std::ofstream outfile;     
           outfile.open("scaling_deltas", std::ios_base::app);
           outfile << t << "," << a << "," << a_out << "\n";
