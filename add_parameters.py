@@ -125,6 +125,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.rec.GExc_stat_dt', prm.GExc_stat_dt)
     tr.f_add_parameter('netw.rec.GInh_stat_dt', prm.GInh_stat_dt)
 
+    tr.f_add_parameter('netw.rec.syn_scl_rec', prm.syn_scl_rec)
+
     
 
     tr.f_add_parameter('netw.rec.synee_atraces_rec',

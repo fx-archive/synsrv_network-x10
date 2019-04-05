@@ -45,6 +45,7 @@ synEE_mod = '''
             insert_P : 1 (shared) 
             p_inactivate : 1 (shared)
             stdp_active : integer (shared)
+            scl_rec_start : second (shared)
             '''
 
 synEE_p_activate = '''
@@ -82,7 +83,7 @@ synEE_post_rec = '''
 #                 a = clip(a*(ATotalMax/Asum_post),0,amax)
 #                 '''
 synEE_scaling = '''
-                a = syn_active*syn_scale(a, ATotalMax, Asum_post, eta_scaling, t, syn_active)
+                a = syn_active*syn_scale(a, ATotalMax, Asum_post, eta_scaling, t, syn_active, scl_rec_start)
                 '''
 
 

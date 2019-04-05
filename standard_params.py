@@ -108,6 +108,7 @@ synee_Apretraces_rec = 1
 synee_Aposttraces_rec = 1
 n_synee_traces_rec = 20
 synEE_stat_dt = 0.1*ms
+syn_scl_rec = 0
 
 turnover_rec = 0
 spks_rec = 0
