@@ -68,7 +68,7 @@ def record_turnover(t, was_active_before, should_become_active,
 @implementation('cpp', code=r'''
     #include <fstream>
     
-    double record_spk(double t, int i, int j, double a, double Apre, double Apost, int syn_active, int preorpost, tRec_start, tRec_max) {
+    double record_spk(double t, int i, int j, double a, double Apre, double Apost, int syn_active, int preorpost, double tRec_start, double tRec_max) {
 
        if (t > tRec_start && t < tRec_max) {
 
