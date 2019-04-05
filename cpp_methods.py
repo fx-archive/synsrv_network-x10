@@ -71,10 +71,9 @@ def record_turnover(t, was_active_before, should_become_active,
 
        if (t > 12) {
 
+         static std::ofstream spk_outfile("scaling_deltas", std::ios_base::app); 
          if (syn_active > 0){
-            std::ofstream outfile;          
-            outfile.open("spk_register", std::ios_base::app);
-            outfile << t << "," << i << "," << j << "," << a << "," << Apre << "," << Apost << "," << preorpost << "\n";
+            spk_outfile << t << "," << i << "," << j << "," << a << "," << Apre << "," << Apost << "," << preorpost << "\n";
          }
    
       }
