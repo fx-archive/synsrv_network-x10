@@ -67,11 +67,11 @@ def record_turnover(t, was_active_before, should_become_active,
     
     double record_spk(double t, int i, int j, double a, double Apre, double Apost, int syn_active, int preorpost) {
 
+       static std::ofstream outfile("spk_register", std::ios_base::app);
+
        if (t > 12) {
 
          if (syn_active > 0){
-            std::ofstream outfile;          
-            outfile.open("spk_register", std::ios_base::app);
             outfile << t << "," << i << "," << j << "," << a << "," << Apre << "," << Apost << "," << preorpost << "\n";
          }
    
