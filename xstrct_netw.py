@@ -194,7 +194,8 @@ def run_net(tr):
         SynEE.summed_updaters['Asum_post']._clock = Clock(
             dt=tr.dt_synEE_scaling)
         synscaling = SynEE.run_regularly(tr.synEE_scaling,
-                                         dt=tr.dt_synEE_scaling, when='end')
+                                         dt=tr.dt_synEE_scaling, when='end',
+                                         name='syn_scaling')
 
     # # intrinsic plasticity
     # if tr.netw.config.it_active:

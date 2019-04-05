@@ -21,7 +21,7 @@ from brian2 import implementation, check_units
           a_out = a*(1 + veta_scaling*(vATotalMax/Asum_post-1));
       }
 
-      if (t > 12 && syn_active==1) {
+      if (t > 102 && syn_active==1) {
           outfile << t << "," << a << "," << a_out << "\n";
       }
 
