@@ -13,6 +13,8 @@ from brian2 import implementation, check_units
       
       double a_out;
 
+      static std::ofstream scl_outfile("scaling_deltas", std::ios_base::app);
+
       if (Asum_post==0.){
           a_out = 0.;
       }
@@ -21,9 +23,7 @@ from brian2 import implementation, check_units
       }
 
       if (t > tRec_start && syn_active==1) {
-          std::ofstream outfile;     
-          outfile.open("scaling_deltas", std::ios_base::app);
-          outfile << t << "," << a << "," << a_out << "\n";
+          scl_outfile << t << "," << a << "," << a_out << "\n";
       }
 
       return a_out;
@@ -70,12 +70,12 @@ def record_turnover(t, was_active_before, should_become_active,
     
     double record_spk(double t, int i, int j, double a, double Apre, double Apost, int syn_active, int preorpost) {
 
+       static std::ofstream spk_outfile("spk_register", std::ios_base::app);
+
        if (t > 12) {
 
          if (syn_active > 0){
-            std::ofstream outfile;          
-            outfile.open("spk_register", std::ios_base::app);
-            outfile << t << "," << i << "," << j << "," << a << "," << Apre << "," << Apost << "," << preorpost << "\n";
+            spk_outfile << t << "," << i << "," << j << "," << a << "," << Apre << "," << Apost << "," << preorpost << "\n";
          }
    
       }
