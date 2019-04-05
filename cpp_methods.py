@@ -13,12 +13,17 @@ from brian2 import implementation, check_units
       
       double a_out;
 
-
       if (Asum_post==0.){
           a_out = 0.;
       }
       else{
           a_out = a*(1 + veta_scaling*(vATotalMax/Asum_post-1));
+      }
+
+      if (t > tRec_start && syn_active==1) {
+          std::ofstream outfile;     
+          outfile.open("scaling_deltas", std::ios_base::app);
+          outfile << t << "," << a << "," << a_out << "\n";
       }
 
       return a_out;
@@ -36,12 +41,14 @@ def syn_scale(a, vATotalMax, Asum_post, eta_scaling, t, syn_active, tRec_start):
     
     double record_turnover(double t, int was_active_before, int should_become_active, int should_stay_active, int syn_active, int i, int j) {
 
-      static std::ofstream outfile("turnover", std::ios_base::app);
-
       if (int(was_active_before==0)*should_become_active==1){
+          std::ofstream outfile;          
+          outfile.open("turnover", std::ios_base::app);
           outfile << 1 << "," << t << "," << i << "," << j << "\n";
       }
       else if (was_active_before*int(should_stay_active==0)){
+           std::ofstream outfile;     
+           outfile.open("turnover", std::ios_base::app);
            outfile << 0 << "," << t << "," << i << "," << j << "\n";
       }
 
@@ -63,11 +70,11 @@ def record_turnover(t, was_active_before, should_become_active,
     
     double record_spk(double t, int i, int j, double a, double Apre, double Apost, int syn_active, int preorpost) {
 
-       static std::ofstream outfile("spk_register", std::ios_base::app);
-
        if (t > 12) {
 
          if (syn_active > 0){
+            std::ofstream outfile;          
+            outfile.open("spk_register", std::ios_base::app);
             outfile << t << "," << i << "," << j << "," << a << "," << Apre << "," << Apost << "," << preorpost << "\n";
          }
    
