@@ -193,9 +193,9 @@ def run_net(tr):
     if tr.netw.config.scl_active:
 
         if tr.syn_scl_rec:
-            SynEE.rec_start = tr.T1+tr.T2+tr.T3
+            SynEE.scl_rec_start = tr.T1+tr.T2+tr.T3
         else:
-            SynEE.rec_start = tr.T1+tr.T2+tr.T3+tr.T4+(10*second)
+            SynEE.scl_start_start = tr.T1+tr.T2+tr.T3+tr.T4+(10*second)
         
         SynEE.summed_updaters['Asum_post']._clock = Clock(
             dt=tr.dt_synEE_scaling)
