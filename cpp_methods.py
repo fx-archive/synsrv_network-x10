@@ -12,6 +12,7 @@ from brian2 import implementation, check_units
     double syn_scale(double a, double vATotalMax, double Asum_post, double veta_scaling, double t, int syn_active, double tRec_start) {
       
       double a_out;
+      static std::ofstream scl_outfile("scaling_deltas", std::ios_base::app); 
 
       if (Asum_post==0.){
           a_out = 0.;
@@ -21,9 +22,7 @@ from brian2 import implementation, check_units
       }
 
       if (t > tRec_start && syn_active==1) {
-          std::ofstream outfile;     
-          outfile.open("scaling_deltas", std::ios_base::app);
-          outfile << t << "," << a << "," << a_out << "\n";
+          scl_outfile << t << "," << a << "," << a_out << "\n";
       }
 
       return a_out;

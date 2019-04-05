@@ -526,13 +526,24 @@ def run_net(tr):
 
     with open(raw_dir+'turnover.p','wb') as pfile:
         pickle.dump(turnover_data,pfile)   
-    
+
+        
     Path(fpath+'spk_register').touch()
     spk_register_data = np.genfromtxt(fpath+'spk_register',delimiter=',')
     os.remove(fpath+'spk_register')
     
     with open(raw_dir+'spk_register.p','wb') as pfile:
         pickle.dump(spk_register_data,pfile)
+
+
+    Path(fpath+'scaling_deltas').touch()
+    scaling_deltas_data = np.genfromtxt(fpath+'scaling_deltas',delimiter=',')
+    os.remove(fpath+'scaling_deltas')
+    
+    with open(raw_dir+'scaling_deltas.p','wb') as pfile:
+        pickle.dump(scaling_deltas_data,pfile)
+
+        
      
     with open(raw_dir+'profiling_summary.txt', 'w+') as tfile:
         tfile.write(str(profiling_summary(net)))
