@@ -21,7 +21,7 @@ from brian2 import implementation, check_units
           a_out = a*(1 + veta_scaling*(vATotalMax/Asum_post-1));
       }
 
-      if (t > 102 && syn_active==1) {
+      if (t > 1002 && syn_active==1) {
           outfile << t << "," << a << "," << a_out << "\n";
       }
 
@@ -40,14 +40,12 @@ def syn_scale(a, vATotalMax, Asum_post, eta_scaling, t, syn_active):
     
     double record_turnover(double t, int was_active_before, int should_become_active, int should_stay_active, int syn_active, int i, int j) {
 
+      static std::ofstream outfile("turnover", std::ios_base::app);
+
       if (int(was_active_before==0)*should_become_active==1){
-          std::ofstream outfile;          
-          outfile.open("turnover", std::ios_base::app);
           outfile << 1 << "," << t << "," << i << "," << j << "\n";
       }
       else if (was_active_before*int(should_stay_active==0)){
-           std::ofstream outfile;     
-           outfile.open("turnover", std::ios_base::app);
            outfile << 0 << "," << t << "," << i << "," << j << "\n";
       }
 
