@@ -12,17 +12,13 @@ from brian2 import implementation, check_units
     double syn_scale(double a, double vATotalMax, double Asum_post, double veta_scaling, double t, int syn_active, double tRec_start) {
       
       double a_out;
-      static std::ofstream outfile("scaling_deltas", std::ios_base::app);
+
 
       if (Asum_post==0.){
           a_out = 0.;
       }
       else{
           a_out = a*(1 + veta_scaling*(vATotalMax/Asum_post-1));
-      }
-
-      if (t > tRec_start && syn_active==1) {
-          outfile << t << "," << a << "," << a_out << "\n";
       }
 
       return a_out;
