@@ -12,7 +12,6 @@ from brian2 import implementation, check_units
     double syn_scale(double a, double vATotalMax, double Asum_post, double veta_scaling, double t, int syn_active, double tRec_start) {
       
       double a_out;
-      static std::ofstream scl_outfile("scaling_deltas", std::ios_base::app); 
 
       if (Asum_post==0.){
           a_out = 0.;
@@ -22,7 +21,9 @@ from brian2 import implementation, check_units
       }
 
       if (t > tRec_start && syn_active==1) {
-          scl_outfile << t << "," << a << "," << a_out << "\n";
+          std::ofstream outfile;     
+          outfile.open("scaling_deltas", std::ios_base::app);
+          outfile << t << "," << a << "," << a_out << "\n";
       }
 
       return a_out;
@@ -71,9 +72,10 @@ def record_turnover(t, was_active_before, should_become_active,
 
        if (t > 12) {
 
-         static std::ofstream spk_outfile("scaling_deltas", std::ios_base::app); 
          if (syn_active > 0){
-            spk_outfile << t << "," << i << "," << j << "," << a << "," << Apre << "," << Apost << "," << preorpost << "\n";
+            std::ofstream outfile;          
+            outfile.open("spk_register", std::ios_base::app);
+            outfile << t << "," << i << "," << j << "," << a << "," << Apre << "," << Apost << "," << preorpost << "\n";
          }
    
       }
