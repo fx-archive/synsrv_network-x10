@@ -36,7 +36,7 @@ def run_net(tr):
 
     print("Started process with id ", str(tr.v_idx))
 
-    T = tr.T1 + tr.T2 + tr.T3 + tr.T4
+    T = tr.T1 + tr.T2 + tr.T3 + tr.T4 + tr.T5
 
     namespace = tr.netw.f_to_dict(short_names=True, fast_access=True)
     namespace['idx'] = tr.v_idx
@@ -188,14 +188,21 @@ def run_net(tr):
     SynEE.syn_active = initial_active
     SynEE.a = initial_a
 
+
+    # recording of stdp in T4
+    SynEE.stdp_rec_start = tr.T1+tr.T2+tr.T3+tr.T4
+    SynEE.stdp_rec_max = tr.T1+tr.T2+tr.T3+tr.T4 + tr.stdp_rec_T
+
        
     # synaptic scaling
     if tr.netw.config.scl_active:
 
         if tr.syn_scl_rec:
-            SynEE.scl_rec_start = tr.T1+tr.T2+tr.T3
+            SynEE.scl_rec_start = tr.T1+tr.T2+tr.T3+tr.T4
+            SynEE.scl_rec_max = tr.T1+tr.T2+tr.T3+tr.T4 + tr.scl_rec_T
         else:
-            SynEE.scl_start_start = tr.T1+tr.T2+tr.T3+tr.T4+(10*second)
+            SynEE.scl_rec_start = T+10*second
+            SynEE.scl_rec_max = T*second
         
         SynEE.summed_updaters['Asum_post']._clock = Clock(
             dt=tr.dt_synEE_scaling)
@@ -333,132 +340,98 @@ def run_net(tr):
                       C_stat, insP_stat)
 
 
-    spks_recorders = [GExc_spks, GInh_spks]
-    if tr.external_mode=='poisson':
-        spks_recorders.append(PInp_spks)
-        
-    stat_recorders = [SynEE_stat, GExc_stat, GInh_stat]
-    
-    rate_recorders = [GExc_rate, GInh_rate]
-    if tr.external_mode=='poisson':
-        rate_recorders.append(PInp_rate)
+    def set_active(*argv):
+        for net_object in argv:
+            net_object.active=True
 
-    for rcc in spks_recorders:
-        rcc.active=False
-    for rcc in stat_recorders:
-        rcc.active=False
-    for rcc in rate_recorders:
-        rcc.active=False
-    
-    for rcc in stat_recorders:
-        rcc.active=True
-    if tr.rates_rec:
-        for rcc in rate_recorders:
-            rcc.active=True
-    if tr.spks_rec:
-        for spr in spks_recorders:
-            spr.active=True
+    def set_inactive(*argv):
+        for net_object in argv:
+            net_object.active=False
 
-    device.insert_code('main', '''
-    cout << "Testing direct insertion of code." << endl;
-    ''')
+
+
+    ### Simulation periods
+            
+
+    # --------- T1 ---------
+    # initial recording period,
+    # all recorders active
+
+    set_active(GExc_spks, GInh_spks, 
+               SynEE_stat, GExc_stat, GInh_stat,
+               GExc_rate, GInh_rate)
+
+    if tr.external_mode=='poisson':
+        set_active(PInp_spks, PInp_rate)
        
     net.run(tr.sim.T1, report='text',
             report_period=300*second, profile=True)
 
-    for rcc in spks_recorders:
-        rcc.active=False
-    for rcc in stat_recorders:
-        rcc.active=False
-    for rcc in rate_recorders:
-        rcc.active=False
-
-    net.run(tr.sim.T2, report='text', report_period=300*second,
-            profile=True)
-        
-
-    for rcc in stat_recorders:
-        rcc.active=True
-    if tr.rates_rec:
-        for rcc in rate_recorders:
-            rcc.active=True
-    if tr.spks_rec:
-        for spr in spks_recorders:
-            spr.active=True
-
-    net.run(tr.sim.T3, report='text', report_period=300*second,
-            profile=True)
-
-
-    # freeze network
-    # synscaling.active=False
-    # strctplst.active=False
-    # SynEE.stdp_active=0
+    # --------- T2 ---------
+    # main simulation period
+    # only active recordings are:
+    #   1) turnover 2) C_stat 3) SynEE_a
     
-    for rcc in stat_recorders:
-        rcc.active=False
-    for rcc in rate_recorders:
-        rcc.active=False
-    for spr in spks_recorders:
-        spr.active=True
+    set_inactive(GExc_spks, GInh_spks, 
+                 SynEE_stat, GExc_stat, GInh_stat,
+                 GExc_rate, GInh_rate)
+    
     if tr.external_mode=='poisson':
-        PInp_rate.active=False
+        set_inactive(PInp_spks, PInp_rate)
 
+    net.run(tr.sim.T2, report='text',
+            report_period=300*second, profile=True)
 
-    if False:
+    # --------- T3 ---------
+    # second recording period,
+    # all recorders active
 
-        synEE_pre_mod  = '''%s 
-                            %s''' %(synEE_pre_mod, mod.synEE_pre_rec)
-        synEE_post_mod = '''%s 
-                            %s''' %(synEE_post_mod, mod.synEE_post_rec)
-
-        rec_SynEE = Synapses(target=GExc, source=GExc, model=tr.synEE_mod,
-                             on_pre=synEE_pre_mod, on_post=synEE_post_mod,
-                             namespace=namespace)
-
-        # connect the GExc->GExc in the same way SynEE connects    
-        if tr.strct_active:
-            sEE_src, sEE_tar = generate_full_connectivity(tr.N_e, same=True)
-            rec_SynEE.connect(i=sEE_src, j=sEE_tar)
-            rec_SynEE.syn_active = 0
-
-        else:
-            srcs_full, tars_full = generate_full_connectivity(tr.N_e, same=True)
-            rec_SynEE.connect(i=srcs_full, j=tars_full)
-            rec_SynEE.syn_active = 0
-
-        rec_SynEE.stdp_active = 1
-
-        # to inherit the .syn_active and .a values of SynEE,
-        # rec_SynEE and SynEE themselfes need to be connected, 
-        # creating a Synapses object between SynEE and rec_SynEE
-        val_inherit = Synapses(target=rec_SynEE, source=SynEE)
-        val_inherit.connect(condition='i==j')
-
-        val_inherit.run_regularly('''a_post = a_pre
-                                     syn_active_post = syn_active_pre
-                                     insert_P_post = insert_P_pre
-                                     p_inactivate_post = p_inactivate_pre''',
-                                  when='start', dt=tr.T4)
-        SynEE.active = False
-
-        if tr.external_mode=='poisson':
-            net = Network(GExc, GInh, PInp, sPN, sPNInh, rec_SynEE,
-                          SynEE, SynEI, SynIE, SynII, PInp_inh,
-                          val_inherit)
-        else:
-            net = Network(GExc, GInh, rec_SynEE, SynEE, SynEI, SynIE,
-                          SynII, val_inherit)
-
-
+    set_active(GExc_spks, GInh_spks, 
+               SynEE_stat, GExc_stat, GInh_stat,
+               GExc_rate, GInh_rate)
     
-    net.run(tr.sim.T4, report='text', report_period=300*second)
+    if tr.external_mode=='poisson':
+        set_active(PInp_spks, PInp_rate)
+    
+    net.run(tr.sim.T3, report='text',
+            report_period=300*second, profile=True)
+
+    # --------- T4 ---------
+    # record STDP and scaling weight changes to file
+    # through the cpp models
+    
+    set_inactive(GExc_spks, GInh_spks, 
+                 SynEE_stat, GExc_stat, GInh_stat,
+                 GExc_rate, GInh_rate)
+
+    if tr.external_mode=='poisson':
+        set_inactive(PInp_spks, PInp_rate)
+    
+    net.run(tr.sim.T4, report='text',
+            report_period=300*second, profile=True)
+
+
+    # --------- T5 ---------
+    # freeze network and record Exc spikes
+    # for cross correlations
+
+    synscaling.active=False
+    strctplst.active=False
+    SynEE.stdp_active=0
+
+    set_active(GExc_spks)
+
+
+    net.run(tr.sim.T5, report='text',
+            report_period=300*second, profile=True)
         
-    SynEE_a.record_single_timestep()
- 
+    SynEE_a.record_single_timestep() 
 
     device.build(directory='builds/%.4d'%(tr.v_idx), clean=True,
                  compile=True, run=True, debug=False)
+
+
+    # -----------------------------------------
     
     # save monitors as raws in build directory
     raw_dir = 'builds/%.4d/raw/'%(tr.v_idx)
@@ -563,9 +536,9 @@ def run_net(tr):
             wlen = int(wsize/binsize)
 
             ts, idxs = GExc_spks['t'], GExc_spks['i']
-            idxs = idxs[ts>tr.T1+tr.T2+tr.T3]
-            ts = ts[ts>tr.T1+tr.T2+tr.T3]
-            ts = ts - (tr.T1+tr.T2+tr.T3)
+            idxs = idxs[ts>tr.T1+tr.T2+tr.T3+tr.T4]
+            ts = ts[ts>tr.T1+tr.T2+tr.T3+tr.T4]
+            ts = ts - (tr.T1+tr.T2+tr.T3+tr.T4)
 
             sts = [neo.SpikeTrain(ts[idxs==i]/second*pq.s,
                                   t_stop=tr.T4/second*pq.s) for i in

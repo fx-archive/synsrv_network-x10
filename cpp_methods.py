@@ -9,7 +9,7 @@ from brian2 import implementation, check_units
 #
 @implementation('cpp', code=r'''
    
-    double syn_scale(double a, double vATotalMax, double Asum_post, double veta_scaling, double t, int syn_active, double tRec_start) {
+    double syn_scale(double a, double vATotalMax, double Asum_post, double veta_scaling, double t, int syn_active, double tRec_start, double tRec_max) {
       
       double a_out;
 
@@ -20,7 +20,7 @@ from brian2 import implementation, check_units
           a_out = a*(1 + veta_scaling*(vATotalMax/Asum_post-1));
       }
 
-      if (t > tRec_start && t < tRec_start+25 && syn_active==1) {
+      if (t > tRec_start && t < tRec_max && syn_active==1) {
           std::ofstream outfile;     
           outfile.open("scaling_deltas", std::ios_base::app);
           outfile << t << "," << a << "," << a_out << "\n";
@@ -28,8 +28,8 @@ from brian2 import implementation, check_units
 
       return a_out;
     } ''')
-@check_units(a=1, vATotalMax=1, Asum_post=1, eta_scaling=1, t=second, syn_active=1, tRec_start=second, result=1)
-def syn_scale(a, vATotalMax, Asum_post, eta_scaling, t, syn_active, tRec_start):
+@check_units(a=1, vATotalMax=1, Asum_post=1, eta_scaling=1, t=second, syn_active=1, tRec_start=second, tRec_max=second, result=1)
+def syn_scale(a, vATotalMax, Asum_post, eta_scaling, t, syn_active, tRec_start, tRec_max):
     return -1.
 
 
@@ -68,9 +68,9 @@ def record_turnover(t, was_active_before, should_become_active,
 @implementation('cpp', code=r'''
     #include <fstream>
     
-    double record_spk(double t, int i, int j, double a, double Apre, double Apost, int syn_active, int preorpost) {
+    double record_spk(double t, int i, int j, double a, double Apre, double Apost, int syn_active, int preorpost, tRec_start, tRec_max) {
 
-       if (t > 12) {
+       if (t > tRec_start && t < tRec_max) {
 
          if (syn_active > 0){
             std::ofstream outfile;          
@@ -83,6 +83,6 @@ def record_turnover(t, was_active_before, should_become_active,
     } ''')
 
 @check_units(t=second, i=1, j=1, a=1, Apre=1, Apost=1, syn_active=1,
-             preorpost=1, result=1)
-def record_spk(t, i, j, a, Apre, Apost, syn_active, preorpost):
+             preorpost=1, tRec_start=second, tRec_max=second, result=1)
+def record_spk(t, i, j, a, Apre, Apost, syn_active, preorpost, tRec_start, tRec_max):
     return 0.0

@@ -85,6 +85,7 @@ T1 = 5*second
 T2 = 5*second
 T3 = 5*second
 T4 = 5*second
+T5 = 5*second
 netw_dt = 0.1*ms
 n_threads = 1
 

@@ -107,7 +107,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.sim.T1',  prm.T1)
     tr.f_add_parameter('netw.sim.T2',  prm.T2)
     tr.f_add_parameter('netw.sim.T3',  prm.T3)
-    tr.f_add_parameter('netw.sim.T4',  prm.T3)
+    tr.f_add_parameter('netw.sim.T4',  prm.T4)
+    tr.f_add_parameter('netw.sim.T5',  prm.T5)
     tr.f_add_parameter('netw.sim.dt', prm.netw_dt)
     tr.f_add_parameter('netw.sim.n_threads', prm.n_threads)
 
@@ -126,8 +127,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.rec.GInh_stat_dt', prm.GInh_stat_dt)
 
     tr.f_add_parameter('netw.rec.syn_scl_rec', prm.syn_scl_rec)
-
-    
+    tr.f_add_parameter('netw.rec.stdp_rec_T', prm.stdp_rec_T)
+    tr.f_add_parameter('netw.rec.scl_rec_T', prm.scl_rec_T)    
 
     tr.f_add_parameter('netw.rec.synee_atraces_rec',
                        prm.synee_atraces_rec)
@@ -143,12 +144,9 @@ def add_params(tr):
     tr.f_add_parameter('netw.rec.synEE_stat_dt', prm.synEE_stat_dt)
     tr.f_add_parameter('netw.rec.spks_rec', prm.spks_rec)
     tr.f_add_parameter('netw.synee_a_nrecpoints', prm.synee_a_nrecpoints)
-
     tr.f_add_parameter('netw.crs_crrs_rec', prm.crs_crrs_rec)
-
     tr.f_add_parameter('netw.csample_dt', prm.csample_dt)
     
-
 
     # post processing
     tr.f_add_parameter('netw.pp_tcut', prm.pp_tcut)

@@ -45,7 +45,12 @@ synEE_mod = '''
             insert_P : 1 (shared) 
             p_inactivate : 1 (shared)
             stdp_active : integer (shared)
+
             scl_rec_start : second (shared)
+            scl_rec_max   : second (shared)
+
+            stdp_rec_start : second (shared)
+            stdp_rec_max   : second (shared)
             '''
 
 synEE_p_activate = '''
@@ -64,7 +69,7 @@ synEE_pre_STDP = '''
                  '''
 
 synEE_pre_rec = '''
-                dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 0)
+                dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 0, stdp_rec_start, stdp_rec_max)
                 '''
 
 synEE_post = '''
@@ -76,14 +81,14 @@ synEE_post_STDP = '''
                   '''
 
 synEE_post_rec = '''
-                 dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 1)
+                 dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 1, stdp_rec_start, stdp_rec_max)
                  '''
 
 # synEE_scaling = '''
 #                 a = clip(a*(ATotalMax/Asum_post),0,amax)
 #                 '''
 synEE_scaling = '''
-                a = syn_active*syn_scale(a, ATotalMax, Asum_post, eta_scaling, t, syn_active, scl_rec_start)
+                a = syn_active*syn_scale(a, ATotalMax, Asum_post, eta_scaling, t, syn_active, scl_rec_start, scl_rec_max)
                 '''
 
 
