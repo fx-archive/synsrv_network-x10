@@ -541,7 +541,7 @@ def run_net(tr):
             ts = ts - (tr.T1+tr.T2+tr.T3+tr.T4)
 
             sts = [neo.SpikeTrain(ts[idxs==i]/second*pq.s,
-                                  t_stop=tr.T4/second*pq.s) for i in
+                                  t_stop=tr.T5/second*pq.s) for i in
                    range(tr.N_e)]
 
             crs_crrs, syn_a = [], []
