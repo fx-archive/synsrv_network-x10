@@ -202,7 +202,7 @@ def run_net(tr):
             SynEE.scl_rec_max = tr.T1+tr.T2+tr.T3 + tr.scl_rec_T
         else:
             SynEE.scl_rec_start = T+10*second
-            SynEE.scl_rec_max = T*second
+            SynEE.scl_rec_max = T
         
         SynEE.summed_updaters['Asum_post']._clock = Clock(
             dt=tr.dt_synEE_scaling)
