@@ -590,8 +590,12 @@ def run_net(tr):
     from analysis.synw_log_fb import synw_log_figure
     synw_log_figure('builds/%.4d'%(tr.v_idx), namespace)
 
-    from analysis.turnover_fb import turnover_figure
-    turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=False)
+    from analysis.srvprb_all import srvprb_all_figure
+    srvprb_all_figure('builds/%.4d'%(tr.v_idx))
+
+
+    # from analysis.turnover_fb import turnover_figure
+    # turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=False)
 
     # from analysis.turnover_fb import turnover_figure
     # turnover_figure('builds/%.4d'%(tr.v_idx), namespace, fit=True)
