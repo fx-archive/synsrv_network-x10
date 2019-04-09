@@ -100,4 +100,5 @@ def post_process(tr):
 
 
 
-
+    from analysis.srvprb_all import srvprb_all_figure
+    srvprb_all_figure('builds/%.4d'%(tr.v_idx))
