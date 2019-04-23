@@ -339,7 +339,7 @@ def run_net(tr):
                       PInp_rate, PInp_inh, sum_target, sum_connection,
                       growth_updater, C_stat, insP_stat)
     else:
-        net = Network(**netw_objects)
+        net = Network(*netw_objects)
 
         
 
