@@ -43,7 +43,9 @@ def run_net(tr):
 
     defaultclock.dt = tr.netw.sim.dt
 
-    # tracks all objects in network dependent on configuration
+    # collect all network components dependent on configuration
+    # (e.g. poisson vs. memnoise) and add them to the Brian 2
+    # network object later
     netw_objects = []
 
     if tr.external_mode=='memnoise':
@@ -343,7 +345,7 @@ def run_net(tr):
                          GExc_spks, GInh_spks,
                          GExc_rate, GInh_rate,   
                          C_stat, insP_stat])
-
+    
 
     net = Network(*netw_objects)
 
