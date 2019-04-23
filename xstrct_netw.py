@@ -43,6 +43,9 @@ def run_net(tr):
 
     defaultclock.dt = tr.netw.sim.dt
 
+    # tracks all objects in network dependent on configuration
+    netw_objects = []
+
     if tr.external_mode=='memnoise':
         neuron_model = tr.condlif_memnoise
     elif tr.external_mode=='poisson':
@@ -67,6 +70,8 @@ def run_net(tr):
                                          size=tr.N_e)*mV, \
                        np.random.uniform(tr.Vr_i/mV, tr.Vt_i/mV,
                                          size=tr.N_i)*mV
+
+    netw_objects.extend([GExc,GInh])
 
 
     synEE_pre_mod = mod.synEE_pre
@@ -120,6 +125,8 @@ def run_net(tr):
 
 
         sPNInh.connect(i=sPNInh_src, j=sPNInh_tar)
+
+        netw_objects.extend([PInp, sPN, PInp_inh, sPNInh])
     
     
 
@@ -193,6 +200,7 @@ def run_net(tr):
     SynEE.stdp_rec_start = tr.T1+tr.T2+tr.T3
     SynEE.stdp_rec_max = tr.T1+tr.T2+tr.T3 + tr.stdp_rec_T
 
+  
        
     # synaptic scaling
     if tr.netw.config.scl_active:
@@ -240,6 +248,9 @@ def run_net(tr):
                                             name='strct_plst_thrs')
 
 
+    netw_objects.extend([SynEE, SynEI, SynIE, SynII])
+
+
     # keep track of the number of active synapses
     sum_target = NeuronGroup(1, 'c : 1 (shared)', dt=tr.csample_dt)
 
@@ -258,6 +269,8 @@ def run_net(tr):
                                  when='after_groups', dt=tr.csample_dt,
                                  name='update_insP')
     growth_updater.connect(j='0')
+
+    netw_objects.extend([sum_target, sum_connection, growth_updater])
 
 
             
@@ -306,15 +319,14 @@ def run_net(tr):
     
     GExc_spks = SpikeMonitor(GExc)    
     GInh_spks = SpikeMonitor(GInh)
-    
-    if tr.external_mode=='poisson':
-        PInp_spks = SpikeMonitor(PInp)
 
     GExc_rate = PopulationRateMonitor(GExc)
     GInh_rate = PopulationRateMonitor(GInh)
 
     if tr.external_mode=='poisson':
+        PInp_spks = SpikeMonitor(PInp)
         PInp_rate = PopulationRateMonitor(PInp)
+        netw_objects.extend([PInp_spks,PInp_rate])
 
 
     if tr.synee_a_nrecpoints==0:
@@ -326,23 +338,16 @@ def run_net(tr):
                            dt=SynEE_a_dt,
                            when='end', order=100)
 
-    netw_objects = [GExc, GInh, SynEE, SynEI, SynIE, SynII,
-                    GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
-                    GExc_spks, GInh_spks, GExc_rate, GInh_rate,
-                    sum_target, sum_connection, growth_updater,
-                    C_stat, insP_stat]
+    netw_objects.extend([GExc_stat, GInh_stat,
+                         SynEE_stat, SynEE_a,
+                         GExc_spks, GInh_spks,
+                         GExc_rate, GInh_rate,   
+                         C_stat, insP_stat])
 
-    if tr.external_mode=='poisson':
-        net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
-                      GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
-                      GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
-                      PInp_rate, PInp_inh, sum_target, sum_connection,
-                      growth_updater, C_stat, insP_stat)
-    else:
-        net = Network(*netw_objects)
 
-        
+    net = Network(*netw_objects)
 
+    
     def set_active(*argv):
         for net_object in argv:
             net_object.active=True
