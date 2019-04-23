@@ -468,11 +468,13 @@ def run_net(tr):
             SynEE_a_states['j'] = list(SynEE.j)
         pickle.dump(SynEE_a_states,pfile)
 
-    with open(raw_dir+'c_stat.p','wb') as pfile:
-        pickle.dump(C_stat.get_states(),pfile)   
 
-    with open(raw_dir+'insP_stat.p','wb') as pfile:
-        pickle.dump(insP_stat.get_states(),pfile)   
+    if tr.adjust_insertP:
+        with open(raw_dir+'c_stat.p','wb') as pfile:
+            pickle.dump(C_stat.get_states(),pfile)   
+
+        with open(raw_dir+'insP_stat.p','wb') as pfile:
+            pickle.dump(insP_stat.get_states(),pfile)   
 
 
     with open(raw_dir+'gexc_spks.p','wb') as pfile:
