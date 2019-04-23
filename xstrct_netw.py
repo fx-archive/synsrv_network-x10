@@ -332,12 +332,15 @@ def run_net(tr):
                       GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
                       PInp_rate, PInp_inh, sum_target, sum_connection,
                       growth_updater, C_stat, insP_stat)
+
+
+    netw_objects = [GExc, GInh, SynEE, SynEI, SynIE, SynII,
+                    GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
+                    GExc_spks, GInh_spks, GExc_rate, GInh_rate,
+                    sum_target, sum_connection, growth_updater,
+                    C_stat, insP_stat]
     else:
-        net = Network(GExc, GInh, SynEE, SynEI, SynIE, SynII,
-                      GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
-                      GExc_spks, GInh_spks, GExc_rate, GInh_rate,
-                      sum_target, sum_connection, growth_updater,
-                      C_stat, insP_stat)
+        net = Network(**netw_objects)
 
 
     def set_active(*argv):
