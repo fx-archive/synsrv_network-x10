@@ -326,22 +326,22 @@ def run_net(tr):
                            dt=SynEE_a_dt,
                            when='end', order=100)
 
+    netw_objects = [GExc, GInh, SynEE, SynEI, SynIE, SynII,
+                    GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
+                    GExc_spks, GInh_spks, GExc_rate, GInh_rate,
+                    sum_target, sum_connection, growth_updater,
+                    C_stat, insP_stat]
+
     if tr.external_mode=='poisson':
         net = Network(GExc, GInh, PInp, sPN, sPNInh, SynEE, SynEI, SynIE, SynII,
                       GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
                       GExc_spks, GInh_spks, PInp_spks, GExc_rate, GInh_rate,
                       PInp_rate, PInp_inh, sum_target, sum_connection,
                       growth_updater, C_stat, insP_stat)
-
-
-    netw_objects = [GExc, GInh, SynEE, SynEI, SynIE, SynII,
-                    GExc_stat, GInh_stat, SynEE_stat, SynEE_a,
-                    GExc_spks, GInh_spks, GExc_rate, GInh_rate,
-                    sum_target, sum_connection, growth_updater,
-                    C_stat, insP_stat]
     else:
         net = Network(**netw_objects)
 
+        
 
     def set_active(*argv):
         for net_object in argv:
