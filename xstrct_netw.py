@@ -313,11 +313,13 @@ def run_net(tr):
                               record=range(tr.n_synee_traces_rec),
                               when='end', dt=tr.synEE_stat_dt)
 
-    C_stat = StateMonitor(sum_target, 'c', dt=tr.csample_dt, record=[0],
-                          when='end')
+    if tr.adjust_insertP:
 
-    insP_stat = StateMonitor(SynEE, 'insert_P', dt=tr.csample_dt, record=[0],
-                             when='end')
+        C_stat = StateMonitor(sum_target, 'c', dt=tr.csample_dt,
+                              record=[0], when='end')
+        insP_stat = StateMonitor(SynEE, 'insert_P', dt=tr.csample_dt,
+                                 record=[0], when='end')
+        netw_objects.extend([C_stat, insP_stat])
 
     
     GExc_spks = SpikeMonitor(GExc)    
@@ -344,8 +346,7 @@ def run_net(tr):
     netw_objects.extend([GExc_stat, GInh_stat,
                          SynEE_stat, SynEE_a,
                          GExc_spks, GInh_spks,
-                         GExc_rate, GInh_rate,   
-                         C_stat, insP_stat])
+                         GExc_rate, GInh_rate])
     
 
     net = Network(*netw_objects)
