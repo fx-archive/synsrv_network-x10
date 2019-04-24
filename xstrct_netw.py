@@ -162,7 +162,7 @@ def run_net(tr):
                      namespace=namespace)
 
 
-    if tr.synapse_noise:
+    if tr.syn_noise:
         SynEE.syn_sigma = tr.syn_sigma
 
     if tr.strct_active:
