@@ -36,8 +36,8 @@ poisson_mod = 'PInp_a : 1'
 # dApost /dt = -Apost/taupost : 1 (event-driven)
 
 synEE_static = 'a : 1'
-synEE_noise  = '''da/dt = syn_active*syn_sigma*xi : 1
-                  syn_sigma : 1 (shared)'''
+synEE_noise  = '''da/dt = syn_active*syn_sigma**0.5*xi : 1
+                  syn_sigma : 1/second (shared)'''
 
 synEE_mod = '''            
             syn_active : integer
