@@ -56,8 +56,12 @@ def add_params(tr):
     tr.f_add_parameter('netw.poisson_mod',  mod.poisson_mod)
 
     # synapse noise
-    tr.f_add_parameter('netw.syn_noise',  mod.syn_noise)
-    tr.f_add_parameter('netw.syn_sigma',  mod.syn_sigma)
+    tr.f_add_parameter('netw.syn_noise',  prm.syn_noise)
+    tr.f_add_parameter('netw.syn_sigma',  prm.syn_sigma)
+
+    tr.f_add_parameter('netw.synEE_static',  mod.synEE_static)
+    tr.f_add_parameter('netw.synEE_noise',  mod.synEE_noise)
+    
 
     # STDP
     tr.f_add_parameter('netw.config.stdp_active', prm.stdp_active)
