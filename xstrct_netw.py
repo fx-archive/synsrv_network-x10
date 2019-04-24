@@ -129,14 +129,7 @@ def run_net(tr):
         sPNInh.connect(i=sPNInh_src, j=sPNInh_tar)
 
         netw_objects.extend([PInp, sPN, PInp_inh, sPNInh])
-    
-
-    if tr.syn_noise:
-        synEE_mod = '''%s 
-                       %s''' %(tr.synEE_noise, tr.synEE_mod)
-    else:
-        synEE_mod = '''%s 
-                       %s''' %(tr.synEE_static, tr.synEE_mod)
+  
     
     if tr.stdp_active:
         synEE_pre_mod  = '''%s 
@@ -188,10 +181,8 @@ def run_net(tr):
     tr.f_add_result('sII_src', sII_src)
     tr.f_add_result('sII_tar', sII_tar)
 
-
-    if tr.syn_noise:
-        SynEE.syn_sigma = tr.syn_sigma
-
+    
+    SynEE.syn_sigma = tr.syn_sigma
     SynEE.insert_P = tr.insert_P
     SynEE.p_inactivate = tr.p_inactivate
     SynEE.stdp_active=1
@@ -208,7 +199,12 @@ def run_net(tr):
     SynEE.stdp_rec_start = tr.T1+tr.T2+tr.T3
     SynEE.stdp_rec_max = tr.T1+tr.T2+tr.T3 + tr.stdp_rec_T
 
-  
+
+    # intrinsic synaptic fluctuations
+    if tr.syn_noise:    
+        synscaling = SynEE.run_regularly(tr.synEE_noise,
+                                         dt=tr.syn_noise_dt, 
+                                         name='syn_noise')
        
     # synaptic scaling
     if tr.netw.config.scl_active:
