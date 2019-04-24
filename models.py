@@ -40,7 +40,7 @@ synEE_noise  = 'a += syn_active*syn_sigma**0.5*xi'
 
 synEE_mod = '''
             a : 1
-            syn_sigma : 1/second (shared)
+            syn_sigma : second (shared)
             syn_active : integer
 
             dApre  /dt = -Apre/taupre  : 1 (event-driven)
