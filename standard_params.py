@@ -53,7 +53,7 @@ p_IPoi = 0.1
 
 # synapse noise
 syn_noise = 0
-syn_sigma = 0.01
+syn_sigma = 0.01/second
 syn_noise_dt = 25*ms
 
 #STDP

@@ -36,11 +36,11 @@ poisson_mod = 'PInp_a : 1'
 # dApost /dt = -Apost/taupost : 1 (event-driven)
 
 
-synEE_noise  = 'a += syn_active*syn_sigma*xi'
+synEE_noise  = 'a += syn_active*syn_sigma**0.5*xi'
 
 synEE_mod = '''
             a : 1
-            syn_sigma : 1 (shared)
+            syn_sigma : 1/second (shared)
             syn_active : integer
 
             dApre  /dt = -Apre/taupre  : 1 (event-driven)
