@@ -131,7 +131,7 @@ def run_net(tr):
         netw_objects.extend([PInp, sPN, PInp_inh, sPNInh])
     
 
-    if tr.synapse_noise:
+    if tr.syn_noise:
         synEE_mod = '''%s 
                        %s''' %(tr.synEE_noise, tr.synEE_mod)
     else:
