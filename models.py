@@ -34,8 +34,12 @@ poisson_mod = 'PInp_a : 1'
 # !--- add event-driven for efficiency ---!
 # dApre  /dt = -Apre/taupre  : 1 (event-driven)
 # dApost /dt = -Apost/taupost : 1 (event-driven)
-synEE_mod = '''
-            a : 1
+
+synEE_static = 'a : 1'
+synEE_noise  = '''da/dt = syn_active*syn_sigma*xi
+                  syn_sigma : 1 (shared)'''
+
+synEE_mod = '''            
             syn_active : integer
 
             dApre  /dt = -Apre/taupre  : 1 (event-driven)
@@ -52,6 +56,8 @@ synEE_mod = '''
             stdp_rec_start : second (shared)
             stdp_rec_max   : second (shared)
             '''
+
+
 
 synEE_p_activate = '''
                    r = rand()

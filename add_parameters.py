@@ -55,6 +55,10 @@ def add_params(tr):
     tr.f_add_parameter('netw.p_IPoi',  prm.p_IPoi)
     tr.f_add_parameter('netw.poisson_mod',  mod.poisson_mod)
 
+    # synapse noise
+    tr.f_add_parameter('netw.syn_noise',  mod.syn_noise)
+    tr.f_add_parameter('netw.syn_sigma',  mod.syn_sigma)
+
     # STDP
     tr.f_add_parameter('netw.config.stdp_active', prm.stdp_active)
     tr.f_add_parameter('netw.taupre',    prm.taupre)

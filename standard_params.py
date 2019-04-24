@@ -51,6 +51,10 @@ a_IPoi = 0.
 p_EPoi = 0.2
 p_IPoi = 0.1
 
+# synapse noise
+syn_noise = 0
+syn_sigma = 0.01
+
 #STDP
 stdp_active = 1
 
@@ -125,3 +129,4 @@ csample_dt = 10*second
 
 # post processing
 pp_tcut = 100*second
+

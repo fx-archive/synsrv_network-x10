@@ -130,8 +130,14 @@ def run_net(tr):
 
         netw_objects.extend([PInp, sPN, PInp_inh, sPNInh])
     
-    
 
+    if tr.synapse_noise:
+        synEE_mod = '''%s 
+                       %s''' %(tr.synEE_noise, tr.synEE_mod)
+    else:
+        synEE_mod = '''%s 
+                       %s''' %(tr.synEE_static, tr.synEE_mod)
+    
     if tr.stdp_active:
         synEE_pre_mod  = '''%s 
                             %s''' %(synEE_pre_mod, mod.synEE_pre_STDP)
@@ -143,10 +149,9 @@ def run_net(tr):
                             %s''' %(synEE_pre_mod, mod.synEE_pre_rec)
         synEE_post_mod = '''%s 
                             %s''' %(synEE_post_mod, mod.synEE_post_rec)
-
         
     # E<-E advanced synapse model, rest simple
-    SynEE = Synapses(target=GExc, source=GExc, model=tr.synEE_mod,
+    SynEE = Synapses(target=GExc, source=GExc, model=synEE_mod,
                      on_pre=synEE_pre_mod, on_post=synEE_post_mod,
                      namespace=namespace)
     SynIE = Synapses(target=GInh, source=GExc, on_pre='ge_post += a_ie',
@@ -156,7 +161,9 @@ def run_net(tr):
     SynII = Synapses(target=GInh, source=GInh, on_pre='gi_post += a_ii',
                      namespace=namespace)
 
-    
+
+    if tr.synapse_noise:
+        SynEE.syn_sigma = tr.syn_sigma
 
     if tr.strct_active:
         sEE_src, sEE_tar = generate_full_connectivity(tr.N_e, same=True)
