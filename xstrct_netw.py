@@ -161,10 +161,6 @@ def run_net(tr):
     SynII = Synapses(target=GInh, source=GInh, on_pre='gi_post += a_ii',
                      namespace=namespace)
 
-
-    if tr.syn_noise:
-        SynEE.syn_sigma = tr.syn_sigma
-
     if tr.strct_active:
         sEE_src, sEE_tar = generate_full_connectivity(tr.N_e, same=True)
         SynEE.connect(i=sEE_src, j=sEE_tar)
@@ -192,7 +188,10 @@ def run_net(tr):
     tr.f_add_result('sII_src', sII_src)
     tr.f_add_result('sII_tar', sII_tar)
 
-        
+
+    if tr.syn_noise:
+        SynEE.syn_sigma = tr.syn_sigma
+
     SynEE.insert_P = tr.insert_P
     SynEE.p_inactivate = tr.p_inactivate
     SynEE.stdp_active=1
