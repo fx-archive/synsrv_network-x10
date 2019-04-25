@@ -153,7 +153,7 @@ def run_net(tr):
     # E<-E advanced synapse model, rest simple
     SynEE = Synapses(target=GExc, source=GExc, model=synEE_mod,
                      on_pre=synEE_pre_mod, on_post=synEE_post_mod,
-                     namespace=namespace)
+                     namespace=namespace, dt=25*ms)
     SynIE = Synapses(target=GInh, source=GExc, on_pre='ge_post += a_ie',
                      namespace=namespace)
     SynEI = Synapses(target=GExc, source=GInh, on_pre='gi_post += a_ei',
