@@ -58,7 +58,7 @@ def add_params(tr):
     # synapse noise
     tr.f_add_parameter('netw.syn_noise',  prm.syn_noise)
     tr.f_add_parameter('netw.syn_sigma',  prm.syn_sigma)
-    tr.f_add_parameter('netw.syn_noise_dt', prm.syn_noise_dt)
+    tr.f_add_parameter('netw.synEE_mod_dt',  prm.synEE_mod_dt)
 
     tr.f_add_parameter('netw.synEE_noise',  mod.synEE_noise)
     

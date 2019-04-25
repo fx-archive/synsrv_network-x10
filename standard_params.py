@@ -53,8 +53,8 @@ p_IPoi = 0.1
 
 # synapse noise
 syn_noise = 0
-syn_sigma = 0.01*second
-syn_noise_dt = 25*ms
+syn_sigma = 0.01/second
+synEE_mod_dt = 25*ms
 
 #STDP
 stdp_active = 1
