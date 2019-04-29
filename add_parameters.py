@@ -60,6 +60,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.syn_sigma',  prm.syn_sigma)
     tr.f_add_parameter('netw.synEE_mod_dt',  prm.synEE_mod_dt)
 
+
+    tr.f_add_parameter('netw.synEE_static',  mod.synEE_static)
     tr.f_add_parameter('netw.synEE_noise',  mod.synEE_noise)
     
 
