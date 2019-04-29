@@ -243,8 +243,9 @@ def run_net(tr):
     SynEE.stdp_rec_start = tr.T1+tr.T2+tr.T3
     SynEE.stdp_rec_max = tr.T1+tr.T2+tr.T3 + tr.stdp_rec_T
 
-    SynEI.stdp_rec_start = tr.T1+tr.T2+tr.T3
-    SynEI.stdp_rec_max = tr.T1+tr.T2+tr.T3 + tr.stdp_rec_T
+    if tr.istdp_active:
+        SynEI.stdp_rec_start = tr.T1+tr.T2+tr.T3
+        SynEI.stdp_rec_max = tr.T1+tr.T2+tr.T3 + tr.stdp_rec_T
 
   
        
