@@ -58,7 +58,6 @@ synEE_mod = '''
             '''
 
 
-
 synEE_p_activate = '''
                    r = rand()
                    syn_active = int(r < p_ee)
@@ -115,7 +114,12 @@ strct_mod_thrs = '''
 turnover_rec_mod = '''
                    dummy = record_turnover(t, was_active_before, should_become_active, should_stay_active, syn_active, i, j)
                    '''
- 
+
+turnoverEI_rec_mod = '''
+                   dummy = record_turnover_EI(t, was_active_before, should_become_active, should_stay_active, syn_active, i, j)
+                   '''
+
+
 
 strct_mod = '''
             r = rand()

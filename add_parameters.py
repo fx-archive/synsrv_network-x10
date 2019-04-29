@@ -73,13 +73,18 @@ def add_params(tr):
     tr.f_add_parameter('netw.Aminus',    prm.Aminus)
     tr.f_add_parameter('netw.amax',      prm.amax)
     tr.f_add_parameter('netw.synEE_rec',      prm.synEE_rec)
-    
+
+    # iSTDP
+    tr.f_add_parameter('netw.config.istdp_active', prm.istdp_active)
 
     # scaling
     tr.f_add_parameter('netw.config.scl_active', prm.scl_active)
     tr.f_add_parameter('netw.ATotalMax',        prm.ATotalMax)
     tr.f_add_parameter('netw.dt_synEE_scaling', prm.dt_synEE_scaling)
     tr.f_add_parameter('netw.eta_scaling', prm.eta_scaling)
+
+    # iscaling
+    tr.f_add_parameter('netw.config.iscl_active', prm.iscl_active)
 
     # intrinsic plasticity
     # tr.f_add_parameter('netw.config.it_active', prm.it_active)
@@ -94,7 +99,11 @@ def add_params(tr):
     tr.f_add_parameter('netw.strct_dt',    prm.strct_dt)
     tr.f_add_parameter('netw.p_inactivate',    prm.p_inactivate)
     tr.f_add_parameter('netw.strct_c',    prm.strct_c)
-    
+
+    # inhibitory structural plasticity
+    tr.f_add_parameter('netw.config.istrct_active', prm.istrct_active)
+    tr.f_add_parameter('netw.insert_P_ei',    prm.insert_P_ei)
+    tr.f_add_parameter('netw.p_inactivate_ei',    prm.p_inactivate_ei)    
     
     tr.f_add_parameter('netw.mod.condlif_poisson',   mod.condlif_poisson)
     tr.f_add_parameter('netw.mod.condlif_memnoise',   mod.condlif_memnoise)

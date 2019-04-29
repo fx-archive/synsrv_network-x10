@@ -63,16 +63,16 @@ synEE_rec = 1
 
 ATotalMax = 40.*0.001
 
+#iSTDP
+istdp_active = 0
+
 # scaling
 scl_active = 0
 dt_synEE_scaling = 10*ms
 eta_scaling = 0.2
 
-# intrinsic plasticity
-it_active = 0
-eta_ip = 0.2*mV*ms
-it_dt = 10*ms
-h_ip = 3*Hz
+# iscaling
+iscl_active = 0
 
 # structural plasticity
 strct_active = 0
@@ -83,6 +83,18 @@ strct_dt = 10*ms
 a_insert = 0.01 * ATotalMax
 p_inactivate = 0.25
 strct_c = 0.
+
+# inhibitory structural plasticity
+istrct_active = 0
+insert_P_ei = 0.001
+p_inactivate_ei = 0.25
+
+
+# intrinsic plasticity
+it_active = 0
+eta_ip = 0.2*mV*ms
+it_dt = 10*ms
+h_ip = 3*Hz
 
 
 #preT  = 100*second

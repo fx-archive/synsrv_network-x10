@@ -20,7 +20,7 @@ from elephant.spike_train_correlation import corrcoef, cch
 import quantities as pq
 
 
-from .cpp_methods import syn_scale, record_turnover, record_spk
+from .cpp_methods import syn_scale, record_turnover, record_turnover_EI, record_spk
 
 
     
@@ -76,9 +76,6 @@ def run_net(tr):
     netw_objects.extend([GExc,GInh])
 
 
-    synEE_pre_mod = mod.synEE_pre
-    synEE_post_mod = mod.synEE_post
-
     if tr.external_mode=='poisson':
     
         if tr.PInp_mode == 'pool':
@@ -131,12 +128,16 @@ def run_net(tr):
         netw_objects.extend([PInp, sPN, PInp_inh, sPNInh])
     
 
+        
     if tr.syn_noise:
         synEE_mod = '''%s 
                        %s''' %(tr.synEE_noise, tr.synEE_mod)
     else:
         synEE_mod = '''%s 
                        %s''' %(tr.synEE_static, tr.synEE_mod)
+
+    synEE_pre_mod = mod.synEE_pre
+    synEE_post_mod = mod.synEE_post
     
     if tr.stdp_active:
         synEE_pre_mod  = '''%s 
@@ -150,14 +151,23 @@ def run_net(tr):
         synEE_post_mod = '''%s 
                             %s''' %(synEE_post_mod, mod.synEE_post_rec)
         
-    # E<-E advanced synapse model, rest simple
+    # E<-E advanced synapse model
     SynEE = Synapses(target=GExc, source=GExc, model=synEE_mod,
                      on_pre=synEE_pre_mod, on_post=synEE_post_mod,
                      namespace=namespace, dt=tr.synEE_mod_dt)
+
+    if tr.istdp_active:
+        SynEI = Synapses(target=GExc, source=GInh, model=synEE_mod,
+                         on_pre=synEE_pre_mod, on_post=synEE_post_mod,
+                         namespace=namespace, dt=tr.synEE_mod_dt)
+    else:
+        SynEI = Synapses(target=GExc, source=GInh, on_pre='gi_post += a_ei',
+                         namespace=namespace)
+
+    #other simple  
     SynIE = Synapses(target=GInh, source=GExc, on_pre='ge_post += a_ie',
                      namespace=namespace)
-    SynEI = Synapses(target=GExc, source=GInh, on_pre='gi_post += a_ei',
-                     namespace=namespace)
+
     SynII = Synapses(target=GInh, source=GInh, on_pre='gi_post += a_ii',
                      namespace=namespace)
 
@@ -167,20 +177,29 @@ def run_net(tr):
         SynEE.syn_active = 0
 
     else:
-        srcs_full, tars_full = generate_full_connectivity(tr.N_e, same=True)
-        SynEE.connect(i=srcs_full, j=tars_full)
-        SynEE.syn_active = 0
+        sEE_src, sEE_tar = generate_connections(tr.N_e, tr.N_e, tr.p_ee, same=True)
+        SynEE.connect(i=sEE_src, j=sEE_tar)
+        SynEE.syn_active = 1
+
+    if tr.istrct_active:
+        sEI_src, sEI_tar = generate_full_connectivity(Nsrc=tr.N_i, Ntar=tr.N_e, same=False)
+        SynEI.connect(i=sEI_src, j=sEI_tar)
+        SynEI.syn_active = 0
+
+    else:
+        sEI_src, sEI_tar = generate_connections(tr.N_e, tr.N_i, tr.p_ei)
+        SynEI.connect(i=sEI_src, j=sEI_tar)
 
 
     sIE_src, sIE_tar = generate_connections(tr.N_i, tr.N_e, tr.p_ie)
-    sEI_src, sEI_tar = generate_connections(tr.N_e, tr.N_i, tr.p_ei)
     sII_src, sII_tar = generate_connections(tr.N_i, tr.N_i, tr.p_ii,
                                             same=True)
 
     SynIE.connect(i=sIE_src, j=sIE_tar)
-    SynEI.connect(i=sEI_src, j=sEI_tar)
     SynII.connect(i=sII_src, j=sII_tar)
-        
+
+    tr.f_add_result('sEE_src', sEE_src)
+    tr.f_add_result('sEE_tar', sEE_tar)
     tr.f_add_result('sIE_src', sIE_src)
     tr.f_add_result('sIE_tar', sIE_tar)
     tr.f_add_result('sEI_src', sEI_src)
@@ -191,10 +210,16 @@ def run_net(tr):
 
     if tr.syn_noise:
         SynEE.syn_sigma = tr.syn_sigma
+        SynEI.syn_sigma = tr.syn_sigma
 
     SynEE.insert_P = tr.insert_P
     SynEE.p_inactivate = tr.p_inactivate
     SynEE.stdp_active=1
+
+    if tr.istdp_active:
+        SynEI.insert_P = tr.insert_P_ei
+        SynEI.p_inactivate = tr.p_inactivate_ei
+        SynEI.stdp_active=1
 
     # make randomly chosen synapses active at beginning
     rs = np.random.uniform(size=tr.N_e*(tr.N_e-1))
@@ -203,10 +228,21 @@ def run_net(tr):
     SynEE.syn_active = initial_active
     SynEE.a = initial_a
 
+    if tr.istrct_active:
+        rs = np.random.uniform(size=tr.N_i*tr.N_e)
+        initial_active = (rs < tr.p_ei).astype('int')
+        initial_a = initial_active * tr.a_ei
+        SynEI.syn_active = initial_active
+        SynEI.a = initial_a
+
+
 
     # recording of stdp in T4
     SynEE.stdp_rec_start = tr.T1+tr.T2+tr.T3
     SynEE.stdp_rec_max = tr.T1+tr.T2+tr.T3 + tr.stdp_rec_T
+
+    SynEI.stdp_rec_start = tr.T1+tr.T2+tr.T3
+    SynEI.stdp_rec_max = tr.T1+tr.T2+tr.T3 + tr.stdp_rec_T
 
   
        
@@ -224,7 +260,23 @@ def run_net(tr):
             dt=tr.dt_synEE_scaling)
         synscaling = SynEE.run_regularly(tr.synEE_scaling,
                                          dt=tr.dt_synEE_scaling, when='end',
-                                         name='syn_scaling')
+                                         name='synEE_scaling')
+
+    if tr.netw.config.iscl_active:
+
+        if tr.syn_scl_rec:
+            SynEI.scl_rec_start = tr.T1+tr.T2+tr.T3
+            SynEI.scl_rec_max = tr.T1+tr.T2+tr.T3 + tr.scl_rec_T
+        else:
+            SynEI.scl_rec_start = T+10*second
+            SynEI.scl_rec_max = T
+        
+        SynEI.summed_updaters['Asum_post']._clock = Clock(
+            dt=tr.dt_synEE_scaling)
+        synscaling = SynEE.run_regularly(tr.synEE_scaling,
+                                         dt=tr.dt_synEE_scaling, when='end',
+                                         name='synEI_scaling')
+
 
     # # intrinsic plasticity
     # if tr.netw.config.it_active:
@@ -255,6 +307,21 @@ def run_net(tr):
                                             when='end',
                                             name='strct_plst_thrs')
 
+
+
+    if tr.netw.config.istrct_active:
+        if tr.strct_mode == 'zero':    
+            if tr.turnover_rec:
+                strct_mod_EI  = '''%s 
+                                   %s''' %(tr.strct_mod, tr.turnoverEI_rec_mod)
+            else:
+                strct_mod_EI = tr.strct_mod
+                
+            strctplst_EI = SynEI.run_regularly(strct_mod_EI, dt=tr.strct_dt,
+                                               when='end', name='strct_plst_EI')
+           
+        elif tr.strct_mode == 'thrs':
+            raise NotImplementedError
 
     netw_objects.extend([SynEE, SynEI, SynIE, SynII])
 
