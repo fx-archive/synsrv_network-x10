@@ -47,17 +47,27 @@ def generate_N_connections(N_tar, N_src, N, same=False):
 
 
 
-def generate_full_connectivity(N, same):
-    if not same==True:
-        raise NotImplementedError
-    i = []
-    j = []
-    for k in range(N):
-        i.extend([k]*(N-1))
-        targets = list(range(N))
-        del targets[k]
-        j.extend(targets)
+def generate_full_connectivity(Nsrc, Ntar=0, same=True):
 
-    assert len(i)==len(j)
-    return np.array(i), np.array(j)
+    if same:
+        i = []
+        j = []
+        for k in range(Nsrc):
+            i.extend([k]*(Nsrc-1))
+            targets = list(range(Nsrc))
+            del targets[k]
+            j.extend(targets)
 
+        assert len(i)==len(j)
+        return np.array(i), np.array(j)
+
+    else:
+        i = []
+        j = []
+        for k in range(Nsrc):
+            i.extend([k]*Ntar)
+            targets = list(range(Ntar))
+            j.extend(targets)
+
+        assert len(i)==len(j)
+        return np.array(i), np.array(j)
