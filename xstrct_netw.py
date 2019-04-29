@@ -210,6 +210,8 @@ def run_net(tr):
 
     if tr.syn_noise:
         SynEE.syn_sigma = tr.syn_sigma
+
+    if tr.syn_noise and tr.istdp_active:
         SynEI.syn_sigma = tr.syn_sigma
 
     SynEE.insert_P = tr.insert_P
