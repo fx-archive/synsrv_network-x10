@@ -131,10 +131,22 @@ def run_net(tr):
         
     if tr.syn_noise:
         synEE_mod = '''%s 
-                       %s''' %(tr.synEE_noise, tr.synEE_mod)
+                       %s
+                       %s''' %(tr.synEE_noise, tr.synEE_mod, tr.synEE_scl_mod)
+
+        synEI_mod = '''%s 
+                       %s
+                       %s''' %(tr.synEE_noise, tr.synEE_mod, tr.synEI_scl_mod)
+
     else:
         synEE_mod = '''%s 
-                       %s''' %(tr.synEE_static, tr.synEE_mod)
+                       %s
+                       %s''' %(tr.synEE_static, tr.synEE_mod, tr.synEE_scl_mod)
+
+        synEI_mod = '''%s 
+                       %s
+                       %s''' %(tr.synEE_static, tr.synEE_mod, tr.synEI_scl_mod)
+
 
     synEE_pre_mod = mod.synEE_pre
     synEE_post_mod = mod.synEE_post
@@ -157,7 +169,7 @@ def run_net(tr):
                      namespace=namespace, dt=tr.synEE_mod_dt)
 
     if tr.istdp_active:
-        SynEI = Synapses(target=GExc, source=GInh, model=synEE_mod,
+        SynEI = Synapses(target=GExc, source=GInh, model=synEI_mod,
                          on_pre=synEE_pre_mod, on_post=synEE_post_mod,
                          namespace=namespace, dt=tr.synEE_mod_dt)
     else:
@@ -259,7 +271,7 @@ def run_net(tr):
             SynEE.scl_rec_start = T+10*second
             SynEE.scl_rec_max = T
         
-        SynEE.summed_updaters['Asum_post']._clock = Clock(
+        SynEE.summed_updaters['AsumEE_post']._clock = Clock(
             dt=tr.dt_synEE_scaling)
         synee_scaling = SynEE.run_regularly(tr.synEE_scaling,
                                             dt=tr.dt_synEE_scaling,
@@ -275,7 +287,7 @@ def run_net(tr):
             SynEI.scl_rec_start = T+10*second
             SynEI.scl_rec_max = T
         
-        SynEI.summed_updaters['Asum_post']._clock = Clock(
+        SynEI.summed_updaters['AsumEI_post']._clock = Clock(
             dt=tr.dt_synEE_scaling)
 
         synei_scaling = SynEI.run_regularly(tr.synEI_scaling,

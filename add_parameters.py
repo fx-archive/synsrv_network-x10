@@ -63,6 +63,8 @@ def add_params(tr):
 
     tr.f_add_parameter('netw.synEE_static',  mod.synEE_static)
     tr.f_add_parameter('netw.synEE_noise',  mod.synEE_noise)
+    tr.f_add_parameter('netw.synEE_scl_mod',  mod.synEE_scl_mod)
+    tr.f_add_parameter('netw.synEI_scl_mod',  mod.synEI_scl_mod)
     
 
     # STDP
@@ -82,9 +84,11 @@ def add_params(tr):
     tr.f_add_parameter('netw.ATotalMax',        prm.ATotalMax)
     tr.f_add_parameter('netw.dt_synEE_scaling', prm.dt_synEE_scaling)
     tr.f_add_parameter('netw.eta_scaling', prm.eta_scaling)
+    tr.f_add_parameter('netw.mod.synEE_scaling', mod.synEE_scaling)
 
     # iscaling
     tr.f_add_parameter('netw.config.iscl_active', prm.iscl_active)
+    tr.f_add_parameter('netw.mod.synEI_scaling', mod.synEI_scaling)
 
     # intrinsic plasticity
     # tr.f_add_parameter('netw.config.it_active', prm.it_active)
@@ -113,7 +117,7 @@ def add_params(tr):
     # tr.f_add_parameter('netw.mod.synEE_pre',     mod.synEE_pre)
     # tr.f_add_parameter('netw.mod.synEE_post',    mod.synEE_post)
     tr.f_add_parameter('netw.mod.synEE_p_activate', mod.synEE_p_activate)
-    tr.f_add_parameter('netw.mod.synEE_scaling', mod.synEE_scaling)
+
     # tr.f_add_parameter('netw.mod.intrinsic_mod', mod.intrinsic_mod)
     tr.f_add_parameter('netw.mod.strct_mod',     mod.strct_mod)
     tr.f_add_parameter('netw.mod.turnover_rec_mod',     mod.turnover_rec_mod)

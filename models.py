@@ -6,7 +6,8 @@ condlif_poisson = '''
               dgfwd /dt = -gfwd/tau_e : 1
               dgi /dt = -gi/tau_i : 1
 
-              Asum : 1
+              AsumEE : 1
+              AsumEI : 1
               '''
 
 
@@ -16,7 +17,8 @@ condlif_memnoise = '''
               dge /dt = -ge/tau_e : 1
               dgi /dt = -gi/tau_i : 1
 
-              Asum : 1
+              AsumEE : 1
+              AsumEI : 1
 
               sigma: volt (constant)
               mu : volt (constant)
@@ -45,7 +47,6 @@ synEE_mod = '''
             dApre  /dt = -Apre/taupre  : 1 (event-driven)
             dApost /dt = -Apost/taupost : 1 (event-driven)
 
-            Asum_post = a : 1 (summed)         
             insert_P : 1 (shared) 
             p_inactivate : 1 (shared)
             stdp_active : integer (shared)
@@ -56,6 +57,9 @@ synEE_mod = '''
             stdp_rec_start : second (shared)
             stdp_rec_max   : second (shared)
             '''
+
+synEE_scl_mod = 'AsumEE_post = a : 1 (summed)'
+synEI_scl_mod = 'AsumEI_post = a : 1 (summed)'
 
 
 synEE_p_activate = '''
@@ -93,7 +97,11 @@ synEE_post_rec = '''
 #                 a = clip(a*(ATotalMax/Asum_post),0,amax)
 #                 '''
 synEE_scaling = '''
-                a = syn_active*syn_scale(a, ATotalMax, Asum_post, eta_scaling, t, syn_active, scl_rec_start, scl_rec_max)
+                a = syn_active*syn_scale(a, ATotalMax, AsumEE_post, eta_scaling, t, syn_active, scl_rec_start, scl_rec_max)
+                '''
+
+synEI_scaling = '''
+                a = syn_active*syn_scale(a, ATotalMax, AsumEI_post, eta_scaling, t, syn_active, scl_rec_start, scl_rec_max)
                 '''
 
 
