@@ -179,6 +179,8 @@ def add_params(tr):
 
     tr.f_add_parameter('netw.rec.spks_rec', prm.spks_rec)
     tr.f_add_parameter('netw.synee_a_nrecpoints', prm.synee_a_nrecpoints)
+    tr.f_add_parameter('netw.synei_a_nrecpoints', prm.synei_a_nrecpoints)
+    
     tr.f_add_parameter('netw.crs_crrs_rec', prm.crs_crrs_rec)
 
     tr.f_add_parameter('netw.adjust_insertP', prm.adjust_insertP)

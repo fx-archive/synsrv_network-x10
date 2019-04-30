@@ -143,6 +143,7 @@ scl_rec_T = 1*second
 turnover_rec = 0
 spks_rec = 0
 synee_a_nrecpoints = 10
+synei_a_nrecpoints = 10
 
 crs_crrs_rec = 1
 

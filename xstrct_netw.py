@@ -451,7 +451,19 @@ def run_net(tr):
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
                            dt=SynEE_a_dt,
-                           when='end', order=100)
+                           when='end', order=100)i
+
+    if tr.istdp_active and tr.synei_a_nrecpoints>0:
+        SynEI_a_dt = tr.sim.T2/tr.synei_a_nrecpoints
+
+        SynEI_a = StateMonitor(SynEI, ['a','syn_active'],
+                               record=range(tr.N_e*tr.N_i),
+                               dt=SynEI_a_dt,
+                               when='end', order=100)
+
+        netw_objects.append(SynEI_a)
+
+        
 
     netw_objects.extend([GExc_stat, GInh_stat,
                          SynEE_stat, SynEE_a, 
@@ -550,7 +562,9 @@ def run_net(tr):
     net.run(tr.sim.T5, report='text',
             report_period=300*second, profile=True)
         
-    SynEE_a.record_single_timestep() 
+    SynEE_a.record_single_timestep()
+    if tr.istdp_active and tr.synei_a_nrecpoints>0:
+        SynEI_a.record_single_timestep()
 
     device.build(directory='builds/%.4d'%(tr.v_idx), clean=True,
                  compile=True, run=True, debug=False)
@@ -586,6 +600,14 @@ def run_net(tr):
             SynEE_a_states['j'] = list(SynEE.j)
         pickle.dump(SynEE_a_states,pfile)
 
+    if tr.istdp_active and tr.synei_a_nrecpoints>0:
+        with open(raw_dir+'synei_a.p','wb') as pfile:
+            SynEI_a_states = SynEI_a.get_states()
+            if tr.crs_crrs_rec:
+                SynEI_a_states['i'] = list(SynEI.i)
+                SynEI_a_states['j'] = list(SynEI.j)
+            pickle.dump(SynEI_a_states,pfile)
+        
 
     if tr.adjust_insertP:
         with open(raw_dir+'c_stat.p','wb') as pfile:
