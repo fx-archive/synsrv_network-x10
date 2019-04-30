@@ -374,7 +374,7 @@ def run_net(tr):
     GInh_stat = StateMonitor(GInh, GInh_recvars, record=[0,1,2],
                              dt=tr.GInh_stat_dt)
     
-
+    # SynEE stat
     SynEE_recvars = []
     if tr.synee_atraces_rec:
         SynEE_recvars.append('a')
@@ -388,6 +388,21 @@ def run_net(tr):
     SynEE_stat = StateMonitor(SynEE, SynEE_recvars,
                               record=range(tr.n_synee_traces_rec),
                               when='end', dt=tr.synEE_stat_dt)
+
+    # SynEI stat
+    SynEI_recvars = []
+    if tr.synei_atraces_rec:
+        SynEI_recvars.append('a')
+    if tr.synei_activetraces_rec:
+        SynEI_recvars.append('syn_active')
+    if tr.synei_Apretraces_rec:
+        SynEI_recvars.append('Apre')
+    if tr.synei_Aposttraces_rec:
+        SynEI_recvars.append('Apost')
+
+    SynEI_stat = StateMonitor(SynEI, SynEI_recvars,
+                              record=range(tr.n_synei_traces_rec),
+                              when='end', dt=tr.synEI_stat_dt)
 
     if tr.adjust_insertP:
 
@@ -420,7 +435,8 @@ def run_net(tr):
                            when='end', order=100)
 
     netw_objects.extend([GExc_stat, GInh_stat,
-                         SynEE_stat, SynEE_a,
+                         SynEE_stat, SynEI_stat,
+                         SynEE_a, 
                          GExc_spks, GInh_spks,
                          GExc_rate, GInh_rate])
     

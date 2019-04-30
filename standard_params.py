@@ -127,6 +127,15 @@ synee_Aposttraces_rec = 1
 n_synee_traces_rec = 20
 synEE_stat_dt = 0.1*ms
 
+synei_atraces_rec = 1
+synei_activetraces_rec = 0
+synei_Apretraces_rec = 1
+synei_Aposttraces_rec = 1
+n_synei_traces_rec = 20
+synEI_stat_dt = 0.1*ms
+
+
+
 syn_scl_rec = 0
 stdp_rec_T = 1*second
 scl_rec_T = 1*second

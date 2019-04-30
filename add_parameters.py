@@ -159,8 +159,20 @@ def add_params(tr):
                        prm.synee_Aposttraces_rec)
     tr.f_add_parameter('netw.rec.n_synee_traces_rec',
                        prm.n_synee_traces_rec)
-
     tr.f_add_parameter('netw.rec.synEE_stat_dt', prm.synEE_stat_dt)
+
+    tr.f_add_parameter('netw.rec.synei_atraces_rec',
+                       prm.synei_atraces_rec)
+    tr.f_add_parameter('netw.rec.synei_activetraces_rec',
+                       prm.synei_activetraces_rec)
+    tr.f_add_parameter('netw.rec.synei_Apretraces_rec',
+                       prm.synei_Apretraces_rec)
+    tr.f_add_parameter('netw.rec.synei_Aposttraces_rec',
+                       prm.synei_Aposttraces_rec)
+    tr.f_add_parameter('netw.rec.n_synei_traces_rec',
+                       prm.n_synei_traces_rec)
+    tr.f_add_parameter('netw.rec.synEI_stat_dt', prm.synEI_stat_dt)
+
     tr.f_add_parameter('netw.rec.spks_rec', prm.spks_rec)
     tr.f_add_parameter('netw.synee_a_nrecpoints', prm.synee_a_nrecpoints)
     tr.f_add_parameter('netw.crs_crrs_rec', prm.crs_crrs_rec)
