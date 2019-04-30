@@ -555,7 +555,12 @@ def run_net(tr):
         pickle.dump(GInh_stat.get_states(),pfile)   
         
     with open(raw_dir+'synee_stat.p','wb') as pfile:
-        pickle.dump(SynEE_stat.get_states(),pfile)   
+        pickle.dump(SynEE_stat.get_states(),pfile)
+
+    if tr.isdtp_active:
+        with open(raw_dir+'synei_stat.p','wb') as pfile:
+            pickle.dump(SynEI_stat.get_states(),pfile)   
+        
     with open(raw_dir+'synee_a.p','wb') as pfile:
         SynEE_a_states = SynEE_a.get_states()
         if tr.crs_crrs_rec:
