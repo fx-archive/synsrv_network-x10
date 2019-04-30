@@ -574,7 +574,7 @@ def run_net(tr):
     with open(raw_dir+'synee_stat.p','wb') as pfile:
         pickle.dump(SynEE_stat.get_states(),pfile)
 
-    if tr.isdtp_active:
+    if tr.istdp_active:
         with open(raw_dir+'synei_stat.p','wb') as pfile:
             pickle.dump(SynEI_stat.get_states(),pfile)   
         
