@@ -537,7 +537,8 @@ def run_net(tr):
     # freeze network and record Exc spikes
     # for cross correlations
 
-    synscaling.active=False
+    synee_scaling.active=False
+    synei_scaling.active=False
     strctplst.active=False
     SynEE.stdp_active=0
 
