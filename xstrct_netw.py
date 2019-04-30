@@ -261,9 +261,10 @@ def run_net(tr):
         
         SynEE.summed_updaters['Asum_post']._clock = Clock(
             dt=tr.dt_synEE_scaling)
-        synscaling = SynEE.run_regularly(tr.synEE_scaling,
-                                         dt=tr.dt_synEE_scaling, when='end',
-                                         name='synEE_scaling')
+        synee_scaling = SynEE.run_regularly(tr.synEE_scaling,
+                                            dt=tr.dt_synEE_scaling,
+                                            when='end',
+                                            name='synEE_scaling')
 
     if tr.netw.config.iscl_active:
 
@@ -276,9 +277,11 @@ def run_net(tr):
         
         SynEI.summed_updaters['Asum_post']._clock = Clock(
             dt=tr.dt_synEE_scaling)
-        synscaling = SynEE.run_regularly(tr.synEE_scaling,
-                                         dt=tr.dt_synEE_scaling, when='end',
-                                         name='synEI_scaling')
+
+        synei_scaling = SynEI.run_regularly(tr.synEI_scaling,
+                                            dt=tr.dt_synEE_scaling,
+                                            when='end',
+                                            name='synEI_scaling')
 
 
     # # intrinsic plasticity
