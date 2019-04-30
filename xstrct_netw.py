@@ -242,7 +242,7 @@ def run_net(tr):
     if tr.istdp_active:
         SynEI.insert_P = tr.insert_P_ei
         SynEI.p_inactivate = tr.p_inactivate_ei
-        SynEI.stdp_active=[1
+        SynEI.stdp_active=1
      
 
     # make randomly chosen synapses active at beginning
