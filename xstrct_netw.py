@@ -461,9 +461,16 @@ def run_net(tr):
     # initial recording period,
     # all recorders active
 
-    set_active(GExc_spks, GInh_spks, 
-               SynEE_stat, GExc_stat, GInh_stat,
-               GExc_rate, GInh_rate)
+    T1T3_recorders = [GExc_spks, GInh_spks, 
+                      SynEE_stat, 
+                      GExc_stat, GInh_stat,
+                      GExc_rate, GInh_rate]
+
+    if tr.istdp_active:
+        T1T3_recorders.append(SynEI_stat)
+    
+
+    set_active(*T1T3_recorders)
 
     if tr.external_mode=='poisson':
         set_active(PInp_spks, PInp_rate)
@@ -476,9 +483,7 @@ def run_net(tr):
     # only active recordings are:
     #   1) turnover 2) C_stat 3) SynEE_a
     
-    set_inactive(GExc_spks, GInh_spks, 
-                 SynEE_stat, GExc_stat, GInh_stat,
-                 GExc_rate, GInh_rate)
+    set_inactive(*T1T3_recorders)
     
     if tr.external_mode=='poisson':
         set_inactive(PInp_spks, PInp_rate)
@@ -490,9 +495,7 @@ def run_net(tr):
     # second recording period,
     # all recorders active
 
-    set_active(GExc_spks, GInh_spks, 
-               SynEE_stat, GExc_stat, GInh_stat,
-               GExc_rate, GInh_rate)
+    set_active(*T1T3_recorders)
     
     if tr.external_mode=='poisson':
         set_active(PInp_spks, PInp_rate)
@@ -504,9 +507,7 @@ def run_net(tr):
     # record STDP and scaling weight changes to file
     # through the cpp models
     
-    set_inactive(GExc_spks, GInh_spks, 
-                 SynEE_stat, GExc_stat, GInh_stat,
-                 GExc_rate, GInh_rate)
+    set_inactive(*T1T3_recorders)
 
     if tr.external_mode=='poisson':
         set_inactive(PInp_spks, PInp_rate)
