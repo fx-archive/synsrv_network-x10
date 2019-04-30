@@ -538,7 +538,7 @@ def run_net(tr):
     # for cross correlations
 
     synee_scaling.active=False
-    if tr.iscaling_active:
+    if tr.netw.config.iscl_active:
         synei_scaling.active=False
     strctplst.active=False
     SynEE.stdp_active=0
