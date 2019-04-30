@@ -194,14 +194,23 @@ def run_net(tr):
         SynEE.syn_active = 1
 
     if tr.istrct_active:
+        print('istrct active')
         sEI_src, sEI_tar = generate_full_connectivity(Nsrc=tr.N_i, Ntar=tr.N_e, same=False)
         SynEI.connect(i=sEI_src, j=sEI_tar)
         SynEI.syn_active = 0
 
     else:
+        print('istrct not _active')
         sEI_src, sEI_tar = generate_connections(tr.N_e, tr.N_i, tr.p_ei)
+        print(len(sEI_src))
         SynEI.connect(i=sEI_src, j=sEI_tar)
 
+        # initial values, as they are not later set
+        # by istrct initialization
+        SynEI.a = tr.a_ei
+        SynEI.syn_active = 1
+
+        
 
     sIE_src, sIE_tar = generate_connections(tr.N_i, tr.N_e, tr.p_ie)
     sII_src, sII_tar = generate_connections(tr.N_i, tr.N_i, tr.p_ii,
@@ -233,13 +242,8 @@ def run_net(tr):
     if tr.istdp_active:
         SynEI.insert_P = tr.insert_P_ei
         SynEI.p_inactivate = tr.p_inactivate_ei
-        SynEI.stdp_active=1
-
-        # starting values, possibly overriden below
-        # if istrct is active
-        SynEI.a = tr.a_ei
-        SynEI.syn_active = 1
-        
+        SynEI.stdp_active=[1
+     
 
     # make randomly chosen synapses active at beginning
     rs = np.random.uniform(size=tr.N_e*(tr.N_e-1))
