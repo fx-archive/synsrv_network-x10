@@ -451,7 +451,7 @@ def run_net(tr):
     SynEE_a = StateMonitor(SynEE, ['a','syn_active'],
                            record=range(tr.N_e*(tr.N_e-1)),
                            dt=SynEE_a_dt,
-                           when='end', order=100)i
+                           when='end', order=100)
 
     if tr.istdp_active and tr.synei_a_nrecpoints>0:
         SynEI_a_dt = tr.sim.T2/tr.synei_a_nrecpoints
