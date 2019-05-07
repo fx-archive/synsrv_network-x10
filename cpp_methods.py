@@ -9,7 +9,7 @@ from brian2 import implementation, check_units
 #
 @implementation('cpp', code=r'''
    
-    double syn_scale(double a, double vATotalMax, double Asum_post, double veta_scaling, double t, int syn_active, double tRec_start, double tRec_max) {
+    double syn_scale(double a, double vATotalMax, double Asum_post, double veta_scaling, double t, int syn_active, double tRec_start, double tRec_max, int i, int j) {
       
       double a_out;
 
@@ -23,13 +23,13 @@ from brian2 import implementation, check_units
       if (t > tRec_start && t < tRec_max && syn_active==1) {
           std::ofstream outfile;     
           outfile.open("scaling_deltas", std::ios_base::app);
-          outfile << t << "," << a << "," << a_out << "\n";
+          outfile << t << "," << a << "," << a_out << "," << i << "," << j << "\n";
       }
 
       return a_out;
     } ''')
-@check_units(a=1, vATotalMax=1, Asum_post=1, eta_scaling=1, t=second, syn_active=1, tRec_start=second, tRec_max=second, result=1)
-def syn_scale(a, vATotalMax, Asum_post, eta_scaling, t, syn_active, tRec_start, tRec_max):
+@check_units(a=1, vATotalMax=1, Asum_post=1, eta_scaling=1, t=second, syn_active=1, tRec_start=second, tRec_max=second, i=1, j=1, result=1)
+def syn_scale(a, vATotalMax, Asum_post, eta_scaling, t, syn_active, tRec_start, tRec_max, i, j):
     return -1.
 
 
