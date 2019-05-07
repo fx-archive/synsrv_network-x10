@@ -94,7 +94,7 @@ synEE_post_rec = '''
 #                 a = clip(a*(ATotalMax/Asum_post),0,amax)
 #                 '''
 synEE_scaling = '''
-                a = syn_active*syn_scale(a, ATotalMax, Asum_post, eta_scaling, t, syn_active, scl_rec_start, scl_rec_max)
+                a = syn_active*syn_scale(a, ATotalMax, Asum_post, eta_scaling, t, syn_active, scl_rec_start, scl_rec_max, i, j)
                 '''
 
 
