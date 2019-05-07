@@ -93,9 +93,6 @@ synEE_post_rec = '''
                  dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 1, stdp_rec_start, stdp_rec_max)
                  '''
 
-# synEE_scaling = '''
-#                 a = clip(a*(ATotalMax/Asum_post),0,amax)
-#                 '''
 synEE_scaling = '''
                 a = syn_active*syn_scale(a, ATotalMax, AsumEE_post, eta_scaling, t, syn_active, scl_rec_start, scl_rec_max, i, j)
                 '''
