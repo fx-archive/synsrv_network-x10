@@ -693,6 +693,14 @@ def run_net(tr):
     with open(raw_dir+'spk_register.p','wb') as pfile:
         pickle.dump(spk_register_data,pfile)
 
+        
+    Path(fpath+'spk_register_EI').touch()
+    spk_register_EI_data = np.genfromtxt(fpath+'spk_register_EI',delimiter=',')
+    os.remove(fpath+'spk_register_EI')
+    
+    with open(raw_dir+'spk_register_EI.p','wb') as pfile:
+        pickle.dump(spk_register_EI_data,pfile)
+
 
     Path(fpath+'scaling_deltas').touch()
     scaling_deltas_data = np.genfromtxt(fpath+'scaling_deltas',delimiter=',')
