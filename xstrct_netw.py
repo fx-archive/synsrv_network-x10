@@ -159,9 +159,9 @@ def run_net(tr):
 
     if tr.synEE_rec:
         synEE_pre_mod  = '''%s 
-                            %s''' %(synEE_pre_mod, mod.syn_pre_rec)
+                            %s''' %(synEE_pre_mod, mod.synEE_pre_rec)
         synEE_post_mod = '''%s 
-                            %s''' %(synEE_post_mod, mod.syn_post_rec)
+                            %s''' %(synEE_post_mod, mod.synEE_post_rec)
 
 
         
@@ -180,9 +180,9 @@ def run_net(tr):
         if tr.synEI_rec:
 
             synEI_pre_mod  = '''%s 
-                                %s''' %(synEI_pre_mod, mod.syn_pre_rec)
+                                %s''' %(synEI_pre_mod, mod.synEI_pre_rec)
             synEI_post_mod = '''%s 
-                                %s''' %(synEI_post_mod, mod.syn_post_rec)
+                                %s''' %(synEI_post_mod, mod.synEI_post_rec)
             
         
         SynEI = Synapses(target=GExc, source=GInh, model=synEI_mod,

@@ -72,7 +72,7 @@ def record_turnover(t, was_active_before, should_become_active,
 @implementation('cpp', code=r'''
     #include <fstream>
     
-    double record_turnover(double t, int was_active_before, int should_become_active, int should_stay_active, int syn_active, int i, int j) {
+    double record_turnover_EI(double t, int was_active_before, int should_become_active, int should_stay_active, int syn_active, int i, int j) {
 
       if (int(was_active_before==0)*should_become_active==1){
           std::ofstream outfile;          
@@ -119,4 +119,30 @@ def record_turnover_EI(t, was_active_before, should_become_active,
 @check_units(t=second, i=1, j=1, a=1, Apre=1, Apost=1, syn_active=1,
              preorpost=1, tRec_start=second, tRec_max=second, result=1)
 def record_spk(t, i, j, a, Apre, Apost, syn_active, preorpost, tRec_start, tRec_max):
+    return 0.0
+
+
+# record spk E<-I
+#
+#
+@implementation('cpp', code=r'''
+    #include <fstream>
+    
+    double record_spk_EI(double t, int i, int j, double a, double Apre, double Apost, int syn_active, int preorpost, double tRec_start, double tRec_max) {
+
+       if (t > tRec_start && t < tRec_max) {
+
+         if (syn_active > 0){
+            std::ofstream outfile;          
+            outfile.open("spk_register_EI", std::ios_base::app);
+            outfile << t << "," << i << "," << j << "," << a << "," << Apre << "," << Apost << "," << preorpost << "\n";
+         }
+   
+      }
+      return 0.0; // we need to return a dummy value
+    } ''')
+
+@check_units(t=second, i=1, j=1, a=1, Apre=1, Apost=1, syn_active=1,
+             preorpost=1, tRec_start=second, tRec_max=second, result=1)
+def record_spk_EI(t, i, j, a, Apre, Apost, syn_active, preorpost, tRec_start, tRec_max):
     return 0.0
