@@ -73,23 +73,29 @@ synEE_pre = '''
             Apre = syn_active*Aplus
             '''
 
-synEE_pre_STDP = '''
+synEI_pre = '''
+            gi_post += syn_active*a
+            Apre = syn_active*Aplus
+            '''
+
+
+syn_pre_STDP = '''
                  a = syn_active*clip(a+Apost*stdp_active, 0, amax)
                  '''
 
-synEE_pre_rec = '''
+syn_pre_rec = '''
                 dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 0, stdp_rec_start, stdp_rec_max)
                 '''
 
-synEE_post = '''
+syn_post = '''
              Apost = syn_active*Aminus
              '''
 
-synEE_post_STDP = '''
+syn_post_STDP = '''
                   a = syn_active*clip(a+Apre*stdp_active, 0, amax)
                   '''
 
-synEE_post_rec = '''
+syn_post_rec = '''
                  dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 1, stdp_rec_start, stdp_rec_max)
                  '''
 

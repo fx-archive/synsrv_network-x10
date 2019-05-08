@@ -149,19 +149,21 @@ def run_net(tr):
 
 
     synEE_pre_mod = mod.synEE_pre
-    synEE_post_mod = mod.synEE_post
+    synEE_post_mod = mod.syn_post
     
     if tr.stdp_active:
         synEE_pre_mod  = '''%s 
-                            %s''' %(synEE_pre_mod, mod.synEE_pre_STDP)
+                            %s''' %(synEE_pre_mod, mod.syn_pre_STDP)
         synEE_post_mod = '''%s 
-                            %s''' %(synEE_post_mod, mod.synEE_post_STDP)
+                            %s''' %(synEE_post_mod, mod.syn_post_STDP)
 
     if tr.synEE_rec:
         synEE_pre_mod  = '''%s 
-                            %s''' %(synEE_pre_mod, mod.synEE_pre_rec)
+                            %s''' %(synEE_pre_mod, mod.syn_pre_rec)
         synEE_post_mod = '''%s 
-                            %s''' %(synEE_post_mod, mod.synEE_post_rec)
+                            %s''' %(synEE_post_mod, mod.syn_post_rec)
+
+
         
     # E<-E advanced synapse model
     SynEE = Synapses(target=GExc, source=GExc, model=synEE_mod,
@@ -169,8 +171,22 @@ def run_net(tr):
                      namespace=namespace, dt=tr.synEE_mod_dt)
 
     if tr.istdp_active:
+
+        synEI_pre_mod  = '''%s 
+                            %s''' %(mod.synEI_pre, mod.syn_pre_STDP)
+        synEI_post_mod = '''%s 
+                            %s''' %(mod.syn_post, mod.syn_post_STDP)
+
+        if tr.synEI_rec:
+
+            synEI_pre_mod  = '''%s 
+                                %s''' %(synEI_pre_mod, mod.syn_pre_rec)
+            synEI_post_mod = '''%s 
+                                %s''' %(synEI_post_mod, mod.syn_post_rec)
+            
+        
         SynEI = Synapses(target=GExc, source=GInh, model=synEI_mod,
-                         on_pre=synEE_pre_mod, on_post=synEE_post_mod,
+                         on_pre=synEI_pre_mod, on_post=synEI_post_mod,
                          namespace=namespace, dt=tr.synEE_mod_dt)
     else:
         SynEI = Synapses(target=GExc, source=GInh, on_pre='gi_post += a_ei',

@@ -65,6 +65,7 @@ ATotalMax = 40.*0.001
 
 #iSTDP
 istdp_active = 0
+synEI_rec = 0
 
 # scaling
 scl_active = 0
