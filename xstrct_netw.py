@@ -20,7 +20,8 @@ from elephant.spike_train_correlation import corrcoef, cch
 import quantities as pq
 
 
-from .cpp_methods import syn_scale, record_turnover, record_turnover_EI, record_spk
+from .cpp_methods import syn_scale, record_turnover, record_turnover_EI, \
+                         record_spk, record_spk_EI
 
 
     
