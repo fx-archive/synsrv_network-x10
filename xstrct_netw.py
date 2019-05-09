@@ -185,7 +185,7 @@ def run_net(tr):
         synEI_post_mod = '''%s 
                             %s''' %(mod.synEI_post_sym, mod.syn_post_STDP)
 
-    if tr.istdp_actice and tr.synEI_rec:
+    if tr.istdp_active and tr.synEI_rec:
 
             synEI_pre_mod  = '''%s 
                                 %s''' %(synEI_pre_mod, mod.synEI_pre_rec)
