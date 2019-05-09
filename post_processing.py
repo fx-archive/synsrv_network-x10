@@ -123,7 +123,7 @@ def post_process(tr):
                 
     if tr.syn_scl_rec:
         
-        with open(bpath+'/raw/scl_deltas.p', 'rb') as pfile:
+        with open(bpath+'/raw/scaling_deltas.p', 'rb') as pfile:
             scl_deltas = pickle.load(pfile)
 
         for resamp_dt in [1*second, 2*second, 5*second, 10*second]:
