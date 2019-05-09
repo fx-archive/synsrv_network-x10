@@ -6,7 +6,7 @@ from brian2.units import ms,mV,second,Hz
 
 from analysis.methods.process_survival import extract_survival
 from analysis.methods.process_turnover_pd import extract_lifetimes
-
+from analysis.methods.resample_spk_register import resample_spk_register
 
 def post_process(tr):
 
