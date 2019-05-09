@@ -6,7 +6,8 @@ from brian2.units import ms,mV,second,Hz
 
 from analysis.methods.process_survival import extract_survival
 from analysis.methods.process_turnover_pd import extract_lifetimes
-from analysis.methods.resample_spk_register import resample_spk_register
+from analysis.methods.resample_dA import resample_spk_register, \
+                                         resample_scl_deltas
 
 def post_process(tr):
 
@@ -111,8 +112,7 @@ def post_process(tr):
 
         for resamp_dt in [1*second, 2*second, 5*second, 10*second]:
 
-            dA_v, a_v = resample_spk_register(spkr, tr, resamp_dt,
-                                              tr.stdp_rec_T)
+            dA_v, a_v = resample_spk_register(spkr, tr, resamp_dt)
 
             fname = 'stdp_dA_T%ds_bin%dms.p' %(int(tr.stdp_rec_T/second),
                                                int(resamp_dt/second*1000))
@@ -120,3 +120,18 @@ def post_process(tr):
             with open(bpath+'/raw/'+fname, 'wb') as pfile:
                 pickle.dump((dA_v, a_v), pfile)
 
+                
+    if tr.syn_scl_rec:
+        
+        with open(bpath+'/raw/scl_register.p', 'rb') as pfile:
+            scl_deltas = pickle.load(pfile)
+
+        for resamp_dt in [1*second, 2*second, 5*second, 10*second]:
+
+            dA_v, a_v = resample_scl_deltas(scl_deltas, tr, resamp_dt)
+
+            fname = 'scl_dA_T%ds_bin%dms.p' %(int(tr.scl_rec_T/second),
+                                               int(resamp_dt/second*1000))
+
+            with open(bpath+'/raw/'+fname, 'wb') as pfile:
+                pickle.dump((dA_v, a_v), pfile)
