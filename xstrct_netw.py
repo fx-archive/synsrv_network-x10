@@ -192,7 +192,7 @@ def run_net(tr):
             synEI_post_mod = '''%s 
                                 %s''' %(synEI_post_mod, mod.synEI_post_rec)
             
-        
+    if tr.istdp_actice:        
         SynEI = Synapses(target=GExc, source=GInh, model=synEI_mod,
                          on_pre=synEI_pre_mod, on_post=synEI_post_mod,
                          namespace=namespace, dt=tr.synEE_mod_dt)
