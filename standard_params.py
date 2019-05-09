@@ -65,7 +65,9 @@ ATotalMax = 40.*0.001
 
 #iSTDP
 istdp_active = 0
+istdp_type = 'dbexp'
 synEI_rec = 0
+LTD_a = 0.02*10**(-3)
 
 # scaling
 scl_active = 0

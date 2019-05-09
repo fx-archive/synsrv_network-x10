@@ -78,7 +78,9 @@ def add_params(tr):
 
     # iSTDP
     tr.f_add_parameter('netw.config.istdp_active', prm.istdp_active)
+    tr.f_add_parameter('netw.istdp_type', prm.istdp_type)
     tr.f_add_parameter('netw.synEI_rec',      prm.synEI_rec)
+    tr.f_add_parameter('netw.LTD_a', prm.LTD_a)
 
     # scaling
     tr.f_add_parameter('netw.config.scl_active', prm.scl_active)

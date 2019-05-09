@@ -171,14 +171,21 @@ def run_net(tr):
                      on_pre=synEE_pre_mod, on_post=synEE_post_mod,
                      namespace=namespace, dt=tr.synEE_mod_dt)
 
-    if tr.istdp_active:
+    if tr.istdp_active and tr.istdp_type=='dbexp':
 
         synEI_pre_mod  = '''%s 
                             %s''' %(mod.synEI_pre, mod.syn_pre_STDP)
         synEI_post_mod = '''%s 
                             %s''' %(mod.syn_post, mod.syn_post_STDP)
 
-        if tr.synEI_rec:
+    elif tr.istdp_active and tr.istdp_type=='sym':
+
+        synEI_pre_mod  = '''%s 
+                            %s''' %(mod.synEI_pre_sym, mod.syn_pre_STDP)
+        synEI_post_mod = '''%s 
+                            %s''' %(mod.synEI_post_sym, mod.syn_post_STDP)
+
+    if tr.istdp_actice and tr.synEI_rec:
 
             synEI_pre_mod  = '''%s 
                                 %s''' %(synEI_pre_mod, mod.synEI_pre_rec)

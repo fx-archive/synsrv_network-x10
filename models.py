@@ -78,6 +78,12 @@ synEI_pre = '''
             Apre = syn_active*Aplus
             '''
 
+synEI_pre_sym = '''
+                gi_post += syn_active*a
+                Apre = syn_active*Aplus
+                a = a - LTD_a
+                '''
+
 
 syn_pre_STDP = '''
                  a = syn_active*clip(a+Apost*stdp_active, 0, amax)
@@ -93,12 +99,17 @@ synEI_pre_rec = '''
 
 
 syn_post = '''
-             Apost = syn_active*Aminus
-             '''
+           Apost = syn_active*Aminus
+           '''
+
+synEI_post_sym = '''
+                 Apost = syn_active*Aplus
+                 '''
+
 
 syn_post_STDP = '''
-                  a = syn_active*clip(a+Apre*stdp_active, 0, amax)
-                  '''
+                a = syn_active*clip(a+Apre*stdp_active, 0, amax)
+                '''
 
 synEE_post_rec = '''
                  dummy = record_spk(t, i, j, a, Apre, Apost, syn_active, 1, stdp_rec_start, stdp_rec_max)
