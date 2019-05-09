@@ -117,6 +117,6 @@ def post_process(tr):
             fname = 'stdp_dA_T%ds_bin%dms.p' %(int(tr.stdp_rec_T/second),
                                                int(resamp_dt/second*1000))
 
-            with open(fname, 'wb') as pfile:
+            with open(bpath+'/raw/'+fname, 'wb') as pfile:
                 pickle.dump((dA_v, a_v), pfile)
 
