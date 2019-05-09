@@ -118,5 +118,5 @@ def post_process(tr):
                                                int(resamp_dt/second*1000))
 
             with open(fname, 'wb') as pfile:
-                pickle.dump((dA_vals, a_vals), pfile)
+                pickle.dump((dA_v, a_v), pfile)
 
