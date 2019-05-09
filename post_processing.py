@@ -102,3 +102,21 @@ def post_process(tr):
 
     from analysis.srvprb_all import srvprb_all_figure
     srvprb_all_figure('builds/%.4d'%(tr.v_idx))
+
+
+    if tr.synEE_rec:
+    
+        with open(bpath+'/raw/spk_register.p', 'rb') as pfile:
+            spkr = pickle.load(pfile)
+
+        for resamp_dt in [1*second, 2*second, 5*second, 10*second]:
+
+            dA_v, a_v = resample_spk_register(spkr, tr, resamp_dt,
+                                              tr.stdp_rec_T)
+
+            fname = 'stdp_dA_T%ds_bin%dms.p' %(int(tr.stdp_rec_T/second),
+                                               int(resamp_dt/second*1000))
+
+            with open(fname, 'wb') as pfile:
+                pickle.dump((dA_vals, a_vals), pfile)
+
