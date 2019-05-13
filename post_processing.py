@@ -7,8 +7,12 @@ from brian2.units import ms,mV,second,Hz
 from analysis.methods.process_survival import extract_survival
 from analysis.methods.process_turnover_pd import extract_lifetimes
 
+from analysis.srvprb_all import srvprb_all_figure
+from analysis.srvprb_EE import srvprb_EE_figure
+from analysis.srvprb_EI import srvprb_EI_figure
 
-def post_process(tr, connections='EE'):
+
+def post_process_turnover(tr, connections='EE'):
 
     if connections=='EE':
         cn=''
@@ -110,5 +114,18 @@ def post_process(tr, connections='EE'):
 
 
 
-    from analysis.srvprb_all import srvprb_all_figure
+
+def post_process(tr):
+
+    post_process_turnover(tr, 'EE')
+    post_process_turnover(tr, 'EI')
+
+    srvprb_EE_figure('builds/%.4d'%(tr.v_idx))
+    srvprb_EI_figure('builds/%.4d'%(tr.v_idx))
     srvprb_all_figure('builds/%.4d'%(tr.v_idx))
+
+
+
+
+
+        
