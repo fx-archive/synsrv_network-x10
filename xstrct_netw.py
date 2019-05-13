@@ -224,7 +224,7 @@ def run_net(tr):
         SynEI.syn_active = 0
 
     else:
-        print('istrct not _active')
+        print('istrct not active')
         sEI_src, sEI_tar = generate_connections(tr.N_e, tr.N_i, tr.p_ei)
         print(len(sEI_src))
         SynEI.connect(i=sEI_src, j=sEI_tar)
@@ -690,7 +690,15 @@ def run_net(tr):
     os.remove(fpath+'turnover')
 
     with open(raw_dir+'turnover.p','wb') as pfile:
-        pickle.dump(turnover_data,pfile)   
+        pickle.dump(turnover_data,pfile)
+
+
+    Path(fpath+'turnover_EI').touch()
+    turnover_EI_data = np.genfromtxt(fpath+'turnover_EI',delimiter=',')    
+    os.remove(fpath+'turnover_EI')
+
+    with open(raw_dir+'turnover_EI.p','wb') as pfile:
+        pickle.dump(turnover_EI_data,pfile)   
 
         
     Path(fpath+'spk_register').touch()
