@@ -125,6 +125,7 @@ def add_params(tr):
     # tr.f_add_parameter('netw.mod.intrinsic_mod', mod.intrinsic_mod)
     tr.f_add_parameter('netw.mod.strct_mod',     mod.strct_mod)
     tr.f_add_parameter('netw.mod.turnover_rec_mod',     mod.turnover_rec_mod)
+    tr.f_add_parameter('netw.mod.turnoverEI_rec_mod',     mod.turnoverEI_rec_mod)
     tr.f_add_parameter('netw.mod.strct_mod_thrs',     mod.strct_mod_thrs)
     
     # tr.f_add_parameter('netw.mod.neuron_method', prm.neuron_method)
