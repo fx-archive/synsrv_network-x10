@@ -196,6 +196,10 @@ def run_net(tr):
     SynEE.p_inactivate = tr.p_inactivate
     SynEE.stdp_active=1
 
+    SynEE.ATotalMax = np.random.normal(loc=tr.ATotalMax,
+                                       scale=tr.ATotalMax_sd,
+                                       size=tr.N_e*(tr.N_e-1))
+
     # make randomly chosen synapses active at beginning
     rs = np.random.uniform(size=tr.N_e*(tr.N_e-1))
     initial_active = (rs < tr.p_ee).astype('int')

@@ -78,6 +78,7 @@ def add_params(tr):
     # scaling
     tr.f_add_parameter('netw.config.scl_active', prm.scl_active)
     tr.f_add_parameter('netw.ATotalMax',        prm.ATotalMax)
+    tr.f_add_parameter('netw.ATotalMax_sd',        prm.ATotalMax_sd)
     tr.f_add_parameter('netw.dt_synEE_scaling', prm.dt_synEE_scaling)
     tr.f_add_parameter('netw.eta_scaling', prm.eta_scaling)
 

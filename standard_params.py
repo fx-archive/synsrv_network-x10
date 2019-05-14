@@ -62,6 +62,7 @@ stdp_active = 1
 synEE_rec = 1
 
 ATotalMax = 40.*0.001
+ATotalMax_sd = 0.0001
 
 # scaling
 scl_active = 0
