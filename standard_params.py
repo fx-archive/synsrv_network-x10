@@ -152,7 +152,8 @@ synei_a_nrecpoints = 10
 
 crs_crrs_rec = 1
 
-adjust_insertP = 1
+adjust_insertP = 0
+adjust_EI_insertP = 0
 csample_dt = 10*second
 
 # post processing

@@ -191,6 +191,7 @@ def add_params(tr):
     tr.f_add_parameter('netw.crs_crrs_rec', prm.crs_crrs_rec)
 
     tr.f_add_parameter('netw.adjust_insertP', prm.adjust_insertP)
+        tr.f_add_parameter('netw.adjust_EI_insertP', prm.adjust_EI_insertP)
     tr.f_add_parameter('netw.csample_dt', prm.csample_dt)
     
 

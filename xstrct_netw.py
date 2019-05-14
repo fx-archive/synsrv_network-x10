@@ -402,6 +402,33 @@ def run_net(tr):
         netw_objects.extend([sum_target, sum_connection, growth_updater])
 
 
+    if tr.istrct_active:
+
+        # keep track of the number of active synapses
+        sum_target_EI = NeuronGroup(1, 'c : 1 (shared)', dt=tr.csample_dt)
+
+        sum_model_EI = '''NSyn : 1 (constant)
+                          c_post = (1.0*syn_active_pre)/NSyn : 1 (summed)'''
+        sum_connection_EI = Synapses(target=sum_target_EI, source=SynEI,
+                                     model=sum_model_EI, dt=tr.csample_dt,
+                                     name='get_active_synapse_count_EI')
+        sum_connection_EI.connect()
+        sum_connection_EI.NSyn = tr.N_e * tr.N_i
+
+
+
+        if tr.adjust_EI_insertP:
+            # homeostatically adjust growth rate
+            growth_updater_EI = Synapses(sum_target_EI, SynEI)
+            growth_updater_EI.run_regularly('insert_P_post *= 0.1/c_pre',
+                                            when='after_groups', dt=tr.csample_dt,
+                                            name='update_insP_EI')
+            growth_updater_EI.connect(j='0')
+
+            netw_objects.extend([sum_target_EI, sum_connection_EI, growth_updater_EI])
+
+
+
             
     # -------------- recording ------------------        
 
@@ -464,6 +491,15 @@ def run_net(tr):
         insP_stat = StateMonitor(SynEE, 'insert_P', dt=tr.csample_dt,
                                  record=[0], when='end')
         netw_objects.extend([C_stat, insP_stat])
+
+    if tr.adjust_EI_insertP:
+
+        C_EI_stat = StateMonitor(sum_target_EI, 'c', dt=tr.csample_dt,
+                                 record=[0], when='end')
+        insP_EI_stat = StateMonitor(SynEI, 'insert_P', dt=tr.csample_dt,
+                                    record=[0], when='end')
+        netw_objects.extend([C_EI_stat, insP_EI_stat])
+
 
     
     GExc_spks = SpikeMonitor(GExc)    
@@ -657,7 +693,14 @@ def run_net(tr):
             pickle.dump(C_stat.get_states(),pfile)   
 
         with open(raw_dir+'insP_stat.p','wb') as pfile:
-            pickle.dump(insP_stat.get_states(),pfile)   
+            pickle.dump(insP_stat.get_states(),pfile)
+
+    if tr.adjust_EI_insertP:
+        with open(raw_dir+'c_EI_stat.p','wb') as pfile:
+            pickle.dump(C_EI_stat.get_states(),pfile)   
+
+        with open(raw_dir+'insP_EI_stat.p','wb') as pfile:
+            pickle.dump(insP_EI_stat.get_states(),pfile)   
 
 
     with open(raw_dir+'gexc_spks.p','wb') as pfile:
