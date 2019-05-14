@@ -7,7 +7,6 @@ condlif_poisson = '''
               dgi /dt = -gi/tau_i : 1
 
               Asum : 1
-              ATotalMax : 1
               '''
 
 
@@ -18,7 +17,6 @@ condlif_memnoise = '''
               dgi /dt = -gi/tau_i : 1
 
               Asum : 1
-              ATotalMax : 1
 
               sigma: volt (constant)
               mu : volt (constant)
@@ -57,6 +55,8 @@ synEE_mod = '''
 
             stdp_rec_start : second (shared)
             stdp_rec_max   : second (shared)
+
+            ATotalMax : 1
             '''
 
 
