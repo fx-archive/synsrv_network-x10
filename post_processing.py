@@ -23,7 +23,7 @@ def post_process_turnover(tr, connections='EE'):
         cn='_EI'
 
     t_cut = tr.pp_tcut
-    t_split = (tr.T2-t_cut)/2.
+    t_split = (tr.T1+tr.T2+tr.T3+tr.T4-t_cut)/2.
 
     if t_split/second > 0:
 
@@ -48,7 +48,7 @@ def post_process_turnover(tr, connections='EE'):
 
 
 
-    Tmax = tr.sim.T1+tr.sim.T2+tr.sim.T3
+    Tmax = tr.sim.T1+tr.sim.T2+tr.sim.T3+tr.sim.T4
 
     lts_wthsrv, lts_dthonly, ex_ids = extract_lifetimes(turnover,
                                                         tr.N_e,
