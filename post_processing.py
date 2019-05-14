@@ -119,6 +119,8 @@ def post_process_turnover(tr, connections='EE'):
 
 def post_process_stdp_rec(tr):
 
+    bpath = 'builds/%.4d' %(tr.v_idx)
+
     if tr.synEE_rec:
     
         with open(bpath+'/raw/spk_register.p', 'rb') as pfile:
@@ -151,7 +153,9 @@ def post_process_stdp_rec(tr):
 
 
 def post_process_scl_rec(tr):
-                
+
+    bpath = 'builds/%.4d' %(tr.v_idx)
+    
     if tr.syn_scl_rec:
         
         with open(bpath+'/raw/scaling_deltas.p', 'rb') as pfile:

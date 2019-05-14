@@ -599,6 +599,7 @@ def run_net(tr):
         SynEI.stdp_active=0
 
     set_active(GExc_spks)
+    set_active(GInh_spks)
 
 
     net.run(tr.sim.T5, report='text',
