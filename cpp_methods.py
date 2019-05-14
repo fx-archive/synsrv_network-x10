@@ -33,6 +33,38 @@ def syn_scale(a, vATotalMax, Asum_post, eta_scaling, t, syn_active, tRec_start, 
     return -1.
 
 
+
+# Implementation of E<-I synaptic scaling
+#
+#
+@implementation('cpp', code=r'''
+   
+    double syn_EI_scale(double a, double vATotalMax, double Asum_post, double veta_scaling, double t, int syn_active, double tRec_start, double tRec_max, int i, int j) {
+      
+      double a_out;
+
+      if (Asum_post==0.){
+          a_out = 0.;
+      }
+      else{
+          a_out = a*(1 + veta_scaling*(vATotalMax/Asum_post-1));
+      }
+
+      if (t > tRec_start && t < tRec_max && syn_active==1) {
+          std::ofstream outfile;     
+          outfile.open("scaling_deltas_EI", std::ios_base::app);
+          outfile << t << "," << a << "," << a_out << "," << i << "," << j << "\n";
+      }
+
+      return a_out;
+    } ''')
+@check_units(a=1, vATotalMax=1, Asum_post=1, eta_scaling=1, t=second, syn_active=1, tRec_start=second, tRec_max=second, i=1, j=1, result=1)
+def syn_EI_scale(a, vATotalMax, Asum_post, eta_scaling, t, syn_active, tRec_start, tRec_max, i, j):
+    return -1.
+
+
+
+
 # recording of turnover
 #
 #

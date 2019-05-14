@@ -93,6 +93,8 @@ def add_params(tr):
     tr.f_add_parameter('netw.config.iscl_active', prm.iscl_active)
     tr.f_add_parameter('netw.mod.synEI_scaling', mod.synEI_scaling)
     tr.f_add_parameter('netw.iATotalMax',        prm.iATotalMax)
+    tr.f_add_parameter('netw.syn_iscl_rec',        prm.syn_iscl_rec)
+    
 
     # intrinsic plasticity
     # tr.f_add_parameter('netw.config.it_active', prm.it_active)

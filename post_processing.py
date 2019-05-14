@@ -11,6 +11,9 @@ from analysis.srvprb_all import srvprb_all_figure
 from analysis.srvprb_EE import srvprb_EE_figure
 from analysis.srvprb_EI import srvprb_EI_figure
 
+from analysis.methods.resample_dA import resample_spk_register, \
+                                         resample_scl_deltas
+
 
 def post_process_turnover(tr, connections='EE'):
 
@@ -114,6 +117,74 @@ def post_process_turnover(tr, connections='EE'):
 
 
 
+def post_process_stdp_rec(tr):
+
+    if tr.synEE_rec:
+    
+        with open(bpath+'/raw/spk_register.p', 'rb') as pfile:
+            spkr = pickle.load(pfile)
+
+        for resamp_dt in [1*second, 2*second, 5*second, 10*second]:
+
+            dA_v, a_v = resample_spk_register(spkr, tr, resamp_dt)
+
+            fname = 'stdp_dA_T%ds_bin%dms.p' %(int(tr.stdp_rec_T/second),
+                                               int(resamp_dt/second*1000))
+
+            with open(bpath+'/raw/'+fname, 'wb') as pfile:
+                pickle.dump((dA_v, a_v), pfile)
+
+    if tr.synEI_rec:
+    
+        with open(bpath+'/raw/spk_register_EI.p', 'rb') as pfile:
+            spkr = pickle.load(pfile)
+
+        for resamp_dt in [1*second, 2*second, 5*second, 10*second]:
+
+            dA_v, a_v = resample_spk_register(spkr, tr, resamp_dt)
+
+            fname = 'stdp_EI_dA_T%ds_bin%dms.p' %(int(tr.stdp_rec_T/second),
+                                                  int(resamp_dt/second*1000))
+
+            with open(bpath+'/raw/'+fname, 'wb') as pfile:
+                pickle.dump((dA_v, a_v), pfile)
+
+
+def post_process_scl_rec(tr):
+                
+    if tr.syn_scl_rec:
+        
+        with open(bpath+'/raw/scaling_deltas.p', 'rb') as pfile:
+            scl_deltas = pickle.load(pfile)
+
+        for resamp_dt in [1*second, 2*second, 5*second, 10*second]:
+
+            dA_v, a_v = resample_scl_deltas(scl_deltas, tr, resamp_dt)
+
+            fname = 'scl_dA_T%ds_bin%dms.p' %(int(tr.scl_rec_T/second),
+                                               int(resamp_dt/second*1000))
+
+            with open(bpath+'/raw/'+fname, 'wb') as pfile:
+                pickle.dump((dA_v, a_v), pfile)
+
+    if tr.syn_iscl_rec:
+
+        with open(bpath+'/raw/scaling_deltas_EI.p', 'rb') as pfile:
+            scl_deltas = pickle.load(pfile)
+
+        for resamp_dt in [1*second, 2*second, 5*second, 10*second]:
+
+            dA_v, a_v = resample_scl_deltas(scl_deltas, tr, resamp_dt)
+
+            fname = 'scl_EI_dA_T%ds_bin%dms.p' %(int(tr.scl_rec_T/second),
+                                               int(resamp_dt/second*1000))
+
+            with open(bpath+'/raw/'+fname, 'wb') as pfile:
+                pickle.dump((dA_v, a_v), pfile)
+
+
+            
+
 
 def post_process(tr):
 
@@ -124,8 +195,5 @@ def post_process(tr):
     srvprb_EI_figure('builds/%.4d'%(tr.v_idx))
     srvprb_all_figure('builds/%.4d'%(tr.v_idx))
 
-
-
-
-
-        
+    post_process_stdp_rec(tr)
+    post_process_scl_rec(tr)

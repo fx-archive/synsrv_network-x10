@@ -314,7 +314,7 @@ def run_net(tr):
 
     if tr.netw.config.iscl_active:
 
-        if tr.syn_scl_rec:
+        if tr.syn_iscl_rec:
             SynEI.scl_rec_start = tr.T1+tr.T2+tr.T3
             SynEI.scl_rec_max = tr.T1+tr.T2+tr.T3 + tr.scl_rec_T
         else:
@@ -725,6 +725,14 @@ def run_net(tr):
         pickle.dump(scaling_deltas_data,pfile)
 
         
+    Path(fpath+'scaling_deltas_EI').touch()
+    scaling_deltas_data = np.genfromtxt(fpath+'scaling_deltas_EI',delimiter=',')
+    os.remove(fpath+'scaling_deltas_EI')
+    
+    with open(raw_dir+'scaling_deltas_EI.p','wb') as pfile:
+        pickle.dump(scaling_deltas_data,pfile)
+
+               
      
     with open(raw_dir+'profiling_summary.txt', 'w+') as tfile:
         tfile.write(str(profiling_summary(net)))

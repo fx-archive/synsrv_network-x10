@@ -77,6 +77,7 @@ eta_scaling = 0.2
 # iscaling
 iscl_active = 0
 iATotalMax = 0.2
+syn_iscl_rec = 0
 
 # structural plasticity
 strct_active = 0
