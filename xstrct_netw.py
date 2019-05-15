@@ -837,6 +837,61 @@ def run_net(tr):
                 pickle.dump(df, pfile)
 
 
+        GInh_spks = GInh_spks.get_states()
+        synei_a = SynEI_a_states
+        wsize = 100*pq.ms
+
+        for binsize in [1*pq.ms, 2*pq.ms, 5*pq.ms]: 
+
+            wlen = int(wsize/binsize)
+
+            ts_E, idxs_E = GExc_spks['t'], GExc_spks['i']
+            idxs_E = idxs_E[ts_E>tr.T1+tr.T2+tr.T3+tr.T4]
+            ts_E = ts_E[ts_E>tr.T1+tr.T2+tr.T3+tr.T4]
+            ts_E = ts_E - (tr.T1+tr.T2+tr.T3+tr.T4)
+
+            ts_I, idxs_I = GInh_spks['t'], GInh_spks['i']
+            idxs_I = idxs_I[ts_I>tr.T1+tr.T2+tr.T3+tr.T4]
+            ts_I = ts_I[ts_I>tr.T1+tr.T2+tr.T3+tr.T4]
+            ts_I = ts_I - (tr.T1+tr.T2+tr.T3+tr.T4)
+
+            sts_E = [neo.SpikeTrain(ts_E[idxs_E==i]/second*pq.s,
+                                    t_stop=tr.T5/second*pq.s) for i in
+                     range(tr.N_e)]
+
+            sts_I = [neo.SpikeTrain(ts_I[idxs_I==i]/second*pq.s,
+                                    t_stop=tr.T5/second*pq.s) for i in
+                     range(tr.N_i)]
+
+            crs_crrs, syn_a = [], []
+
+            for f,(i,j) in enumerate(zip(synei_a['i'], synei_a['j'])):
+                if synei_a['syn_active'][-1][f]==1:
+
+                    crs_crr, cbin = cch(BinnedSpikeTrain(sts_I[i],
+                                                         binsize=binsize),
+                                        BinnedSpikeTrain(sts_E[j],
+                                                         binsize=binsize),
+                                        cross_corr_coef=True,
+                                        border_correction=True,
+                                        window=(-1*wlen,wlen))
+
+                    crs_crrs.append(list(np.array(crs_crr).T[0]))
+                    syn_a.append(synei_a['a'][-1][f])
+
+
+            fname = 'EI_crrs_wsize%dms_binsize%fms_full' %(wsize/pq.ms,
+                                                            binsize/pq.ms)
+
+            df = {'cbin': cbin, 'crs_crrs': np.array(crs_crrs),
+                  'syn_a': np.array(syn_a), 'binsize': binsize,
+                  'wsize': wsize, 'wlen': wlen}
+
+
+            with open('builds/%.4d/raw/'%(tr.v_idx)+fname+'.p', 'wb') as pfile:
+                pickle.dump(df, pfile)
+
+
     # -----------------  clean up  ---------------------------
     shutil.rmtree('builds/%.4d/results/'%(tr.v_idx))
             
